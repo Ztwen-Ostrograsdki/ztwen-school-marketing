@@ -1,18 +1,27 @@
 <div class="w-full max-w-[85rem] py-3 px-4 sm:px-6 lg:px-8 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2">
-    <div class="flex h-full items-center">
+    <div class="flex h-full items-center mt-8">
         <main class="w-full max-w-3xl mx-auto py-2">
-            <div class="border bg-gray-900 border-gray-200 rounded-xl z-bg-secondary-light-opac dark:border-gray-700 py-4 px-5 shadow-4 shadow-sky-500 w-full mx-auto">
+            <div class="top-blue w-[250px] h-[250px] from-green-300 to-zinc-300 via-green-300 bg-linear-90 rounded-full absolute top-[89%] left-[70%]"></div>
+            <div class="top-blue w-[250px] h-[250px] from-blue-300 to-gray-300 via-purple-300 bg-linear-90 rounded-full absolute top-[90%] left-[78%]"></div>
+
+            <div class="top-blue w-[250px] h-[250px] bg-blue-400 rounded-full absolute top-[30%] right-[70%]"></div>
+            <div class="top-blue w-[250px] h-[250px] from-sky-300 to-indigo-300 via-green-300 bg-linear-90 rounded-full absolute top-[12%] left-[14%]"></div>
+            
+            <div class="border border-gray-200 rounded-xl bg-black/60 backdrop-blur-lg dark:border-gray-700 py-4 px-5 shadow-4 shadow-sky-500 w-full mx-auto">
             <!-- Form -->
                 <div class="w-full p-0 m-0">
                     <div class="w-full p-0 m-0">
                         <div wire:loading.remove wire:target='register' class="text-center">
                             <h5 class="letter-spacing-1 flex flex-col gap-y-2 text-gray-200">
-                            <span class="uppercase inline-block w-full pb-2">
-                                inscription
-                            </span>
+                                <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl  uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
+                                    <span class="">
+                                        inscription
+                                    </span>
+                                    <span class="absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
+                                </p>
                             
                             </h5>
-                            <p class="mt-2 text-sm block text-gray-600 dark:text-gray-400">
+                            <p class="mt-4 text-sm block text-gray-600 dark:text-gray-400">
                             Vous avez déjà un compte?
                             <a class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('login')}}">
                                 Connectez-vous ici
@@ -54,49 +63,58 @@
                 
                     <form wire:submit.prevent='register'>
                         <div class="w-full mt-5">
-                            <div class="relative z-0 w-full mb-5 group text-gray-400">
-                                <label for="register-firstname" class="block mb-1 text-sm font-medium text-gray-400">Votre Nom</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
-                                        <span class="fas fa-user"></span>
+                            <div class="w-full mx-auto border rounded-lg border-gray-500 px-2 mb-5">
+                                <span class="inline-block py-2 letter-spacing-2 text-yellow-400 w-full text-center text-sm border-b mb-1 border-gray-500">
+                                    Informations identitaire
+                                </span>
+                                <div class="grid md:grid-cols-1 md:gap-6 pb-2">
+                                    <div class="grid w-full md:grid-cols-2 md:gap-6">
+                                        <div class="relative z-0 w-full group text-gray-400">
+                                            <label for="register-firstname" class="block mb-1 text-sm letter-spacing-2 text-gray-400">Votre Nom</label>
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
+                                                    <span class="fas fa-user"></span>
+                                                </div>
+                                                <input wire:model='firstname' type="text" id="register-firstname" aria-describedby="helper-text-register-firstname" class="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Votre nom" required />
+                                            </div>
+                                            @error('firstname')
+                                            <p id="helper-text-register-firstname" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
+                                            {{ $message }}
+                                            </p>
+                                            @enderror
+                                        </div>
+                                            
+                                        <div class="relative z-0 w-full group text-gray-400">
+                                            <label for="register-lastname" class="block mb-1 text-sm font-medium text-gray-400">Vos prénoms</label>
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
+                                                    <span class="fas fa-user"></span>
+                                                </div>
+                                                <input wire:model='lastname' type="text" id="register-lastname" aria-describedby="helper-text-register-lastname" class="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Vos prénoms complets" required />
+                                            </div>
+                                            @error('lastname')
+                                            <p id="helper-text-register-lastname" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
+                                            {{ $message }}
+                                            </p>
+                                            @enderror
+                                        </div>
                                     </div>
-                                    <input wire:model='firstname' type="text" id="register-firstname" aria-describedby="helper-text-register-firstname" class="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Votre nom" required />
-                                </div>
-                                @error('firstname')
-                                <p id="helper-text-register-firstname" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
-                                {{ $message }}
-                                </p>
-                                @enderror
-                            </div>
-                                
-                            <div class="relative z-0 w-full mb-5 group text-gray-400">
-                                <label for="register-lastname" class="block mb-1 text-sm font-medium text-gray-400">Vos prénoms</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
-                                        <span class="fas fa-user"></span>
-                                    </div>
-                                    <input wire:model='lastname' type="text" id="register-lastname" aria-describedby="helper-text-register-lastname" class="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Vos prénoms complets" required />
-                                </div>
-                                @error('lastname')
-                                <p id="helper-text-register-lastname" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
-                                {{ $message }}
-                                </p>
-                                @enderror
-                            </div>
 
-                            <div class="relative z-0 w-full mb-5 group text-gray-400">
-                                <label for="register-email" class="block mb-1 text-sm font-medium text-gray-400">Votre addresse mail</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
-                                        <span class="fas fa-envelope"></span>
+                                    <div class="relative z-0 w-full mb-5 group text-gray-400">
+                                        <label for="register-email" class="block mb-1 text-sm font-medium text-gray-400">Votre addresse mail</label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
+                                                <span class="fas fa-envelope"></span>
+                                            </div>
+                                            <input wire:model.live='email' type="text" id="register-email" aria-describedby="helper-text-register-email" class="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Votre addresse mail" required />
+                                        </div>
+                                        @error('email')
+                                        <p id="helper-text-register-email" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
+                                        {{ $message }}
+                                        </p>
+                                        @enderror
                                     </div>
-                                    <input wire:model.live='email' type="text" id="register-email" aria-describedby="helper-text-register-email" class="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Votre addresse mail" required />
                                 </div>
-                                @error('email')
-                                <p id="helper-text-register-email" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
-                                {{ $message }}
-                                </p>
-                                @enderror
                             </div>
                             
                             <div class="w-full mx-auto border rounded-lg border-gray-500 px-2 mb-5">
@@ -106,10 +124,10 @@
                                 <div class="grid md:grid-cols-2 md:gap-6">
                                     <div class="relative z-0 w-full mb-5 text-gray-400 group ">
                                         <label for="register-department" class="block mb-1 text-sm font-medium text-gray-400">Votre département</label>
-                                        <select aria-describedby="helper-text-register-department" wire:model.live='department' id="register-department" class="bg-gray-900 border border-gray-300 text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                        <option class="z-bg-secondary-light-opac" value="{{null}}">Votre département</option>
+                                        <select aria-describedby="helper-text-register-department" wire:model.live='department' id="register-department" class="bg-transparent border border-gray-300 text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option class="bg-black/60 backdrop-blur-lg" value="{{null}}">Votre département</option>
                                         @foreach ($departments as $dk => $dep)
-                                            <option class="z-bg-secondary-light-opac" value="{{$dk}}">{{$dep}}</option>
+                                            <option class="bg-black/60 backdrop-blur-lg" value="{{$dk}}">{{$dep}}</option>
                                         @endforeach
                                         </select>
                                         @error('department')
@@ -121,10 +139,10 @@
                                     @if($department)
                                     <div class="relative z-0 w-full mb-5 text-gray-400 group ">
                                         <label for="register-city" class="block mb-1 text-sm font-medium text-gray-400">Votre commune</label>
-                                        <select aria-describedby="helper-text-register-city" wire:model.live='city' id="register-city" class="bg-gray-900 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                        <option class="z-bg-secondary-light-opac" value="{{null}}">Votre commune</option>
+                                        <select aria-describedby="helper-text-register-city" wire:model.live='city' id="register-city" class="bg-transparent border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option class="bg-black/60 backdrop-blur-lg" value="{{null}}">Votre commune</option>
                                         @foreach ($cities[$department_key] as $ck => $ct)
-                                            <option class="z-bg-secondary-light-opac" value="{{$ct}}">{{$ct}}</option>
+                                            <option class="bg-black/60 backdrop-blur-lg" value="{{$ct}}">{{$ct}}</option>
                                         @endforeach
                                         </select>
                                         @error('city')
@@ -141,10 +159,10 @@
                             <div class="grid md:grid-cols-2 md:gap-6">
                                 <div class="relative z-0 w-full mb-5 text-gray-400 group ">
                                 <label for="register-gender" class="block mb-1 text-sm font-medium text-gray-400">Sexe</label>
-                                <select aria-describedby="helper-text-register-gender" wire:model='gender' id="register-gender" class="bg-gray-900 border border-gray-300 text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option class="z-bg-secondary-light-opac" value="{{null}}">Préciser votre genre </option>
+                                <select aria-describedby="helper-text-register-gender" wire:model='gender' id="register-gender" class="bg-transparent border border-gray-300 text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option class="bg-black/60 backdrop-blur-lg" value="{{null}}">Préciser votre genre </option>
                                     @foreach ($genders as $gk => $g)
-                                    <option class="z-bg-secondary-light-opac" value="{{$gk}}">{{$g}}</option>
+                                    <option class="bg-black/60 backdrop-blur-lg" value="{{$gk}}">{{$g}}</option>
                                     @endforeach
                                 </select>
                                 @error('gender')
@@ -155,10 +173,10 @@
                                 </div>
                                 <div class="relative z-0 w-full mb-5 text-gray-400 group ">
                                 <label for="register-marital_status" class="block mb-1 text-sm font-medium text-gray-400">Situation matrimoniale</label>
-                                <select aria-describedby="helper-text-register-marital_status" wire:model='marital_status' id="register-marital_status" class="bg-gray-900 border border-gray-300 text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option class="z-bg-secondary-light-opac" value="{{null}}">Préciser votre situation </option>
+                                <select aria-describedby="helper-text-register-marital_status" wire:model='marital_status' id="register-marital_status" class="bg-transparent border border-gray-300 text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option class="bg-black/60 backdrop-blur-lg" value="{{null}}">Préciser votre situation </option>
                                     @foreach ($marital_statuses as $mk => $m)
-                                    <option class="z-bg-secondary-light-opac" value="{{$mk}}">{{$m}}</option>
+                                    <option class="bg-black/60 backdrop-blur-lg" value="{{$mk}}">{{$m}}</option>
                                     @endforeach
                                 </select>
                                 @error('marital_status')
@@ -214,7 +232,7 @@
                             </div>
 
                             <div class="w-full mx-auto border rounded-lg border-gray-500 px-2 mb-5">
-                                <span class="inline-block py-2 letter-spacing-2 text-gray-400 w-full text-center text-sm border-b mb-1 border-gray-500">
+                                <span class="inline-block py-2 letter-spacing-2 text-yellow-400 w-full text-center text-sm border-b mb-1 border-gray-500">
                                     Sécurisation compte
                                 </span>
                                 <div class="grid md:grid-cols-2 md:gap-6">
@@ -263,9 +281,9 @@
 
                         
                         <div class="flex w-full justify-center items-center">
-                            <a type="button" wire:click='register' wire:loading.class='opacity-50' wire:target='register' class=" cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            <a type="button" wire:click='register' wire:loading.class='opacity-50' wire:target='register' class="text-black cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparenttext-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                 <span wire:loading.remove wire:target='register'>
-                                <span>Valider</span>
+                                <span>Valider mon inscription</span>
                                 <span class="fas fa-hand-point-right"></span>
                         
                                 </span>

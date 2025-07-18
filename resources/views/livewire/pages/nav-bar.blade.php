@@ -20,9 +20,14 @@
                 <a href="#services" class="text-sm font-medium hover:text-purple-400 transition">Services</a>
                 <a href="#portfolio" class="text-sm font-medium hover:text-purple-400 transition">Portfolio</a>
                 <a href="#contact" class="text-sm font-medium hover:text-purple-400 transition">Contact</a>
+                @guest
                 <a href="{{route('register')}}" class="cursor-pointer rounded-full border-2 py-2 px-6 border-white bg-white text-purple-900 hover:bg-purple-900 hover:text-white hover:shadow-lg transition duration-300 ease-in-out">
                     S'inscire
                 </a>
+                <a href="{{route('login')}}" class="cursor-pointer rounded-full border-2 py-2 px-6 border-white bg-green-500 text-gray-900 hover:bg-green-700 hover:text-white hover:shadow-lg transition duration-300 ease-in-out">
+                    Connexion
+                </a>
+                @endguest
                 <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                     <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 cursor-pointer focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                         <span class="sr-only">Open user menu</span>

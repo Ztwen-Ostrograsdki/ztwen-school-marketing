@@ -6,12 +6,16 @@
 
         <title>{{ $title ?? config('app.name') }}</title>
 
+        <link rel="stylesheet" href="">
+
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+
+        <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
 
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -30,6 +34,29 @@
         @fluxScripts
 
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+        <script>
+            ScrollReveal().reveal('.headline');
+
+            ScrollReveal().reveal('.card', { interval: 200, origin: 'bottom', distance: '200px'});
+
+            function revealOnScroll() {
+                const elements = document.querySelectorAll('.reveal');
+
+                elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight - 100; // seuil d'apparition
+
+                if (isVisible) {
+                    el.classList.remove('opacity-0', 'translate-y-10');
+                    el.classList.add('opacity-100', 'translate-y-0');
+                }
+                });
+            }
+
+            window.addEventListener('scroll', revealOnScroll);
+            window.addEventListener('load', revealOnScroll); // au cas où certains éléments sont visibles dès le début
+        </script>
 
         <script>
             document.addEventListener('alpine:init', () => {
