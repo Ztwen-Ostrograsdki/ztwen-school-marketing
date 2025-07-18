@@ -1,4 +1,4 @@
-<footer class="from-gray-700 to-gray-950 bg-linear-to-tl border-  w-full mt-80 border-t-2">
+<footer class="from-gray-900 to-black bg-linear-to-tl  w-full mt-80 border-t-2">
     <div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 lg:pt-20 mx-auto">
         <!-- Grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
