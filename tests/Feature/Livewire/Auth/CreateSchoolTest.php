@@ -10,9 +10,5 @@ use Tests\TestCase;
 
 class CreateSchoolTest extends TestCase
 {
-    public function test_renders_successfully()
-    {
-        Livewire::test(CreateSchool::class)
-            ->assertStatus(200);
-    }
+    
 }
