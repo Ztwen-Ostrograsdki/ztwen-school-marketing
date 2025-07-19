@@ -7,7 +7,7 @@
             <img class="h-10 w-auto" src="https://little-joy-studio.vercel.app/studio.png" width="999" height="999" alt="little joys studio" />
             </a> -->
             <a href="/" class="flex items-center shrink-0">
-                <img class="h-10 rounded-4xl mr-1" src="{{asset('icons/ztwen-black.png')}}" alt="Logo {{config('app.name')}}">
+                <img class="h-10 rounded-4xl mr-1" src="{{asset('images/ztwen.png')}}" alt="Logo {{config('app.name')}}">
                 <span class="md:flex text-2xl mt-0.5 font-bold text-primary-600 text-white">
                     {{config('app.name')}}
                 </span>
@@ -16,7 +16,7 @@
             <!-- Desktop Menu Links -->
             <div class="hidden md:flex items-center md:gap-8 text-white">
                 <a href="{{route('home')}}" class="text-sm font-medium @if(request()->route()->named('home')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Acceuil</a>
-                <a href="#about" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">A propos</a>
+                <a href="{{route('about.us')}}" class="text-sm font-medium @if(request()->route()->named('about.us')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">A propos</a>
                 <a href="{{route('packs.page')}}" class="@if(request()->route()->named('packs.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif text-sm font-medium  px-2 py-2 rounded-lg transition">Services</a>
                 <a href="#portfolio" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">A la une</a>
                 <a href="#contact" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">Contact</a>
