@@ -73,9 +73,14 @@
                     </div>
 
                     <div class="flex w-full justify-center items-center my-4">
-                        <a type="button" href="#" class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                            <span>Soumettre la demande</span>
-                            <span class="fas fa-send"></span>
+                        <a type="button" wire:click='toPaymentPage' class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            <span>
+                                <span wire:loading.remove wire:target='toPaymentPage'>Soumettre la demande</span>
+                                <span wire:loading wire:target='toPaymentPage'>
+                                    <span class="fas animate-spin fa-rotate"></span>
+                                    Chargement en cours...
+                                </span>
+                            </span>
                         </a>
                     </div>
                 </div>

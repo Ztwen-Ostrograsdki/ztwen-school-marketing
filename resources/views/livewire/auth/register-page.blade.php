@@ -85,7 +85,7 @@
                     </div>
                     <!-- Form -->
                 
-                    <form wire:submit.prevent='register'>
+                    <form wire:keydown.enter='register' @submit.prevent>
                         <div class="w-full mt-5">
                             <div class="w-full mx-auto border rounded-lg border-gray-500 px-2 mb-5">
                                 <span class="inline-block py-2 letter-spacing-2 text-yellow-400 w-full text-center text-sm border-b mb-1 border-gray-500">
@@ -306,14 +306,12 @@
                         
                         <div class="flex w-full justify-center items-center">
                             <a type="button" wire:click='register' wire:loading.class='opacity-50' wire:target='register' class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                <span wire:loading.remove wire:target='register'>
-                                <span>Valider mon inscription</span>
-                                <span class="fas fa-hand-point-right"></span>
-                        
-                                </span>
-                                <span wire:loading wire:target='register'>
-                                <span class="fa animate-spin fa-rotate"></span>
-                                Traitement en cours...
+                                <span>
+                                    <span wire:loading.remove wire:target='register'>S'inscrire</span>
+                                    <span wire:loading wire:target='register'>
+                                        <span class="fas animate-spin fa-rotate"></span>
+                                        Création en cours...
+                                    </span>
                                 </span>
                             </a>
                         </div>

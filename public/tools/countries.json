@@ -1,0 +1,443 @@
+[
+{
+	"nom":"afghanistan",
+	"capitale":"kaboul",
+	"langue":["dari","pachto"],
+	"monnaie":["afghani"],
+	"code_iso":"AFG, AF",
+	"drapeau":"9/9a/Flag_of_Afghanistan.svg",
+	"armoirie":"common/4/47/National_emblem_of_Afghanistan.svg"
+},
+{
+	"nom":"afrique du sud",
+	"capitale":"le cap",
+	"langue":["afrikaans","anglais","ndébélé du transvaal","sotho du nord","sotho du sud","swati","tsonga","tswana","venda","xhosa","zoulou"],
+	"monnaie":["rand"],
+	"code_iso":"ZAF, ZA",
+	"drapeau":"a/af/Flag_of_South_Africa.svg",
+	"armoirie":"en/2/21/Coat_of_arms_of_South_Africa.svg"
+},
+{
+	"nom":"albanie",
+	"capitale":"tirana",
+	"langue":["albanais"],
+	"monnaie":["lek"],
+	"code_iso":"ALB, AL",
+	"drapeau":"3/36/Flag_of_Albania.svg",
+	"armoirie":"common/6/6e/Coat_of_arms_of_Albania.svg"
+	},
+{
+	"nom":"algérie",
+	"capitale":"alger",
+	"langue":["arabe","tamazight","arabe algérien","français"],
+	"monnaie":["Dinar algérien"],
+	"code_iso":"DZA, DZ",
+	"drapeau":"7/77/Flag_of_Algeria.svg",
+	"armoirie":"common/d/df/Emblem_of_Algeria.svg"
+},
+{
+	"nom":"allemagne",
+	"capitale":"berlin",
+	"langue":["allemand"],
+	"monnaie":["euro","franc suisse"],
+	"code_iso":"DEU, DE",
+	"drapeau":"b/ba/Flag_of_Germany.svg",
+	"armoirie":"common/d/da/Coat_of_arms_of_Germany.svg"
+},
+{
+	"nom":"andorre",
+	"capitale":"andore-la-vieille",
+	"langue":["catalan"],
+	"monnaie":["euro"],
+	"code_iso":"AND, AD",
+	"drapeau":"1/19/Flag_of_Andorra.svg",
+	"armoirie":"common/4/4e/Coat_of_arms_of_Andorra.svg"
+},
+{
+	"nom":"angola",
+	"capitale":"luanda",
+	"langue":["portugais"],
+	"monnaie":["kwanza"],
+	"code_iso":"AGO, AO",
+	"drapeau":"9/9d/Flag_of_Angola.svg",
+	"armoirie":"common/f/ff/Emblem_of_Angola.svg"
+},
+{
+	"nom":"antigua-et-barbuda",
+	"capitale":"saint john's",
+	"langue":["anglais"],
+	"monnaie":["dollar des caraïbes orientales"],
+	"code_iso":"ATG, AG",
+	"drapeau":"8/89/Flag_of_Antigua_and_Barbuda.svg",
+	"armoirie":"common/3/30/Coat_of_arms_of_Antigua_and_Barbuda.svg"
+},
+{
+	"nom":"arabie saoudite",
+	"capitale":"riyad",
+	"langue":["arabe"],
+	"monnaie":["riyal saoudien"],
+	"code_iso":"SAU, SA",
+	"drapeau":"0/0d/Flag_of_Saudi_Arabia.svg",
+	"armoirie":"common/9/99/Emblem_of_Saudi_Arabia.svg"
+},
+{
+	"nom":"argentine",
+	"capitale":"buenos aires",
+	"langue":["espagnol"],
+	"monnaie":["peso argentin"],
+	"code_iso":"ARG, AR",
+	"drapeau":"1/1a/Flag_of_Argentina.svg",
+	"armoirie":"common/f/ff/Coat_of_arms_of_Argentina.svg"
+},
+{
+	"nom":"arménie",
+	"capitale":"erevan",
+	"langue":["arménien"],
+	"monnaie":["dram"],
+	"code_iso":"ARM, AM",
+	"drapeau":"2/2f/Flag_of_Armenia.svg",
+	"armoirie":"common/0/0f/Coat_of_arms_of_Armenia.svg"
+},
+{
+	"nom":"australie",
+	"capitale":"canberra",
+	"langue":["anglais"],
+	"monnaie":["dollar australien"],
+	"code_iso":"AUS, AU",
+	"drapeau":"8/88/Flag_of_Australia_%28converted%29.svg",
+	"armoirie":"common/f/f8/Coat_of_Arms_of_Australia.svg"
+},
+{
+	"nom":"autriche",
+	"capitale":"vienne",
+	"langue":["allemand"],
+	"monnaie":["euro"],
+	"code_iso":"AUT, AT",
+	"drapeau":"4/41/Flag_of_Austria.svg",
+	"armoirie":"common/a/a0/Austria_Bundesadler.svg"
+},
+{
+	"nom":"azebaïdjan",
+	"capitale":"bakou",
+	"langue":["azéri"],
+	"monnaie":["manat azerbaïdjanais"],
+	"code_iso":"AZE, AZ",
+	"drapeau":"d/dd/Flag_of_Azerbaijan.svg",
+	"armoirie":"common/6/6b/Emblem_of_Azerbaijan.svg"
+},
+{
+	"nom":"bahamas",
+	"capitale":"nasau",
+	"langue":["anglais"],
+	"monnaie":["dollar bahaméen"],
+	"code_iso":"BHS, BS",
+	"drapeau":"9/93/Flag_of_the_Bahamas.svg",
+	"armoirie":"common/8/8a/Coat_of_arms_of_the_Bahamas.svg"
+},
+{
+	"nom":"bahreïn",
+	"capitale":"manama",
+	"langue":["arabe"],
+	"monnaie":["dinar bahreïni"],
+	"code_iso":"BHR, BH",
+	"drapeau":"2/2c/Flag_of_Bahrain.svg",
+	"armoirie":"common/6/6d/Emblem_of_Bahrain.svg"
+},
+{
+	"nom":"bangladesh",
+	"capitale":"dacca",
+	"langue":["bengali"],
+	"monnaie":["taka"],
+	"code_iso":"BGD,BD",
+	"drapeau":"f/f9/Flag_of_Bangladesh.svg",
+	"armoirie":"common/8/81/National_emblem_of_Bangladesh.svg"
+},
+{
+	"nom":"barbade",
+	"capitale":"bridgetown",
+	"langue":["anglais"],
+	"monnaie":["dollar barbadien"],
+	"code_iso":"BRB, BB",
+	"drapeau":"e/ef/Flag_of_Barbados.svg",
+	"armoirie":"common/b/bc/Coat_of_arms_of_Barbados_%282%29.svg"
+},
+{
+	"nom":"belgique",
+	"capitale":"bruxelles",
+	"langue":["français","néerlandais","allemand"],
+	"monnaie":["euro"],
+	"code_iso":"BEL, BE",
+	"drapeau":"6/65/Flag_of_Belgium.svg",
+	"armoirie":"common/f/f1/Great_coat_of_arms_of_Belgium.svg"
+},
+{
+	"nom":"belize",
+	"capitale":"belmopan",
+	"langue":["anglais"],
+	"monnaie":["dollar bélizien"],
+	"code_iso":"BLZ, BZ",
+	"drapeau":"e/e7/Flag_of_Belize.svg",
+	"armoirie":"common/d/dd/Coat_of_arms_of_Belize.svg"
+},
+{
+	"nom":"bénin",
+	"capitale":"porto-novo",
+	"langue":["français"],
+	"monnaie":["franc cfa"],
+	"code_iso":"BEN, BJ",
+	"drapeau":"0/0a/Flag_of_Benin.svg",
+	"armoirie":"common/1/13/Coat_of_arms_of_Benin.svg"
+},
+{
+	"nom":"bhoutan",
+	"capitale":"thimphou",
+	"langue":["dzongkha"],
+	"monnaie":["ngultrum"],
+	"code_iso":"BTN, BT",
+	"drapeau":"9/91/Flag_of_Bhutan.svg",
+	"armoirie":"common/e/eb/Emblem_of_Bhutan.svg"
+},
+{
+	"nom":"biélorussie",
+	"capitale":"minsk",
+	"langue":["biélorusse","russe"],
+	"monnaie":["rouble biélorusse"],
+	"code_iso":"BLR, BY",
+	"drapeau":"8/85/Flag_of_Belarus.svg",
+	"armoirie":"common/b/bc/Coat_of_arms_of_Belarus_%28official%29.svg"
+},
+{
+	"nom":"birmanie",
+	"capitale":"naypyidaw",
+	"langue":["birman"],
+	"monnaie":["kyat"],
+	"code_iso":"MMR, MM",
+	"drapeau":"8/8c/Flag_of_Myanmar.svg",
+	"armoirie":"common/8/89/State_seal_of_Myanmar.svg"
+},
+{
+	"nom":"bolivie",
+	"capitale":"la paz",
+	"langue":["quechua","guarani","aymara","espagnol"],
+	"monnaie":["boliviano"],
+	"code_iso":"BOL, BO",
+	"drapeau":"4/48/Flag_of_Bolivia.svg",
+	"armoirie":"common/0/06/Coat_of_arms_of_Bolivia.svg"
+},
+{
+	"nom":"bosnie-herzégovine",
+	"capitale":"sarajevo",
+	"langue":["bosnien","serbe","croate"],
+	"monnaie":["mark convertible"],
+	"code_iso":"BIH, BA",
+	"drapeau":"b/bf/Flag_of_Bosnia_and_Herzegovina.svg",
+	"armoirie":"common/d/d4/Coat_of_arms_of_Bosnia_and_Herzegovina.svg"
+},
+{
+	"nom":"botswana",
+	"capitale":"gaborone",
+	"langue":["tswana","anglais"],
+	"monnaie":["pula"],
+	"code_iso":"BWA, BW",
+	"drapeau":"f/fa/Flag_of_Botswana.svg",
+	"armoirie":"common/d/de/Coat_of_arms_of_Botswana.svg"
+},
+{
+	"nom":"brésil",
+	"capitale":"brasilia",
+	"langue":["portugais"],
+	"monnaie":["réal"],
+	"code_iso":"BRA, BR",
+	"drapeau":"0/05/Flag_of_Brazil.svg",
+	"armoirie":"common/b/bf/Coat_of_arms_of_Brazil.svg"
+},
+{
+	"nom":"brunei",
+	"capitale":"bandar seri begawan",
+	"langue":["malais"],
+	"monnaie":["dollar de brunei"],
+	"code_iso":"BRN, BN",
+	"drapeau":"9/9c/Flag_of_Brunei.svg",
+	"armoirie":"common/0/09/Emblem_of_Brunei.svg"
+},
+{
+	"nom":"bulgarie",
+	"capitale":"sofia",
+	"langue":["bulgare"],
+	"monnaie":["lev"],
+	"code_iso":"BGR, BG",
+	"drapeau":"9/9a/Flag_of_Bulgaria.svg",
+	"armoirie":"common/2/24/Coat_of_arms_of_Bulgaria.svg"
+},
+{
+	"nom":"burkina faso",
+	"capitale":"ouagadougou",
+	"langue":["français"],
+	"monnaie":["franc cfa"],
+	"code_iso":"BFA, BF",
+	"drapeau":"3/31/Flag_of_Burkina_Faso.svg",
+	"armoirie":"common/a/a8/Burkina_Faso_COA.png"
+},
+{
+	"nom":"burundi",
+	"capitale":"gitega",
+	"langue":["français,kirundi"],
+	"monnaie":["franc burundais"],
+	"code_iso":"BDI, BI",
+	"drapeau":"5/50/Flag_of_Burundi.svg",
+	"armoirie":"common/4/4b/Blason_du_Burundi.svg"
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+},
+{
+	"nom":"",
+	"capitale":"",
+	"langue":[""],
+	"monnaie":[""],
+	"code_iso":"",
+	"drapeau":"",
+	"armoirie":""
+}
+]

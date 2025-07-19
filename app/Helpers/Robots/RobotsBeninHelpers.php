@@ -1,7 +1,80 @@
 <?php
 namespace App\Helpers\Robots;
 
+use Illuminate\Support\Facades\File;
+
 class RobotsBeninHelpers {
+
+	public static function getLevels()
+	{
+		return [
+			'primary' => "Primaire",
+			'secondary' => "Secondaire",
+			'superior' => "Supérieur",
+			'primary-secondary' => "Primaire - Secondaire",
+			'primary-superior' => "Primaire - Supérieur",
+			'secondary-superior' => "Secondaire - Supérieur",
+			'primary-secondary-superior' => "Primaire - Secondaire - Supérieur",
+		];
+	}
+
+	public static function getSytems()
+	{
+		return [
+			'gene' => "Général",
+			'pro' => "Professionnel",
+			'tech' => "Technique",
+			'superior' => "Supérieur",
+			'gene-pro' => "Général - Professionnel",
+			'gene-tech' => "Général - Technique",
+			'pro-tech' => "Technique - Professionnel",
+			'pro-superior' => "Professionnel - Supérieur",
+			'tech-superior' => "Technique - Supérieur",
+		];
+	}
+
+
+	public static function getCountries($target = null)
+	{
+		
+		$path = public_path('tools/countries.json');
+
+		$countries = [];
+
+		if(File::exists($path)){
+
+			$data = json_decode(file_get_contents($path), true);
+
+			if($target){
+
+				foreach($data as $country){
+
+					if(!array_key_exists($target, $country)){
+
+						$target = 'nom';
+					}
+
+					if($country[$target]){
+						
+						$countries[] = $country[$target]; 
+					}
+					
+
+				}
+
+			}
+			else{
+
+				$countries = $data;
+
+			}
+
+			
+		}
+		
+		return $countries;
+		
+	}
 
 
 	public static function getDepartments($department_id = null)

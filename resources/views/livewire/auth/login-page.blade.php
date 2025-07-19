@@ -35,7 +35,7 @@
                 <span class="absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
             </p>
             
-            <form class="mt-5">
+            <form wire:keydown.enter='login' @submit.prevent class="mt-5">
                 <div class="flex gap-y-2 flex-col text-sm">
                     <div class="text-left">
                         <label class="text-gray-300 cursor-pointer letter-spacing-2" for="email">
@@ -54,7 +54,13 @@
                 </div>
                 <button type="submit" class="p-2 text-black cursor-pointer border from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 rounded-2xl m-8 w-36 mx-auto sm:w-48 hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700"
                 >
-                    Se connecter
+                    <span>
+                        <span wire:loading.remove wire:target='login'>Se connecter</span>
+                        <span wire:loading wire:target='login'>
+                            <span class="fas animate-spin fa-rotate"></span>
+                            Authentification en cours...
+                        </span>
+                    </span>
                 </button>            
 
             </form>

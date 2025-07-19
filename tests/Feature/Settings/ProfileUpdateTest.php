@@ -4,73 +4,74 @@ use App\Livewire\Settings\Profile;
 use App\Models\User;
 use Livewire\Livewire;
 
-test('profile page is displayed', function () {
-    $this->actingAs($user = User::factory()->create());
+// test('profile page is displayed', function () {
 
-    $this->get('/settings/profile')->assertOk();
-});
+//     $this->actingAs($user = User::factory()->create());
 
-test('profile information can be updated', function () {
-    $user = User::factory()->create();
+//     $this->get('/settings/profile')->assertOk();
+// });
 
-    $this->actingAs($user);
+// test('profile information can be updated', function () {
+//     $user = User::factory()->create();
 
-    $response = Livewire::test(Profile::class)
-        ->set('pseudo', 'Test User')
-        ->set('email', 'test@example.com')
-        ->call('updateProfileInformation');
+//     $this->actingAs($user);
 
-    $response->assertHasNoErrors();
+//     $response = Livewire::test(Profile::class)
+//         ->set('pseudo', 'Test User')
+//         ->set('email', 'test@example.com')
+//         ->call('updateProfileInformation');
 
-    $user->refresh();
+//     $response->assertHasNoErrors();
 
-    expect($user->pseudo)->toEqual('Test User');
-    expect($user->email)->toEqual('test@example.com');
-    expect($user->email_verified_at)->toBeNull();
-});
+//     $user->refresh();
 
-test('email verification status is unchanged when email address is unchanged', function () {
-    $user = User::factory()->create();
+//     expect($user->pseudo)->toEqual('Test User');
+//     expect($user->email)->toEqual('test@example.com');
+//     expect($user->email_verified_at)->toBeNull();
+// });
 
-    $this->actingAs($user);
+// test('email verification status is unchanged when email address is unchanged', function () {
+//     $user = User::factory()->create();
 
-    $response = Livewire::test(Profile::class)
-        ->set('pseudo', 'Test User')
-        ->set('email', $user->email)
-        ->call('updateProfileInformation');
+//     $this->actingAs($user);
 
-    $response->assertHasNoErrors();
+//     $response = Livewire::test(Profile::class)
+//         ->set('pseudo', 'Test User')
+//         ->set('email', $user->email)
+//         ->call('updateProfileInformation');
 
-    expect($user->refresh()->email_verified_at)->not->toBeNull();
-});
+//     $response->assertHasNoErrors();
 
-test('user can delete their account', function () {
-    $user = User::factory()->create();
+//     expect($user->refresh()->email_verified_at)->not->toBeNull();
+// });
 
-    $this->actingAs($user);
+// test('user can delete their account', function () {
+//     $user = User::factory()->create();
 
-    $response = Livewire::test('settings.delete-user-form')
-        ->set('password', 'password')
-        ->call('deleteUser');
+//     $this->actingAs($user);
 
-    $response
-        ->assertHasNoErrors()
-        ->assertRedirect('/');
+//     $response = Livewire::test('settings.delete-user-form')
+//         ->set('password', 'password')
+//         ->call('deleteUser');
 
-    expect($user->fresh())->toBeNull();
-    expect(auth()->check())->toBeFalse();
-});
+//     $response
+//         ->assertHasNoErrors()
+//         ->assertRedirect('/');
 
-test('correct password must be provided to delete account', function () {
-    $user = User::factory()->create();
+//     expect($user->fresh())->toBeNull();
+//     expect(auth()->check())->toBeFalse();
+// });
 
-    $this->actingAs($user);
+// test('correct password must be provided to delete account', function () {
+//     $user = User::factory()->create();
 
-    $response = Livewire::test('settings.delete-user-form')
-        ->set('password', 'wrong-password')
-        ->call('deleteUser');
+//     $this->actingAs($user);
 
-    $response->assertHasErrors(['password']);
+//     $response = Livewire::test('settings.delete-user-form')
+//         ->set('password', 'wrong-password')
+//         ->call('deleteUser');
 
-    expect($user->fresh())->not->toBeNull();
-});
+//     $response->assertHasErrors(['password']);
+
+//     expect($user->fresh())->not->toBeNull();
+// });

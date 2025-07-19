@@ -15,8 +15,18 @@ class PackProfil extends Component
         $this->slug = $slug;
 
     }
+    
     public function render()
     {
         return view('livewire.shop.pack-profil');
+    }
+
+
+    public function toPaymentPage()
+    {
+        
+        $token = env('APP_MY_TOKEN');
+
+        return to_route('subscribe.confirmation', ['uuid', $this->uuid, 'slug' => $this->slug, 'token' => $token]);
     }
 }

@@ -14,7 +14,7 @@
         <div class="w-full bg-transparent pt-12 p-4">
             <div class="grid gap-14 md:grid-cols-2 md:gap-5">
                 
-                <div data-aos-delay="150" class="rounded-xl bg-blue-800/80 border border-white p-6 text-center shadow-2xl card">
+                <div data-aos-delay="150" class="rounded-xl opacity-80 card hover:opacity-100 transition-opacity duration-150 bg-blue-800/80 border border-white p-6 text-center shadow-2xl ">
                     <div class="mx-auto flex h-20 w-20 -translate-y-16 transform items-center justify-center rounded-full my-0 shadow-lg bg-sky-500 shadow-sky-500/40">
                         <span class="fas fa-star"></span>
                         <span class="">BASIC</span>
@@ -27,7 +27,7 @@
                         <ul class="flex  flex-col text-transparent my-0 bg-clip-text gap-y-2 text-left font-semibold letter-spacing-1 from-gray-300 via-sky-500 to-zinc-200 bg-linear-to-r">
                             <li>Première page à plein temps pendant toute la durée d'abonnement</li>
                             <li>Publications des statistiques limitée</li>
-                            <li>Notifications par par mail</li>
+                            <li>Notifications par mail</li>
                             <li>Possibilité de faire des annonces (limitées)</li>
                             <li>Images (Max: 5 images) de votre école à la une</li>
                             <li>Contrôle du profil de votre école</li>
@@ -47,12 +47,15 @@
                     </div>
                 </div>
 
-                <div data-aos-delay="150" class="rounded-xl bg-black/60 border border-white p-6 text-center shadow-2xl card">
+                <div data-aos-delay="150" class="rounded-xl bg-black/60 border border-white p-6 text-center shadow-2xl opacity-80 card hover:opacity-100 transition-opacity duration-150">
                     <div class="mx-auto flex h-20 w-20 -translate-y-16 transform items-center justify-center rounded-full my-0 shadow-lg bg-green-500 shadow-green-500/40">
                         <span class="fas fa-star"></span>
                         <span class="">PRO</span>
                         <span class="fas fa-star"></span>
                     </div>
+                    <h5 class="inline-block mb-3 p-2 px-8 text-green-950 bg-green-600 text-center">
+                        Recommandé
+                    </h5>
                     <h1 class="text-transparent my-0 bg-clip-text uppercase letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r text-base font-semibold lg:px-14 "> 
                         - Pack Pro -
                     </h1>

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-
             $table->uuid('uuid')->unique();
             $table->string('pseudo')->nullable()->default(null);
             $table->string('identifiant')->unique();
@@ -38,6 +37,8 @@ return new class extends Migration
             $table->datetime('blocked_at')->nullable()->default(null);
             $table->string('blocked_because')->nullable()->default(null);
             $table->unsignedBigInteger('wrong_password_tried')->nullable()->default(null);
+            $table->unsignedBigInteger('assistant_of')->nullable()->default(null);
+            $table->foreign('assistant_of')->references('id')->on('users')->nullOnDelete();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

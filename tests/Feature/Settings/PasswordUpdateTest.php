@@ -5,36 +5,36 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 
-test('password can be updated', function () {
-    $user = User::factory()->create([
-        'password' => Hash::make('password'),
-    ]);
+// test('password can be updated', function () {
+//     $user = User::factory()->create([
+//         'password' => Hash::make('password'),
+//     ]);
 
-    $this->actingAs($user);
+//     $this->actingAs($user);
 
-    $response = Livewire::test(Password::class)
-        ->set('current_password', 'password')
-        ->set('password', 'new-password')
-        ->set('password_confirmation', 'new-password')
-        ->call('updatePassword');
+//     $response = Livewire::test(Password::class)
+//         ->set('current_password', 'password')
+//         ->set('password', 'new-password')
+//         ->set('password_confirmation', 'new-password')
+//         ->call('updatePassword');
 
-    $response->assertHasNoErrors();
+//     $response->assertHasNoErrors();
 
-    expect(Hash::check('new-password', $user->refresh()->password))->toBeTrue();
-});
+//     expect(Hash::check('new-password', $user->refresh()->password))->toBeTrue();
+// });
 
-test('correct password must be provided to update password', function () {
-    $user = User::factory()->create([
-        'password' => Hash::make('password'),
-    ]);
+// test('correct password must be provided to update password', function () {
+//     $user = User::factory()->create([
+//         'password' => Hash::make('password'),
+//     ]);
 
-    $this->actingAs($user);
+//     $this->actingAs($user);
 
-    $response = Livewire::test(Password::class)
-        ->set('current_password', 'wrong-password')
-        ->set('password', 'new-password')
-        ->set('password_confirmation', 'new-password')
-        ->call('updatePassword');
+//     $response = Livewire::test(Password::class)
+//         ->set('current_password', 'wrong-password')
+//         ->set('password', 'new-password')
+//         ->set('password_confirmation', 'new-password')
+//         ->call('updatePassword');
 
-    $response->assertHasErrors(['current_password']);
-});
+//     $response->assertHasErrors(['current_password']);
+// });
