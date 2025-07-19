@@ -7,7 +7,7 @@
             <img class="h-10 w-auto" src="https://little-joy-studio.vercel.app/studio.png" width="999" height="999" alt="little joys studio" />
             </a> -->
             <a href="/" class="flex items-center shrink-0">
-                <img class="h-10 rounded-md mr-1" src="{{asset('icons/ztwen-black.png')}}" alt="Logo {{config('app.name')}}">
+                <img class="h-10 rounded-4xl mr-1" src="{{asset('icons/ztwen-black.png')}}" alt="Logo {{config('app.name')}}">
                 <span class="md:flex text-2xl mt-0.5 font-bold text-primary-600 text-white">
                     {{config('app.name')}}
                 </span>
@@ -15,18 +15,22 @@
 
             <!-- Desktop Menu Links -->
             <div class="hidden md:flex items-center md:gap-8 text-white">
-                <a href="/" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-4 py-2 rounded-lg transition">Home</a>
-                <a href="#about" class="text-sm font-medium hover:text-purple-400 transition">About</a>
-                <a href="#services" class="text-sm font-medium hover:text-purple-400 transition">Services</a>
-                <a href="#portfolio" class="text-sm font-medium hover:text-purple-400 transition">Portfolio</a>
-                <a href="#contact" class="text-sm font-medium hover:text-purple-400 transition">Contact</a>
+                <a href="{{route('home')}}" class="text-sm font-medium @if(request()->route()->named('home')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Acceuil</a>
+                <a href="#about" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">A propos</a>
+                <a href="{{route('packs.page')}}" class="@if(request()->route()->named('packs.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif text-sm font-medium  px-2 py-2 rounded-lg transition">Services</a>
+                <a href="#portfolio" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">A la une</a>
+                <a href="#contact" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">Contact</a>
                 @guest
-                <a href="{{route('register')}}" class="cursor-pointer rounded-full border-2 py-2 px-6 border-white bg-white text-purple-900 hover:bg-purple-900 hover:text-white hover:shadow-lg transition duration-300 ease-in-out">
-                    S'inscire
-                </a>
-                <a href="{{route('login')}}" class="cursor-pointer rounded-full border-2 py-2 px-6 border-white bg-green-500 text-gray-900 hover:bg-green-700 hover:text-white hover:shadow-lg transition duration-300 ease-in-out">
-                    Connexion
-                </a>
+                    @if(!request()->route()->named('register'))
+                        <a href="{{route('register')}}" class="cursor-pointer rounded-full border-2 py-2 px-6 border-white bg-white text-purple-900 hover:bg-purple-900 hover:text-white hover:shadow-lg transition duration-300 ease-in-out">
+                            S'inscire
+                        </a>
+                    @endif
+                    @if(!request()->route()->named('login'))
+                        <a href="{{route('login')}}" class="cursor-pointer rounded-full py-2 px-6 border-white bg-purple-700 text-gray-100 hover:bg-indigo-900 hover:text-white hover:shadow-lg transition duration-300 ease-in-out">
+                            Connexion
+                        </a>
+                    @endif
                 @endguest
                 <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                     <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 cursor-pointer focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">

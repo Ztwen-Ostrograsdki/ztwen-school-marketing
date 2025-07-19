@@ -1,9 +1,27 @@
 <div>
     <section class=" max-w-3xl mx-auto pt-[10%] relative items-center justify-center mt-10 rounded-lg py-5">
-        <div class="top-blue w-[250px] h-[250px] bg-blue-400 rounded-full absolute top-[10%] left-[50%]"></div>
-        <div class="bottom-pink w-[280px] h-[280px] rounded-full absolute top-[50%] left-[12%] lg:left-[30%]"></div>
-        <div class="top-orange w-[300px] h-[300px] rounded-full absolute top-[5%] left-[5%] md:left-[23%] lg:left-[30%]"></div>
-        <div class="container max-w-md border bg-black/60 backdrop-blur-lg border-sky-500 shadow-xl shadow-gray-800 m-auto text-center p-8 text-white z-10 mb-10" style="">
+        <div class="hidden md:block">
+            <div class="top-blue w-[100px] h-[100px] from-blue-300 to-gray-300 via-purple-300 bg-linear-90 rounded-full absolute  top-[33%] right-[8%]"></div>
+            <div class="top-blue w-[100px] h-[100px] from-blue-300 to-gray-300 via-purple-300 bg-linear-90 rounded-full absolute  top-[40%] left-[5%]"></div>
+            <div class="top-blue w-[100px] h-[100px] bg-blue-400 rounded-full absolute  bottom-[30%] right-[10%]"></div>
+            <div class="top-blue w-[50px] h-[50px] bg-purple-400 rounded-full absolute  bottom-[70%] right-[2%]"></div>
+            <div class="top-blue w-[100px] h-[100px] from-sky-300 to-indigo-300 via-green-300 bg-linear-90 rounded-full absolute  top-[12%] left-[14%]"></div>
+            <div class="top-blue w-[100px] h-[100px] from-purple-300 to-gray-300 via-indigo-500 bg-linear-90 rounded-full absolute  top-[8%] left-[30%]"></div>
+            <div class="top-blue w-[60px] h-[60px] from-purple-300 to-gray-300 via-sky-300 bg-linear-90 rounded-full absolute  bottom-[8%] left-[10%]"></div>
+        </div>
+
+        <div class="md:hidden">
+            <div class="top-blue w-[50px] h-[50px] from-blue-300 to-gray-300 via-purple-300 bg-linear-90 rounded-full absolute  top-[-4%] right-[8%]"></div>
+            <div class="top-blue w-[50px] h-[50px] from-blue-300 to-gray-300 via-purple-300 bg-linear-90 rounded-full absolute  top-[1%] left-[3%]"></div>
+            <div class="top-blue w-[50px] h-[50px] bg-blue-400 rounded-full absolute  bottom-[0%] right-[10%]"></div>
+            <div class="top-blue w-[50px] h-[50px] bg-purple-400 rounded-full absolute  bottom-[1%] right-[2%]"></div>
+            <div class="top-blue w-[50px] h-[50px] from-sky-300 to-indigo-300 via-green-300 bg-linear-90 rounded-full absolute  top-[50%] left-[-4%]"></div>
+            <div class="top-blue w-[50px] h-[50px] from-purple-300 to-gray-300 via-indigo-500 bg-linear-90 rounded-full absolute  top-[-3%] left-[55%]"></div>
+            <div class="top-blue w-[80px] h-[80px] from-purple-300 to-gray-300 via-green-200 bg-linear-90 rounded-full absolute  top-[-4%] left-[35%]"></div>
+            <div class="top-blue w-[60px] h-[60px] from-purple-300 to-gray-300 via-sky-300 bg-linear-90 rounded-full absolute  bottom-[-8%] left-[10%]"></div>
+        </div>
+        
+        <div class="container max-w-md border bg-black/60 backdrop-blur-lg border-sky-500 shadow-xl shadow-gray-800 m-auto text-center p-8 text-white  mb-10" style="">
             <img 
                 id="passport" 
                 src="{{asset('icons/news/user-person-man.png')}}" 
@@ -40,7 +58,19 @@
                 </button>            
 
             </form>
-            <p class="text-sm font-semibold letter-spacing-1">Pas encore de compte, cliquer ici <a href="{{route('register')}}" class="underline hover:text-pink-300">S'inscire</a></p>             
+            <div class="flex flex-col gap-y-2">
+                <p class="text-sm font-semibold letter-spacing-1">
+                    Pas encore de compte, cliquer ici 
+                    <a href="{{route('register')}}" class="underline hover:text-pink-300">
+                        S'inscire
+                    </a>
+                </p>
+                <p class="text-sm font-semibold letter-spacing-1 text-gray-400">
+                    <a href="{{route('password.forgot')}}" class="underline hover:text-pink-300">
+                        J'ai oublié mon mot de passe
+                    </a>
+                </p>
+            </div>             
         </div>
         
     </section>
