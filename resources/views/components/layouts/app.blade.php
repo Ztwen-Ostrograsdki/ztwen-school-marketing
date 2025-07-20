@@ -83,6 +83,64 @@
             });
         </script>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+
+                let message_focusable = document.getElementById('focusable-input');
+
+                if(message_focusable) {message_focusable.focus();}
+
+                // document.querySelectorAll('[id$="-modal"]').forEach(modal => {
+
+                //     modal.setAttribute('aria-hidden', 'true');
+                    
+                // });
+
+            });
+
+            document.addEventListener('livewire:init', () => {
+
+                Livewire.on('HideModalEvent', (event) => {
+
+                    let modal_name = event[0];
+
+                    let modalElement = document.querySelector(modal_name);
+
+                    modal = new Modal(modalElement)
+
+                    modal.hide();
+
+                    let fixed = document.querySelector(".fixed.inset-0.z-40");
+
+                    if(fixed){fixed.remove();}
+
+                    setTimeout(() => {
+
+                        initAllSwipers(); 
+                    }, 300); 
+
+                });
+
+                Livewire.on('OpenModalEvent', (event) => {
+
+                    let modal_name = event[0];
+
+                    let modalElement = document.querySelector(modal_name);
+
+                    modal = new Modal(modalElement)
+
+                    modalElement.setAttribute('aria-hidden', 'false');
+
+                    modal.show();
+
+                    initAllSwipers();
+
+                });
+                
+            });
+
+        </script>
+
     </body>
 </html>
 

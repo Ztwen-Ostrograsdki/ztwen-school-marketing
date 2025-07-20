@@ -3,7 +3,7 @@
         <h5 class="card letter-spacing-1 flex bg-black/70 text-center mx-auto flex-col gap-y-2 text-gray-200 border rounded-sm">
             <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl  uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
                 <span class="">
-                    Profil de : <span class="uppercase text-orange-500"> {{$uuid}} </span>
+                    Profil de l'école: <span class="uppercase text-orange-500"> {{$uuid}} </span>
                 </span>
                 <span class="card absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
             </p>
@@ -17,7 +17,7 @@
                 <img class="h-16 w-16 rounded-full object-cover border-2 border-indigo-500" src="https://randomuser.me/api/portraits/women/45.jpg" alt="Profile picture">
             </div>
             <div class="flex-1 min-w-0">
-                <p class="text-lg font-bold text-sky-500 truncate">Sarah Johnson</p>
+                <p class="text-lg font-bold text-sky-500 truncate">CEPG Réussite</p>
                 <p class="text-sm text-gray-400 truncate">Photographer & Traveler</p>
                 <div class="flex space-x-4 mt-2">
                 <span class="text-sm font-medium text-gray-400">542 <span class="font-normal text-gray-400">posts</span></span>
