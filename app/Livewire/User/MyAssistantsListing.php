@@ -21,4 +21,10 @@ class MyAssistantsListing extends Component
     {
         return view('livewire.user.my-assistants-listing');
     }
+
+
+    public function openAddAssistantModal()
+    {
+        $this->dispatch('AddNewAssistantLiveEvent');
+    }
 }

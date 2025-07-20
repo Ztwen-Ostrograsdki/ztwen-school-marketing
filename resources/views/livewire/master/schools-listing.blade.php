@@ -88,7 +88,7 @@
                                     <!-- Row 1 -->
                                     <tr class="hover:bg-gray-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <a href="{{route('admin.school.profil', ['uuid' => "ECOLE-23"])}}" class="flex items-center">
+                                        <a href="{{route('school.profil', ['uuid' => "ECOLE-23"])}}" class="flex items-center">
                                             <div class="h-10 w-10 flex-shrink-0">
                                                 <img class="h-10 w-10 rounded-full object-cover border-sky-500 border" src="{{asset('icons/news/user-person-man.png')}}" alt="">
                                             </div>

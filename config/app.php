@@ -2,6 +2,18 @@
 
 return [
 
+    'infos_types' => [
+        'cv' => "Cours de vacances",
+        'cr' => "Cours de renforcements",
+        'ot' => "Besoins d'enseignants",
+        'infos' => "Informations",
+        'ofe' => "Offres d'emploi",
+        'bd' => "Bulletins disponibles",
+        'cp' => "Conseil | Réunion des parents",
+        'ce' => "Conseil des enseignants",
+
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

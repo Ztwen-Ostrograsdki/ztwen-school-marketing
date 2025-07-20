@@ -34,7 +34,7 @@ Route::get('administration', Dashboard::class)->name('admin');
 Route::get('administration/les-utilisateurs', UsersListing::class)->name('admin.users.listing');
 Route::get('administration/les-assistants', AssistantsListing::class)->name('admin.assistants.listing');
 Route::get('administration/les-ecoles', SchoolsListing::class)->name('admin.schools.listing');
-Route::get('administration/ecole/u={uuid}', SchoolProfil::class)->name('admin.school.profil');
+Route::get('ecole/u={uuid}', SchoolProfil::class)->name('school.profil');
 
 Route::get('Connexion', LoginPage::class)->name('login');
 Route::get('mot-de-passe-oublie', ForgotPasswordPage::class)->name('password.forgot');

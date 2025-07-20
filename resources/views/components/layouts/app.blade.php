@@ -22,9 +22,12 @@
     <body class="min-h-screen pb-0 mb-0  from-sky-500 via-purple-700  to-indigo-500 bg-gradient-to-tr">
 
         @livewire('pages.nav-bar')
+            <button type="button" class="hidden" data-drawer-target="drawer-admin-navigation" data-drawer-show="drawer-admin-navigation" aria-controls="drawer-admin-navigation"></button>
 
         <main class="pt-4 mt-14 px-2">
             {{ $slot }}
+
+             @livewire('modals-manager') {{--INCLUDE OF APP MODALS --}}
         </main>
 
         @livewire('pages.footer')
@@ -32,6 +35,7 @@
         @fluxScripts
 
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
 
         <script>
             ScrollReveal().reveal('.headline');
@@ -86,6 +90,8 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
 
+                initFlowbite();
+
                 let message_focusable = document.getElementById('focusable-input');
 
                 if(message_focusable) {message_focusable.focus();}
@@ -114,10 +120,10 @@
 
                     if(fixed){fixed.remove();}
 
-                    setTimeout(() => {
+                    // setTimeout(() => {
 
-                        initAllSwipers(); 
-                    }, 300); 
+                    //     initAllSwipers(); 
+                    // }, 300); 
 
                 });
 
@@ -133,13 +139,14 @@
 
                     modal.show();
 
-                    initAllSwipers();
+                    // initAllSwipers();
 
                 });
                 
             });
 
         </script>
+        
 
     </body>
 </html>

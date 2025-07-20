@@ -16,11 +16,12 @@
             <!-- Desktop Menu Links -->
             <div class="hidden md:flex items-center md:gap-8 text-white">
                 <a href="{{route('home')}}" class="text-sm font-medium @if(request()->route()->named('home')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Acceuil</a>
+                <a href="{{route('user.profil', ['uuid' => "uudeuueueu"])}}" class="text-sm font-medium @if(request()->route()->named('user.profil')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Mon profil</a>
                 <a href="{{route('admin')}}" class="text-sm font-medium @if(request()->route()->named('admin')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Administration</a>
                 <a href="{{route('about.us')}}" class="text-sm font-medium @if(request()->route()->named('about.us')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">A propos</a>
                 <a href="{{route('packs.page')}}" class="@if(request()->route()->named('packs.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif text-sm font-medium  px-2 py-2 rounded-lg transition">Services</a>
                 <a href="#portfolio" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">A la une</a>
-                <a href="#contact" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">Contact</a>
+                
                 @guest
                     @if(!request()->route()->named('register'))
                         <a href="{{route('register')}}" class="cursor-pointer rounded-full border-2 py-2 px-6 border-white bg-white text-purple-900 hover:bg-purple-900 hover:text-white hover:shadow-lg transition duration-300 ease-in-out">
@@ -33,7 +34,10 @@
                         </a>
                     @endif
                 @endguest
+
+                {{-- USER DROPDOWN MENU --}}
                 <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+
                     <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 cursor-pointer focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                         <span class="sr-only">Open user menu</span>
                         <img class="w-8 h-8 rounded-full" src="{{asset('icons/news/user-person-man.png')}}" alt="user photo">
@@ -68,8 +72,9 @@
                     </div>
                     
                 </div>
+                {{-- END USER DROPDOWN MENU --}}
             </div>
-            <!-- Mobile Menu Button -->
+            {{-- SMALL SCREEN  SIDEBAR BUTTON--}}
             <div class="md:hidden">
                 <button type="button" class="collapse-toggle text-white btn btn-outline btn-secondary btn-sm btn-square cursor-pointer" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -77,11 +82,12 @@
                     </svg>
                 </button>
             </div>
-            
+            {{-- END SMALL SCREEN  SIDEBAR BUTTON--}}
         </div>
     </nav>
 
-    <div id="drawer-navigation" class="fixed top-0 left-0 z-50 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
+    {{-- SMALL SCREEN SIDEBAR --}}
+    <div id="drawer-navigation" class="fixed top-0 left-0 z-50 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label">
         <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
         <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -153,12 +159,13 @@
             </ul>
         </div>
     </div>
+    {{-- END SMALL SCREEN SIDEBAR --}}
 
 <!-- Middle Section -->
 
 
 {{-- ADMIN MENU SIDEBAR --}}
-<div id="drawer-admin-navigation" class="fixed top-0 left-0 z-50 w-80 h-screen p-4 overflow-y-auto transition-transform -translate-x-full from-gray-800 to-indigo-900 via-sky-950 bg-linear-to-br border-r" tabindex="-1" aria-labelledby="drawer-admin-navigation-label">
+<div id="drawer-admin-navigation" class="fixed top-0 left-0 z-50 w-80 h-screen p-4 overflow-y-auto transition-transform -translate-x-full from-gray-800 to-indigo-900 via-sky-950 bg-linear-to-br border-r" tabindex="-1" aria-labelledby="drawer-label">
         <h5 id="drawer-admin-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Administration</h5>
         <button type="button" data-drawer-hide="drawer-admin-navigation" aria-controls="drawer-admin-navigation" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
