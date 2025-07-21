@@ -6,17 +6,17 @@ use Livewire\Component;
 
 class SchoolProfil extends Component
 {
-    public $uuid;
+    public $uuid, $slug;
 
     public $simple_name = "CEPG Réussite Assurée";
 
     public $school_name = "ECOLE";
 
-    public function mount($uuid)
+    public function mount($slug, $uuid)
     {
         $this->uuid = $uuid;
 
-
+        $this->slug = $slug;
     }
     
     public function render()

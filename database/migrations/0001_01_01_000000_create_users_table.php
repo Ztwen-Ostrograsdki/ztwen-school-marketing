@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('email')->unique();
@@ -24,7 +25,7 @@ return new class extends Migration
             $table->string('auth_token')->nullable()->default(null);
             $table->string('contacts')->nullable()->default(null);
             $table->string('FEDAPAY_ID')->nullable()->default(null);
-            $table->string('adress')->nullable()->default(null);
+            $table->string('address')->nullable()->default(null);
             $table->string('city')->nullable()->default(null);
             $table->string('department')->nullable()->default(null);
             $table->string('gender')->nullable()->default(null);

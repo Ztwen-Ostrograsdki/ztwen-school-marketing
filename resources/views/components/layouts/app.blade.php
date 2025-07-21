@@ -15,6 +15,10 @@
 
         <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
 
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
+
+        @livewireStyles
+
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @fluxAppearance
@@ -145,9 +149,16 @@
                 
             });
 
+            window.User = {!! json_encode([
+                    'id' => optional(auth()->user())->id,
+                ]) 
+            !!};
+
         </script>
         
+        @livewireScripts
 
+        @livewireSweetalertScripts
     </body>
 </html>
 

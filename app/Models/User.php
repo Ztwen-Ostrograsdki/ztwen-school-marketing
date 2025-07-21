@@ -3,15 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Helpers\TraitsManagers\UserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles, UserTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +27,7 @@ class User extends Authenticatable
         'lastname',
         'gender',
         'contacts',
-        'adress',
+        'address',
         'city',
         'department',
         'pseudo',
@@ -39,6 +41,7 @@ class User extends Authenticatable
         'blocked_because',
         'wrong_password_tried',
         'uuid',
+        'assistant_of'
     ];
 
     public static function booted()
@@ -47,10 +50,59 @@ class User extends Authenticatable
 
             $user->uuid = Str::uuid();
 
-            $user->adress = $user->city . " - " . $user->department;
+            $user->address = $user->city . " - " . $user->department;
+
+            $user->identifiant = $user->makeUserIdentifySequence();
 
         });
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function infos()
+    {
+        return $this->hasMany(Info::class);
+    }
+
+    public function stats()
+    {
+        return $this->hasMany(Stat::class);
+    }
+
+    public function school()
+    {
+        return $this->hasOne(School::class);
+    }
+
+    public function current_subscription()
+    {
+        return $this->subscriptions()->where('is_active', true)->first();
+    }
+
+    public function current_payment()
+    {
+        return $this->payments()->where('is_active', true)->first();
+    }
+
+    public function my_assistants()
+    {
+        return User::where('assistant_of', $this->id)->get();
+    }
+
+    public function my_chief()
+    {
+        return $this->assistant_of ? User::find($this->assistant_of) : null;
+    }
+
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -71,6 +123,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'blocked_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -85,5 +138,31 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    public function to_profil_route()
+    {
+        return to_route('user.profil', ['id' => $this->id, 'uuid' => $this->uuid]);
+    } 
+    
+    
+    public function to_my_assistants_list_route()
+    {
+        return to_route('my.assistants', ['id' => $this->id, 'uuid' => $this->uuid]);
+    }
+
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    public function getUnreadNotifications()
+    {
+        return $this->unreadNotifications;
+    }
+
+    public function getReadNotifications()
+    {
+        return $this->readNotifications;
     }
 }

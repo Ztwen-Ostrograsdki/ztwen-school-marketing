@@ -9,11 +9,13 @@ class StatsManagerModal extends Component
 {
     public $modal_name = "#stats-manager-modal";
 
-    public $title, $stat, $year, $stat_id;
+    public $title, $stat, $year, $stat_id, $exam;
 
     public function render()
     {
-        return view('livewire.modals.stats-manager-modal');
+        $exams = config('app.exams');
+
+        return view('livewire.modals.stats-manager-modal', compact('exams'));
     }
 
     #[On("ManageStatLiveEvent")]

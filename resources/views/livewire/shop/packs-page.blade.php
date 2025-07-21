@@ -1,5 +1,172 @@
 <div class="w-full max-w-[85rem] py-3 px-4 sm:px-6 lg:px-8 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2">
-    <div class="mt-10">
+
+    <section class="bg-black/90 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-gray-300 sm:text-5xl">
+                    Les packs <span class="text-sky-800">{{ env('APP_NAME') }}</span> disponibles
+                </h2>
+                <p class="mt-4 text-xl text-lime-400 font-thin">
+                    Choisissez votre pack cadeau, et façonner votre établissement sur la toîle!!!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <!-- Free Plan -->
+                <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-semibold text-white">Free</h3>
+                        <p class="mt-4 text-gray-400">Get started with our basic features.</p>
+                    </div>
+                    <div class="mb-8">
+                        <span class="text-5xl font-extrabold text-white">$0</span>
+                        <span class="text-xl font-medium text-gray-400">/mo</span>
+                    </div>
+                    <ul class="mb-8 space-y-4 text-gray-400">
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>1 user account</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>10 transactions per month</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Basic support</span>
+                        </li>
+                    </ul>
+                    <a href="{{route('pack.profil', ['uuid' => "free", 'slug' => "pack-free"])}}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
+                    Sign Up
+                    </a>
+                </div>
+
+                <!-- Starter Plan -->
+                <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-semibold text-white">Starter</h3>
+                        <p class="mt-4 text-gray-400">Perfect for small businesses and startups.</p>
+                    </div>
+                    <div class="mb-8">
+                        <span class="text-5xl font-extrabold text-white">$49</span>
+                        <span class="text-xl font-medium text-gray-400">/mo</span>
+                    </div>
+                    <ul class="mb-8 space-y-4 text-gray-400">
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>5 user accounts</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>100 transactions per month</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Standard support</span>
+                        </li>
+                    </ul>
+                    <a href="{{route('pack.profil', ['uuid' => "starter", 'slug' => "pack-starter"])}}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
+                    Get Started
+                    </a>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-semibold text-white">Pro</h3>
+                        <p class="mt-4 text-gray-400">Ideal for growing businesses and enterprises.</p>
+                    </div>
+                    <div class="mb-8">
+                        <span class="text-5xl font-extrabold text-white">$99</span>
+                        <span class="text-xl font-medium text-gray-400">/mo</span>
+                    </div>
+                    <ul class="mb-8 space-y-4 text-gray-400">
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Unlimited user accounts</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Unlimited transactions</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Priority support</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Advanced analytics</span>
+                        </li>
+                    </ul>
+                    <a href="{{route('pack.profil', ['uuid' => "pro", 'slug' => "pack-pro"])}}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
+                    Get Started
+                    </a>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-semibold text-white">Enterprise</h3>
+                        <p class="mt-4 text-gray-400">Tailored for large-scale deployments and custom needs.</p>
+                    </div>
+                    <div class="mb-8">
+                        <span class="text-5xl font-extrabold text-white">Custom</span>
+                    </div>
+                    <ul class="mb-8 space-y-4 text-gray-400">
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Dedicated infrastructure</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Custom integrations</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Dedicated support team</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Premium SLAs</span>
+                        </li>
+                    </ul>
+                    <a href="{{route('pack.profil', ['uuid' => "basic", 'slug' => "pack-basic"])}}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
+                    Contact Sales
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="mt-10 hidden">
         <div>
             <h5 class="card letter-spacing-1 flex bg-black/70 text-center mx-auto flex-col gap-y-2 text-gray-200">
                 <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl  uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
@@ -15,7 +182,7 @@
             <div class="grid gap-14 md:grid-cols-2 md:gap-5">
                 
                 <div data-aos-delay="150" class="rounded-xl opacity-80 card hover:opacity-100 transition-opacity duration-150 bg-blue-800/80 border border-white p-6 text-center shadow-2xl ">
-                    <div class="mx-auto flex h-20 w-20 -translate-y-16 transform items-center justify-center rounded-full my-0 shadow-lg bg-sky-500 shadow-sky-500/40">
+                    <div class="mx-auto flex h-20 w-20 -translate-y-16 transform items-center justify-center rounded-full my-0 shadow-sm shadow-lime-400 bg-sky-500 shadow-sky-500/40">
                         <span class="fas fa-star"></span>
                         <span class="">BASIC</span>
                         <span class="fas fa-star"></span>
@@ -48,7 +215,7 @@
                 </div>
 
                 <div data-aos-delay="150" class="rounded-xl bg-black/60 border border-white p-6 text-center shadow-2xl opacity-80 card hover:opacity-100 transition-opacity duration-150">
-                    <div class="mx-auto flex h-20 w-20 -translate-y-16 transform items-center justify-center rounded-full my-0 shadow-lg bg-green-500 shadow-green-500/40">
+                    <div class="mx-auto flex h-20 w-20 -translate-y-16 transform items-center justify-center rounded-full my-0 shadow-sm shadow-lime-400 bg-green-500 shadow-green-500/40">
                         <span class="fas fa-star"></span>
                         <span class="">PRO</span>
                         <span class="fas fa-star"></span>

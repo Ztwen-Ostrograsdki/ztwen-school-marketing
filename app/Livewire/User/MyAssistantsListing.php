@@ -8,12 +8,14 @@ use Livewire\Component;
 #[Title("La liste de mes assistants")]
 class MyAssistantsListing extends Component
 {
-    public $uuid;
+    public $uuid, $user_id;
 
-    public function mount($uuid)
+    public function mount($id, $uuid)
     {
         
         $this->uuid = $uuid;
+
+        $this->user_id = $id;
 
     }
 

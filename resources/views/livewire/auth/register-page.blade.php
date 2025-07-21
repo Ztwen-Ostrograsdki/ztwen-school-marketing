@@ -39,18 +39,20 @@
                             <h5 class="letter-spacing-1 flex flex-col gap-y-2 text-gray-200">
                                 <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl  uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
                                     <span class="">
-                                        inscription
+                                        {{ $title }}
                                     </span>
                                     <span class="absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
                                 </p>
                             
                             </h5>
+                            @if($updating == false)
                             <p class="mt-4 text-sm block text-gray-600 dark:text-gray-400">
-                            Vous avez déjà un compte?
-                            <a class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('login')}}">
-                                Connectez-vous ici
-                            </a>
+                                Vous avez déjà un compte?
+                                <a class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('login')}}">
+                                    Connectez-vous ici
+                                </a>
                             </p>
+                            @endif
                         </div>
                         <div wire:loading wire:target='register' class="text-center w-full mx-auto my-3">
                             <h5 class="w-full bg-success-400 text-gray-900 border rounded-xl p-3 letter-spacing-2 border-r-gray-800 border-gray-900">
@@ -124,13 +126,14 @@
                                         </div>
                                     </div>
 
+                                    @guest
                                     <div class="relative z-0 w-full mb-5 group text-gray-400">
                                         <label for="register-email" class="block mb-1 text-sm font-medium text-gray-400">Votre addresse mail</label>
                                         <div class="relative">
                                             <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
                                                 <span class="fas fa-envelope"></span>
                                             </div>
-                                            <input wire:model.live='email' type="text" id="register-email" aria-describedby="helper-text-register-email" class="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Votre addresse mail" required />
+                                            <input  @auth disabled @endauth wire:model.live='email' type="text" id="register-email" aria-describedby="helper-text-register-email" class="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5   dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Votre addresse mail" required />
                                         </div>
                                         @error('email')
                                         <p id="helper-text-register-email" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
@@ -138,6 +141,7 @@
                                         </p>
                                         @enderror
                                     </div>
+                                    @endguest
                                 </div>
                             </div>
                             
@@ -255,6 +259,7 @@
                                 @enderror
                             </div>
 
+                            @guest
                             <div class="w-full mx-auto border rounded-lg border-gray-500 px-2 mb-5">
                                 <span class="inline-block py-2 letter-spacing-2 text-yellow-400 w-full text-center text-sm border-b mb-1 border-gray-500">
                                     Sécurisation compte
@@ -266,7 +271,7 @@
                                             <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
                                                 <span class="fas fa-key"></span>
                                             </div>
-                                            <input wire:model.live='password' type="password" id="register-password" aria-describedby="helper-text-register-password" class="bg-transparent border  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500 @if ($password && $password_confirmation &&  $password == $password_confirmation) border-green-600 shadow-2 shadow-green-600 @else shadow-none border-gray-600 @endif" placeholder="Choisissez un mot de passe confidentiel" required />
+                                            <input @auth disabled @endauth wire:model.live='password' type="password" id="register-password" aria-describedby="helper-text-register-password" class="bg-transparent border  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500 @if ($password && $password_confirmation &&  $password == $password_confirmation) border-green-600 shadow-2 shadow-green-600 @else shadow-none border-gray-600 @endif" placeholder="Choisissez un mot de passe confidentiel" required />
                                         </div>
                                         @error('password')
                                         <p id="helper-text-register-password" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
@@ -288,7 +293,7 @@
                                             <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
                                                 <span class="fas fa-key"></span>
                                             </div>
-                                            <input wire:model.live='password_confirmation' type="password" id="register-password_confirmation" aria-describedby="helper-text-register-password_confirmation" class="bg-transparent borde  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5    dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500 @if ($password && $password_confirmation &&  $password == $password_confirmation) border-green-600 shadow-2 shadow-green-600 @else shadow-none border-gray-600 @endif" placeholder="Confirmez le mot de passe" required />
+                                            <input  @auth disabled @endauth wire:model.live='password_confirmation' type="password" id="register-password_confirmation" aria-describedby="helper-text-register-password_confirmation" class="bg-transparent borde  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5    dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500 @if ($password && $password_confirmation &&  $password == $password_confirmation) border-green-600 shadow-2 shadow-green-600 @else shadow-none border-gray-600 @endif" placeholder="Confirmez le mot de passe" required />
                                         </div>
                                         @error('password_confirmation')
                                         <p id="helper-text-register-password_confirmation" class="mt-2 text-xs text-red-500 letter-spacing-2 ">
@@ -299,6 +304,7 @@
                                     @endif
                                 </div>
                             </div>
+                            @endguest
                             
                             
                         </div>
@@ -306,6 +312,7 @@
                         
                         <div class="flex w-full justify-center items-center">
                             <a type="button" wire:click='register' wire:loading.class='opacity-50' wire:target='register' class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                @guest
                                 <span>
                                     <span wire:loading.remove wire:target='register'>S'inscrire</span>
                                     <span wire:loading wire:target='register'>
@@ -313,6 +320,15 @@
                                         Création en cours...
                                     </span>
                                 </span>
+                                @else
+                                <span>
+                                    <span wire:loading.remove wire:target='register'>Mettre à jour</span>
+                                    <span wire:loading wire:target='register'>
+                                        <span class="fas animate-spin fa-rotate"></span>
+                                        Mise à jour en cours...
+                                    </span>
+                                </span>
+                                @endguest
                             </a>
                         </div>
                     </form>

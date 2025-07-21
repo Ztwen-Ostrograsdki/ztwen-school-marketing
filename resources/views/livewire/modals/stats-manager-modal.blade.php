@@ -18,14 +18,29 @@
                 <!-- Modal body -->
                 <form wire:submit.prevent="insert" class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-2">
-                        <div class="col-span-2">
-                            <label for="title" class="block mb-2 text-sm text-amber-400 font-medium ">Références</label>
-                            <input wire:model='title' type="text" name="title" id="title" class="bg-transparent border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="BEPC 2025, BAC 2025..." >
+                        <div class="col-span-1">
+                            <label for="exam" class="block mb-2 text-sm text-amber-400 font-medium ">Examen</label>
+                            <select wire:model='exam' id="exam" class="bg-transparent border border-sky-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option class="text-sm text-white py-1.5 bg-black" >Selectionner l'examen</option>
+
+                                @foreach ($exams as $k => $exm)
+                                    <option class="text-white py-1.5 bg-black" value="{{$exm}}">{{$exm}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         
                         <div class="col-span-1">
                             <label for="year" class="block mb-2 text-sm text-amber-400 font-medium ">L'année</label>
                             <input wire:model='year' type="text" name="year" id="year" class="bg-transparent border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Préciser l'année de l'examen" >
+                        </div>
+                        <div class="col-span-2">
+
+                            <label for="title" class="flex justify-between mb-2 text-sm text-amber-400 font-medium ">
+                                <span>Références</span>
+                                <span class="text-orange-500 letter-spacing-1 font-thin">(Optionnel)</span>
+                            </label>
+
+                            <input wire:model='title' type="text" name="title" id="title" class="bg-transparent border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="BEPC 2025, BAC 2025..." >
                         </div>
 
                         <div class="col-span-1">

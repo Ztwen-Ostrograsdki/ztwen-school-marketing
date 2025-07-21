@@ -35,7 +35,7 @@
             </div>
             <div class="px-6 mt-6 overflow-x-auto card">
                 <div class="text-xs sm:text-sm mt-4 md:mt-0 flex flex-wrap gap-3 justify-start ">
-                    <a href="{{route('user.profil', ['uuid' => "uudeuueueu"])}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
+                    <a href="{{route('user.profil', ['id' => 3, 'uuid' => "uudeuueueu"])}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
                         <span>
                             <span class="fas fa-home mr-1"></span>
                             Mon profil

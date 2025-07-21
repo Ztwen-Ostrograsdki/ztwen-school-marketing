@@ -14,6 +14,42 @@ return [
 
     ],
 
+    'notifications_sections' => [
+        'news' => "Récentes",
+        'unread' => "Non lues",
+        'read' => "Déjà lues",
+        'all' => "Toutes les notifications",
+        'hidden' => "Masquées",
+    ],
+
+    'exams' => [
+        'cep' => 'CEP',
+        'bepc' => 'BEPC',
+        'cap' => 'CAP',
+        'bts' => 'BTS',
+        'bac' => 'BAC',
+        'bac-F1' => 'BAC F1',
+        'bac-F2' => 'BAC F2',
+        'bac-F3' => 'BAC F3',
+        'bac-F4' => 'BAC F4',
+        'bac-D' => 'BAC F3',
+        'bac-C' => 'BAC F3',
+        'bac-E' => 'BAC E',
+        'bac-A1' => 'BAC F3',
+        'bac-A2' => 'BAC F3',
+        'bac-AB' => 'BAC F3',
+        'dt-EA' => 'DT EA',
+        'dt-EL' => 'DT EL',
+        'dt-FC' => 'DT FC',
+        'dt-FM' => 'DT FM',
+        'dt-MA' => 'DT MA',
+        'dt-OG' => 'DT OG',
+        'dt-BTP' => 'DT BTP',
+        'dt-DPB' => 'DT DPB',
+        'dt-OBB' => 'DT OBB',
+
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
