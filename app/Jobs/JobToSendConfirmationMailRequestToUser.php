@@ -65,11 +65,9 @@ class JobToSendConfirmationMailRequestToUser implements ShouldQueue
 
         $user = $this->user;
 
-        $lien = route('email.verification', ['email' => $user->email, 'key' => $key]);
+        $lien = route('email.verification', ['token' => env('APP_MY_TOKEN'), 'email' => $user->email, 'key' => $key]);
 
-        $updated = $user->forceFill([
-            'email_verify_key' => Hash::make($key)
-        ])->save();
+        $user->forceFill(['email_verify_key' => Hash::make($key)])->save();
 
         $greating = $user->greatingMessage($user->getUserNamePrefix(true, false)) . ", ";
 

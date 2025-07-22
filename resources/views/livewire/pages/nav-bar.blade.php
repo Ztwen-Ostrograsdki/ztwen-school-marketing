@@ -16,11 +16,23 @@
             <!-- Desktop Menu Links -->
             <div class="hidden md:flex items-center md:gap-8 text-white">
                 <a href="{{route('home')}}" class="text-sm font-medium @if(request()->route()->named('home')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Acceuil</a>
-                <a href="{{route('user.profil', ['id' => 2, 'uuid' => "uudeuueueu"])}}" class="text-sm font-medium @if(request()->route()->named('user.profil')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Mon profil</a>
-                <a href="{{route('admin')}}" class="text-sm font-medium @if(request()->route()->named('admin')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Administration</a>
-                <a href="{{route('about.us')}}" class="text-sm font-medium @if(request()->route()->named('about.us')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">A propos</a>
-                <a href="{{route('packs.page')}}" class="@if(request()->route()->named('packs.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif text-sm font-medium  px-2 py-2 rounded-lg transition">Services</a>
-                <a href="#portfolio" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">A la une</a>
+                @auth
+                    <a href="{{auth_user()->to_profil_route()}}" class="text-sm font-medium @if(request()->route()->named('user.profil')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">
+                        Mon profil
+                    </a>
+                    <a href="{{route('admin')}}" class="text-sm font-medium @if(request()->route()->named('admin')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">
+                        Administration
+                    </a>
+                @endauth
+                <a href="{{route('about.us')}}" class="text-sm font-medium @if(request()->route()->named('about.us')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
+                    A propos
+                </a>
+                <a href="{{route('packs.page')}}" class="@if(request()->route()->named('packs.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif text-sm font-medium  px-2 py-2 rounded-lg transition">
+                    Services
+                </a>
+                <a href="#portfolio" class="text-sm font-medium hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 px-2 py-2 rounded-lg transition">
+                    A la une
+                </a>
                 
                 @guest
                     @if(!request()->route()->named('register'))
@@ -36,42 +48,51 @@
                 @endguest
 
                 {{-- USER DROPDOWN MENU --}}
+                @auth
                 <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
 
                     <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 cursor-pointer focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                         <span class="sr-only">Open user menu</span>
-                        <img class="w-8 h-8 rounded-full" src="{{asset('icons/news/user-person-man.png')}}" alt="user photo">
+                        <img class="w-8 h-8 rounded-full border-2 border-indigo-500" src="{{user_profil_photo(auth_user())}}" alt="profil de photo de {{auth_user()->getFullName()}}">
                     </button>
                     <!-- Dropdown menu -->
                     
-                    <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
+                    <div class="z-50 hidden my-4 text-base list-none bg-black border border-amber-400 divide-y divide-gray-100 rounded-lg shadow-md shadow-gray-900 dark:divide-gray-600 " id="user-dropdown">
                         <div class="px-4 py-3">
-                        <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                        <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                        <span class="block text-sm text-gray-900 dark:text-white">
+                            {{ auth_user()->getFullName() }}
+                        </span>
+                        <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">
+                            {{ auth_user()->email }}
+                        </span>
                         </div>
-                        <ul class="py-2" aria-labelledby="user-menu-button">
-                        <li>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Administrations</a>
-                        </li>
-                        <li>
-                            <a href="{{route('user.profil', ['id' => 3, 'uuid' => "uudeuueueu"])}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mon profil</a>
-                        </li>
-                        <li>
-                            <a href="{{route('my.assistants', ['id' => 3, 'uuid' => "uudeuueueu"])}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes assistants</a>
-                        </li>
-                        <li>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mon abonnements</a>
-                        </li>
-                        <li>
-                            <a href="{{route('create.school', ['uuid' => "uudeuueueu"])}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Ajouter une école</a>
-                        </li>
-                        <li>
-                            <a type="button" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Se déconnecter</a>
-                        </li>
+                        <ul class="py-2" aria-labelledby="user-menu-button" class="">
+                            <li>
+                                <a href="{{route('admin')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Administrations</a>
+                            </li>
+                            <li>
+                                <a href="{{auth_user()->to_profil_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mon profil</a>
+                            </li>
+                            <li>
+                                <a href="{{auth_user()->to_my_assistants_list_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes assistants</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mon abonnements</a>
+                            </li>
+                            <li>
+                                <a href="{{route('create.school', ['uuid' => "uudeuueueu"])}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Ajouter une école</a>
+                            </li>
+                            <li>
+                                <a href="{{auth_user()->to_profil_edit_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Editer mon profil</a>
+                            </li>
+                            <li>
+                                <a x-on:click="$dispatch('LogoutLiveEvent')" type="button" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Se déconnecter</a>
+                            </li>
                         </ul>
                     </div>
                     
                 </div>
+                @endauth
                 {{-- END USER DROPDOWN MENU --}}
             </div>
             {{-- SMALL SCREEN  SIDEBAR BUTTON--}}

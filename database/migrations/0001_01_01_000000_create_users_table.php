@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('firstname')->nullable()->default(null);
             $table->string('lastname')->nullable()->default(null);
             $table->string('profil_photo')->nullable()->default(null);
+            $table->string('marital_status')->nullable()->default(null);
             $table->string('password_reset_key')->nullable()->default(null);
             $table->string('email_verify_key')->nullable()->default(null);
             $table->boolean('blocked')->default(false);

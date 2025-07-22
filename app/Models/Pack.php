@@ -38,12 +38,12 @@ class Pack extends Model
 
     public function to_profil_route()
     {
-        return to_route('pack.profil', ['uuid' => $this->uuid, 'slug' => $this->slug]);
+        return route('pack.profil', ['uuid' => $this->uuid, 'slug' => $this->slug]);
     }
     
     public function to_subscribing_route()
     {
-        return to_route('subscribe.confirmation', ['uuid' => $this->uuid, 'slug' => $this->slug, 'token' => env('APP_MY_TOKEN')]);
+        return route('subscribe.confirmation', ['uuid' => $this->uuid, 'slug' => $this->slug, 'token' => env('APP_MY_TOKEN')]);
     }
 
     public static function booted()

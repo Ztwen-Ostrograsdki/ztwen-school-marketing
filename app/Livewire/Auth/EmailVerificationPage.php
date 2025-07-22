@@ -3,14 +3,14 @@
 namespace App\Livewire\Auth;
 
 use Akhaled\LivewireSweetalert\Toast;
-use App\Events\UpdateUsersListToComponentsEvent;
-use App\Helpers\Tools\ModelsRobots;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title("Confirmation de l'adresse mail")]
 class EmailVerificationPage extends Component
 {
     use Toast;
@@ -21,36 +21,41 @@ class EmailVerificationPage extends Component
 
     public $user;
 
-    public $confirmed = false;
-
-    public $key_expired = false;
+    public $confirmed = false, $key_expired = false, $token;
 
     
-    public function mount($email = null, $key = null)
+    public function mount($token, $email = null, $key = null)
     {
-        if($email) $this->$email = $email;
+        if($token && $token == env('APP_MY_TOKEN')){
 
-        if($this->email){
+            if($email) $this->$email = $email;
 
-            $user = User::where('email', $this->email)->whereNotNull('email_verify_key')->first();
+            if($this->email){
 
-            if($user){
+                $user = User::where('email', $this->email)->whereNotNull('email_verify_key')->first();
 
-                if($user->email_verified_at){
+                if($user){
 
-                    $this->confirmed = true;
-                }
-                else{
+                    if($user->email_verified_at){
 
-                    $this->user = $user;
+                        $this->confirmed = true;
+                    }
+                    else{
+
+                        $this->user = $user;
+
+                    }
 
                 }
 
             }
 
-        }
+            if($key) $this->email_verify_key = $key;
 
-        if($key) $this->email_verify_key = $key;
+        }
+        else{
+            abort(404);
+        }
     }
 
     
@@ -200,11 +205,11 @@ class EmailVerificationPage extends Component
 
                 $message = "Demande lancée avec succès! Un courriel vous a été envoyé pour confirmation, veuillez vérifier votre boite mail.";
 
-                $this->toast($message, 'info', 5000);
+                $this->toast($message, 'success', 5000);
 
                 session()->flash('success', $message);
 
-                return redirect(route('email.verification', ['email' => $this->email]))->with('success', "Confirmer votre compte en renseignant le code qui vous été envoyé!");
+                return redirect(route('email.verification', ['token' => env('APP_MY_TOKEN'), 'email' => $user->email]))->with('success', "Confirmer votre compte en renseignant le code qui vous été envoyé!");
             }
             else{
 

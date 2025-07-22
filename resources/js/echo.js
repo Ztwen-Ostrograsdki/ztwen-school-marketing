@@ -23,6 +23,7 @@ if (window.User) {
     window.ClientUser = window.User;
 }
 
+// USER CHANNELS
 e.private("App.Models.User." + window.ClientUser.id)
 
     .notification((notification) => {
@@ -43,3 +44,26 @@ e.private("App.Models.User." + window.ClientUser.id)
     .listen("NotificationsDeletedSuccessfullyEvent", (data) => {
         Livewire.dispatch("LiveNotificationsDeletedSuccessfullyEvent");
     });
+
+// ADMIN CHANNELS
+e.private("admin")
+    .listen("NotificationDispatchedToAdminsSuccessfullyEvent", (user) => {
+        Livewire.dispatch(
+            "LiveNotificationDispatchedToAdminsSuccessfullyEvent",
+            user
+        );
+    })
+    .listen("NewLyceeCreatedSuccessfullyEvent", (data) => {
+        Livewire.dispatch("LiveNewLyceeCreatedSuccessfullyEvent", data);
+    })
+    .listen("UpdateUsersListToComponentsEvent", (data) => {
+        Livewire.dispatch("LiveUpdateUsersListToComponentsEvent");
+    });
+
+e.private("confirmeds").listen("UserDataHasBeenUpdatedEvent", (user) => {
+    Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
+});
+
+e.channel("public").listen("UserDataHasBeenUpdatedEvent", (user) => {
+    Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
+});

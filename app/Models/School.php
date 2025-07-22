@@ -40,7 +40,7 @@ class School extends Model
 
     public function to_profil_route()
     {
-        return to_route('school.profil', ['slug' => $this->slug, 'uuid' => $this->uuid]);
+        return route('school.profil', ['slug' => $this->slug, 'uuid' => $this->uuid]);
     }
 
 

@@ -484,8 +484,12 @@ if(!function_exists('user_profil_photo')){
 
     function user_profil_photo($user = null)
     {
-        if(!$user) return asset("/images/image1.jpg");
+        if(!$user) 
         
+            if(auth_user()) $user = auth_user();
+
+        else return asset("/images/image1.jpg");
+
         if($user->profil_photo) 
 
             return url('storage', $user->profil_photo);
@@ -493,7 +497,6 @@ if(!function_exists('user_profil_photo')){
         else
 
             return asset("/images/image1.jpg");
-
 
     }
 

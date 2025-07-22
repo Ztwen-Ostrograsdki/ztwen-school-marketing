@@ -4,12 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Helpers\TraitsManagers\UserTrait;
+use App\Observers\ObserveUser;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
+#[ObservedBy(ObserveUser::class)]
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -33,6 +36,7 @@ class User extends Authenticatable
         'pseudo',
         'identifiant',
         'profil_photo',
+        'marital_status',
         'auth_token',
         'password_reset_key',
         'FEDAPAY_ID',
@@ -44,6 +48,42 @@ class User extends Authenticatable
         'assistant_of'
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'blocked_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    /**
+     * Get the user's initials
+     */
+    public function initials(): string
+    {
+        return Str::of($this->name)
+            ->explode(' ')
+            ->take(2)
+            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->implode('');
+    }
+
     public static function booted()
     {
         static::creating(function ($user){
@@ -53,6 +93,12 @@ class User extends Authenticatable
             $user->address = $user->city . " - " . $user->department;
 
             $user->identifiant = $user->makeUserIdentifySequence();
+
+        });
+
+        static::updating(function ($user){
+
+            $user->address = $user->city . " - " . $user->department;
 
         });
     }
@@ -102,53 +148,20 @@ class User extends Authenticatable
         return $this->assistant_of ? User::find($this->assistant_of) : null;
     }
 
-    
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'blocked_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
-    /**
-     * Get the user's initials
-     */
-    public function initials(): string
-    {
-        return Str::of($this->name)
-            ->explode(' ')
-            ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
-            ->implode('');
-    }
-
     public function to_profil_route()
     {
-        return to_route('user.profil', ['id' => $this->id, 'uuid' => $this->uuid]);
+        return route('user.profil', ['id' => $this->id, 'uuid' => $this->uuid]);
     } 
+
+    public function to_profil_edit_route()
+    {
+        return route('register', ['uuid' => $this->uuid]);
+    }
     
     
     public function to_my_assistants_list_route()
     {
-        return to_route('my.assistants', ['id' => $this->id, 'uuid' => $this->uuid]);
+        return route('my.assistants', ['id' => $this->id, 'uuid' => $this->uuid]);
     }
 
     public function getNotifications()

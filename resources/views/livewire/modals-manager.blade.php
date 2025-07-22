@@ -9,6 +9,10 @@
     <button data-modal-target="infos-manager-modal" data-modal-toggle="infos-manager-modal" class="hidden" type="button"></button>
     @livewire('modals.communique-manager-modal')
 
+
+    <button data-modal-target="logout-modal" data-modal-toggle="logout-modal" class="hidden" type="button"></button>
+    @livewire('auth.logout-page')
+
     {{-- USER MODALS START --}}
     
     

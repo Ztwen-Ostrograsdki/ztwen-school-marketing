@@ -17,7 +17,9 @@ use App\Livewire\Shop\PackProfil;
 use App\Livewire\Shop\PacksPage;
 use App\Livewire\User\MyAssistantsListing;
 use App\Livewire\User\MyProfil;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 Route::get('/', Home::class)->name('home');
@@ -50,7 +52,7 @@ Route::get('profil/k={id}/u={uuid}/mon-profil', MyProfil::class)->name('user.pro
 Route::get('profil/k={id}/u={uuid}/mes-assistants', MyAssistantsListing::class)->name('my.assistants');
 
 // Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
-Route::get('/verification-email/email={email}/{key?}', EmailVerificationPage::class)->name('email.verification');
+Route::get('/verification-email/r={token}/email={email}/{key?}', EmailVerificationPage::class)->name('email.verification');
     // Route::get('/reinitialisation-mot-de-passe/token={token?}/email={email?}', ResetPasswordPage::class)->name('password.reset');
     // Route::get('/reinitialisation-mot-de-passe/par-email/email={email?}/{key?}', ResetPasswordPage::class)->name('password.reset.by.email');
     // Route::get('/mot-de-passe-oublie', ForgotPasswordPage::class)->name('password.forgot');
@@ -66,6 +68,27 @@ Route::get('/419', function () {
 Route::get('/410', function () {
     abort(410);
 })->name('error.410');
+
+
+// Route::get('/profil_photos/{path}', function($path){
+
+//     if(Storage::disk('local')->exists($path)){
+
+//         $full_path = 'profil_photos/' . $path;
+
+//         $file = Storage::disk('local')->get($full_path);
+
+//         $type = Storage::disk('local')->mimeType($full_path);
+
+//         return response($file)->header("Content-Type", $type);
+
+//     }
+//     else{
+
+//        return abort(404);
+//     }
+
+// })->where('path', '.*')->name('user.profil.photo');
 
 
 Route::post('logout', App\Livewire\Actions\Logout::class)

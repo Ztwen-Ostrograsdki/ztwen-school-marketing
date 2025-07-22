@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\UserDataHasBeenUpdatedEvent;
 use App\Models\User;
 use Illuminate\Support\Str;
 
@@ -23,6 +24,8 @@ class ObserveUser
 
             $user->assignRole('master');
         }
+
+        UserDataHasBeenUpdatedEvent::dispatch($user);
     }
 
     /**
@@ -30,15 +33,15 @@ class ObserveUser
      */
     public function updated(User $user): void
     {
-        //
+        UserDataHasBeenUpdatedEvent::dispatch($user);
     }
 
     /**
      * Handle the User "deleted" event.
      */
-    public function deleted(User $user): void
+    public function deleting(User $user): void
     {
-        //
+        UserDataHasBeenUpdatedEvent::dispatch($user);
     }
 
     /**

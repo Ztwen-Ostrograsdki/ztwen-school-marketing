@@ -35,27 +35,55 @@
                 <span class="absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
             </p>
             
-            <form wire:keydown.enter='login' @submit.prevent class="mt-5">
+            <form wire:keydown.enter='login' @submit.prevent class="mt-5 text-left">
                 <div class="flex gap-y-2 flex-col text-sm">
-                    <div class="text-left">
-                        <label class="text-gray-300 cursor-pointer letter-spacing-2" for="email">
-                            <span class="fas fa-user"></span>
-                            <span>Votre identfiant</span>
-                        </label>
-                        <input autocomplete="false" type="text" id="email" placeholder="Username..." class="w-full mx-auto bg-transparent">
+                    <div>
+                    <label for="email" class="block text-left text-sm mb-2 cursor-pointer text-gray-300 ml-1">
+                        <span class="fas fa-user-check mr-1.5"></span>
+                        <span>Adresse mail</span>
+                    </label>
+                    <div class="relative">
+                      <input wire:loading.attr='disabled' wire:target='login' placeholder="Renseignez votre adresse mail" wire:model='email' type="email" id="email" name="email" class="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-80 disabled:pointer-events-none bg-transparent dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 disabled:text-yellow-300" required aria-describedby="con_email-error">
+                      @error('email')
+                      <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                        <svg class="h-5 w-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                        </svg>
+                      </div>
+                      @enderror
                     </div>
-                    <div class="text-left">
-                        <label class="text-gray-300 cursor-pointer letter-spacing-2" for="email">
-                            <span class="fas fa-key"></span>
-                            Votre mot de passe
-                        </label>
-                        <input type="password" id="password" placeholder="Password..." class="w-full mx-auto ">
+                    @error('email')
+                      <p class="text-xs text-red-600 mt-2" id="con_email-error">{{ $message }}</p>
+                    @enderror
+                  </div>
+
+                  <div>
+                    <label for="password" class="block text-sm mb-2 cursor-pointer text-gray-300 text-left ml-1">
+                        <span class="fas fa-key mr-1.5"></span>
+                        <span>Votre mot de passe</span>
+                    </label>
+                    <div class="relative">
+                      <input wire:loading.attr='disabled' wire:target='login' placeholder="Renseignez votre mot de passe..." wire:model.live='password' type="password" id="password" name="password" class="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 bg-transparent" required aria-describedby="password-error">
+                      @error('password')
+                      <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                        <svg class="h-5 w-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                        </svg>
+                      </div>
+                      @enderror
                     </div>
+                    @error('password')
+                      <p class="text-xs text-red-600 mt-2" id="password-error">{{ $message }}</p>
+                    @enderror
+                  </div>
                 </div>
-                <button type="submit" class="p-2 text-black cursor-pointer border from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 rounded-2xl m-8 w-36 mx-auto sm:w-48 hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700"
+                <button wire:click='login' wire:loading.attr='disabled' wire:target='login' class="p-2 bg-sky-500 hover:bg-sky-800 text-black text-center font-semibold letter-spacing-1 rounded-md w-full my-5 cursor-pointer"
                 >
                     <span>
-                        <span wire:loading.remove wire:target='login'>Se connecter</span>
+                        <span wire:loading.remove wire:target='login'>
+                            <span class="fas fa-user-check mr-1"></span>
+                            <span>Se connecter</span>
+                        </span>
                         <span wire:loading wire:target='login'>
                             <span class="fas animate-spin fa-rotate"></span>
                             Authentification en cours...
