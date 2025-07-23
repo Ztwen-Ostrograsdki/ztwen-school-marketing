@@ -7,8 +7,10 @@ use App\Events\BlockedUserTryingToLoginEvent;
 use App\Events\LogoutUserEvent;
 use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Models\User;
+use App\Notifications\RealTimeNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -113,6 +115,10 @@ class LoginPage extends Component
                 }
 
                 $this->toast("Connexion réussie!", 'success');
+
+                $msg = "Vous êtes connecté!";
+
+                Notification::sendNow([$user], new RealTimeNotification($msg));
 
                 request()->session()->regenerate();
 

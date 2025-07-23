@@ -16,12 +16,13 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('likes')->nullable()->default(2);
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(false);
             $table->string('name')->nullable()->default(null);
             $table->string('contacts')->nullable()->default(null);
             $table->string('simple_name')->nullable()->default(null);
             $table->string('level')->nullable()->default(null);
             $table->string('slug')->unique();
+            $table->string('folder')->unique();
             $table->string('system')->nullable()->default(null);
             $table->string('department')->nullable()->default(null);
             $table->string('city')->nullable()->default(null);

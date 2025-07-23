@@ -20,7 +20,7 @@ class NotificationDispatchedToAdminsSuccessfullyEvent implements ShouldBroadcast
      */
     public function __construct(public ?User $user = null)
     {
-        $this->user = $user;
+        
     }
 
     /**

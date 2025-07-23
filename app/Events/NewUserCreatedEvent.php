@@ -11,16 +11,18 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class BlockedUserTryingToLoginEvent implements ShouldBroadcast
+class NewUserCreatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $user)
+    public function __construct(
+        public User $user,
+    )
     {
-        
+        //
     }
 
     /**
@@ -31,7 +33,7 @@ class BlockedUserTryingToLoginEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('admin'),
+            new PrivateChannel('confirmeds'),
         ];
     }
 }

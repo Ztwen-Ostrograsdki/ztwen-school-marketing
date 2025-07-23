@@ -24,35 +24,59 @@ use Illuminate\Support\Str;
 
 Route::get('/', Home::class)->name('home');
 
-// Route::middleware('guest')->group(function () {
-    
-    
-// });
+
+Route::middleware(['auth'])->group(function(){
+
+    // ADMINS ROUTES
+    Route::get('administration', Dashboard::class)->name('admin');
+
+    Route::get('administration/les-utilisateurs', UsersListing::class)->name('admin.users.listing');
+
+    Route::get('administration/les-assistants', AssistantsListing::class)->name('admin.assistants.listing');
+
+    Route::get('administration/les-ecoles', SchoolsListing::class)->name('admin.schools.listing');
+
+
+    // END ADMINS ROUTES
+
+    Route::get('boutique/u={uuid}/pack={slug}/tok={token}/validation-souscription', SubscribePage::class)->name('subscribe.confirmation');
+
+    Route::get('mon-profil/u={uuid}/edition-profil', RegisterPage::class)->name('user.profil.edition')->middleware(['user.self']);
+
+    Route::get('mon-profil/u={user_uuid}/gestion/creation-ecole', CreateSchool::class)->name('create.school');
+
+    Route::get('mon-profil/u={user_uuid}/s={school_slug}/is={school_id}/edition/edition-de-mon-ecole', CreateSchool::class)->name('school.edition');
+
+    Route::get('profil/k={id}/u={uuid}/mon-profil', MyProfil::class)->name('user.profil');
+
+    Route::get('profil/k={id}/u={uuid}/mes-assistants', MyAssistantsListing::class)->name('my.assistants');
+});
+
 
 Route::get('a-propos-de-' . Str::lower(Str::slug(str_replace('@', '', config('app.name')))), AboutUs::class)->name('about.us');
 
-Route::get('inscription/{uuid?}', RegisterPage::class)->name('register');
-
-Route::get('administration', Dashboard::class)->name('admin');
-Route::get('administration/les-utilisateurs', UsersListing::class)->name('admin.users.listing');
-Route::get('administration/les-assistants', AssistantsListing::class)->name('admin.assistants.listing');
-Route::get('administration/les-ecoles', SchoolsListing::class)->name('admin.schools.listing');
 Route::get('ecole/s={slug}/u={uuid}', SchoolProfil::class)->name('school.profil');
 
-Route::get('Connexion', LoginPage::class)->name('login');
-Route::get('mot-de-passe-oublie', ForgotPasswordPage::class)->name('password.forgot');
 Route::get('boutique/packs-disponibles', PacksPage::class)->name('packs.page');
+
 Route::get('boutique/u={uuid}/pack={slug}', PackProfil::class)->name('pack.profil');
-Route::get('boutique/u={uuid}/pack={slug}/tok={token}/validation-souscription', SubscribePage::class)->name('subscribe.confirmation');
 
-Route::get('profil/u={uuid}/ajout-nouvelle-ecole', CreateSchool::class)->name('create.school');
 
-Route::get('profil/k={id}/u={uuid}/mon-profil', MyProfil::class)->name('user.profil');
 
-Route::get('profil/k={id}/u={uuid}/mes-assistants', MyAssistantsListing::class)->name('my.assistants');
+
+Route::middleware(['guest'])->group(function(){
+
+    Route::get('inscription', RegisterPage::class)->name('register');
+
+    Route::get('Connexion', LoginPage::class)->name('login');
+
+    Route::get('mot-de-passe-oublie', ForgotPasswordPage::class)->name('password.forgot');
+
+    Route::get('/verification-email/r={token}/email={email}/{key?}', EmailVerificationPage::class)->name('email.verification');
+});
 
 // Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
-Route::get('/verification-email/r={token}/email={email}/{key?}', EmailVerificationPage::class)->name('email.verification');
+
     // Route::get('/reinitialisation-mot-de-passe/token={token?}/email={email?}', ResetPasswordPage::class)->name('password.reset');
     // Route::get('/reinitialisation-mot-de-passe/par-email/email={email?}/{key?}', ResetPasswordPage::class)->name('password.reset.by.email');
     // Route::get('/mot-de-passe-oublie', ForgotPasswordPage::class)->name('password.forgot');

@@ -22,7 +22,7 @@ class UserDataHasBeenUpdatedEvent implements ShouldBroadcast
         public ?User $user = null,
     )
     {
-        $this->user = $user;
+        
     }
 
     /**

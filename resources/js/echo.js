@@ -23,7 +23,7 @@ if (window.User) {
     window.ClientUser = window.User;
 }
 
-// USER CHANNELS
+// USER LISTENED EVENT
 e.private("App.Models.User." + window.ClientUser.id)
 
     .notification((notification) => {
@@ -45,25 +45,43 @@ e.private("App.Models.User." + window.ClientUser.id)
         Livewire.dispatch("LiveNotificationsDeletedSuccessfullyEvent");
     });
 
-// ADMIN CHANNELS
-e.private("admin")
-    .listen("NotificationDispatchedToAdminsSuccessfullyEvent", (user) => {
+// ADMIN LISTENED EVENT
+e.private("admin").listen(
+    "NotificationDispatchedToAdminsSuccessfullyEvent",
+    (user) => {
         Livewire.dispatch(
             "LiveNotificationDispatchedToAdminsSuccessfullyEvent",
             user
         );
+    }
+);
+
+// USERS EMAIL VERIFIED LISTENED EVENT
+e.private("confirmeds")
+    .listen("UserDataHasBeenUpdatedEvent", (user) => {
+        Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
     })
-    .listen("NewLyceeCreatedSuccessfullyEvent", (data) => {
-        Livewire.dispatch("LiveNewLyceeCreatedSuccessfullyEvent", data);
+    .listen("SchoolDataHasBeenUpdatedEvent", (user) => {
+        Livewire.dispatch("LiveSchoolDataHasBeenUpdatedEvent", user);
     })
-    .listen("UpdateUsersListToComponentsEvent", (data) => {
-        Livewire.dispatch("LiveUpdateUsersListToComponentsEvent");
+    .listen("NewSchoolCreatedEvent", (user) => {
+        Livewire.dispatch("LiveNewSchoolCreatedEvent", user);
+    })
+    .listen("NewUserCreatedEvent", (user) => {
+        Livewire.dispatch("LiveNewUserCreatedEvent", user);
     });
 
-e.private("confirmeds").listen("UserDataHasBeenUpdatedEvent", (user) => {
-    Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
-});
-
-e.channel("public").listen("UserDataHasBeenUpdatedEvent", (user) => {
-    Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
-});
+// PUBLIC LISTENED EVENT
+e.channel("public")
+    .listen("UserDataHasBeenUpdatedEvent", (user) => {
+        Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
+    })
+    .listen("SchoolDataHasBeenUpdatedEvent", (user) => {
+        Livewire.dispatch("LiveSchoolDataHasBeenUpdatedEvent", user);
+    })
+    .listen("NewSchoolCreatedEvent", (user) => {
+        Livewire.dispatch("LiveNewSchoolCreatedEvent", user);
+    })
+    .listen("NewUserCreatedEvent", (user) => {
+        Livewire.dispatch("LiveNewUserCreatedEvent", user);
+    });

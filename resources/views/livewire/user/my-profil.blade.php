@@ -171,23 +171,114 @@
             @auth
                 @if(auth_user()->id == $user->id)
                 <div class="flex gap-x-2 text-sm">
-                    <a href="#" class="text-black cursor-pointer bg-indigo-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-500 focus:ring-yellow-800" type="button">
+                    <a href="{{auth_user()->to_create_school_route()}}" class="text-black cursor-pointer bg-indigo-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-500 focus:ring-yellow-800" type="button">
                         <span class="w-full flex items-center px-1.5">
                             <span class="fas fa-pen mr-1"></span>
-                            Ajouter
+                            Créer
                         </span>
                     </a>
+                    @if($user->schools)
                     <a href="#" class="text-black cursor-pointer bg-yellow-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
                         <span class="w-full flex items-center px-1.5">
                             <span class="fas fa-pen mr-1"></span>
                             Editer
                         </span>
                     </a>
+                    <a href="#" class="text-white cursor-pointer bg-red-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-500 focus:ring-yellow-800" type="button">
+                        <span class="w-full flex items-center px-1.5">
+                            <span class="fas fa-pen mr-1"></span>
+                            Fermer
+                        </span>
+                    </a>
+                    @endif
                 </div> 
                 @endif
             @endauth
         </div>
-       
+        <div class="">
+            <div class="font-semibold letter-spacing-1 text-gray-300 text-sm md:text-lg flex flex-col mx-auto p-5 text-left gap-y-3">
+                @foreach ($user->schools as $school)
+                    <div class="shadow-sm shadow-amber-400 bg-black/75 p-3 rounded-md">
+                        <h5 class="text-purple-600 py-2 flex justify-between"> 
+                            <span>
+                                <span>Ecole </span>
+                                <span>#{{ $loop->iteration }}</span>
+                            </span>
+                            <a class="hover:text-pink-300" href="{{$school->to_profil_route()}}">
+                                <span class="text-sm">{{ $school->name }}</span>
+                            </a>
+                        </h5>
+                        <div class="w-full text-sm">
+                            <h5 class="flex justify-between">
+                                <span>Ecole:</span> 
+                                <span>
+                                    <span class="mr-2.5">{{ $school->name }}</span>
+                                    (<span class="text-sky-500">{{ $school->simple_name }}</span>)
+                                </span>
+                            </h5>
+                            <h5 class="flex justify-between">
+                                <span>Contacts:</span> 
+                                <span>
+                                    <span class="fas fa-phone mr-1"></span>
+                                    <span class="">{{ $school->contacts }}</span>
+                                </span>
+                            </h5>
+
+                            <h5 class="flex justify-between">
+                                <span>Localisation: </span>
+                                <span>
+                                    <span class="fas fa-map-location-dot mr-1"></span>
+                                    <span>{{ $school->country }}</span> - 
+                                    <span>{{ $school->department }}</span> - 
+                                    <span>{{ $school->city }}</span>
+                                </span>
+                            </h5>
+                            <h5 class="flex justify-between">
+                                <span>Système  d'enseignement: </span>
+                                <span>
+                                    <span>Enseignement(s) : </span>
+                                    <span>{{ $school->system }}</span>  
+                                </span>
+                            </h5>
+                            <h5 class="flex justify-between">
+                                <span>Niveau pédagogique: </span>
+                                <span>
+                                    <span>Niveau(x) : </span>
+                                    <span>{{ $school->level }}</span>  
+                                </span>
+                            </h5>
+                            <h5 class="flex justify-between items-center ">
+                                <span>Capacité en nombres: </span>
+                                <span class="">
+                                    <span class="fas fa-users mr-1"></span>
+                                    <span>{{ __formatNumber3($school->capacity) }}</span>  
+                                    <span>apprenants</span>
+                                </span>
+                            </h5>
+                            <h5 class="">
+                                <h6 class="py-1.5">Des images de {{ $school->simple_name }} : </h6>
+                                <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-2">
+                                    @foreach ($school->images as $key => $image)
+                                        <div class="group relative border rounded overflow-hidden" style="z-index: 2000 !important;" x-data="{ show: false }"
+                                            x-init="setTimeout(() => show = true, {{ $key * 100 }})"
+                                            x-show="show"
+                                            x-transition:enter="transition ease-out duration-500"
+                                            x-transition:enter-start="opacity-0 scale-90"
+                                            x-transition:enter-end="opacity-100 scale-100">
+                                            <img src="{{ url('storage', $image) }}" class="object-cover w-full h-32" alt="Image ">
+                                            <span wire:click="removeImage({{ $key }})"
+                                                class="absolute inset-0 bg-red-600 bg-opacity-50 text-white text-xs font-semibold opacity-0 group-hover:opacity-70 transition duration-300 flex items-center justify-center cursor-pointer">
+                                                ✖ Retirer cette image
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </h5>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
     </div>
 
     @if(auth_user()->id == $user->id)

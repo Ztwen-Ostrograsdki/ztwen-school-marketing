@@ -2,11 +2,14 @@
 
 namespace App\Livewire\User;
 
+use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Models\User;
 use Livewire\Component;
 
 class MyProfil extends Component
 {
+    use ListenToEchoEventsTrait;
+    
     public $uuid, $user_id;
 
     public $user_name;
@@ -51,6 +54,11 @@ class MyProfil extends Component
         $all_likes = getRand(1000, 959599);
 
         return view('livewire.user.my-profil', compact('all_subscribes', 'all_posts', 'all_likes'));
+    }
+
+    public function removeImage($path)
+    {
+            
     }
 
     public function openAddAssistantModal()

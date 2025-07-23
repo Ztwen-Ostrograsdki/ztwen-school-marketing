@@ -6,9 +6,13 @@ use App\Models\Pack;
 use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Observers\ObserveSchool;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+#[ObservedBy(ObserveSchool::class)]
 class School extends Model
 {
     protected $fillable = [
@@ -29,9 +33,12 @@ class School extends Model
         'objectives',
         'images',
         'observation',
-        'likes'
+        'likes',
+        'folder',
 
     ];
+
+    public $photos_root = 'ecoles/';
 
     protected $casts = [
         'objectives' => 'array',
@@ -42,6 +49,11 @@ class School extends Model
     {
         return route('school.profil', ['slug' => $this->slug, 'uuid' => $this->uuid]);
     }
+    
+    public function to_school_update_route()
+    {
+        return route('school.edition', ['user_uuid' => $this->user->uuid, 'school_slug' => $this->slug, 'school_id' => $this->id]);
+    }
 
 
     public static function booted()
@@ -49,6 +61,10 @@ class School extends Model
         static::creating(function ($school){
 
             $school->uuid = Str::uuid();
+
+            $school->is_active = false;
+
+            $school->likes = generateRandomNumber(2);
 
             $school->slug = Str::slug($school->name) . '-' . generateRandomNumber();
 
@@ -78,6 +94,36 @@ class School extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function hasImages()
+    {
+        return !empty($this->images);
+    }
+
+    public function refreshImagesFolder()
+    {
+
+        $is_dir = Storage::disk('public')->exists($this->folder);
+
+        if($is_dir){
+
+            $images = (array)$this->images;
+
+            $images_from_storage = Storage::disk('public')->files($this->folder);
+
+            foreach($images_from_storage as $file){
+
+                if(!in_array($file, $images)){
+
+                    Storage::disk('public')->delete($file);
+
+                }
+
+            }
+
+
+        }
     }
 
 

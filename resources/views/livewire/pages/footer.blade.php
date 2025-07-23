@@ -6,6 +6,11 @@
             <a class=" flex-none text-xl font-semibold text-white dark:focus:outline-none dark:focus:ring-1 pl-2 dark:focus:ring-gray-600" href="\" aria-label="Brand">{{ config('app.name') }}</a>
 
             <div class="mt-3 flex flex-col gap-y-2 ">
+                <p class="m-0 p-0">
+                    <a class="inline-block my-0 hover:bg-gray-800 py-1 w-full pl-2 footer-element gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('packs.page')}}">
+                    La boutique des packs
+                    </a>
+                </p>
                 @auth
                 <p class="m-0 p-0">
                     <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
@@ -61,6 +66,11 @@
             </h4>
 
             <div class="mt-3 grid gap-y-2">
+                <p class="m-0 p-0">
+                    <a class="inline-block my-0 hover:bg-gray-800 py-1 w-full pl-2 footer-element gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('packs.page')}}">
+                    Les packs disponibles
+                    </a>
+                </p>
                 <p class="m-0 p-0">
                     <a class="inline-block my-0 hover:bg-gray-800 py-1 w-full pl-2 footer-element gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('about.us')}}">
                     A propos de nous

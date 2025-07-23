@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -11,16 +12,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class BlockedUserTryingToLoginEvent implements ShouldBroadcast
+class SchoolDataHasBeenUpdatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $user)
+    public function __construct(
+        public School $school,
+
+        public ?User $updater = null,
+    )
     {
-        
+
     }
 
     /**
@@ -31,7 +36,8 @@ class BlockedUserTryingToLoginEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('admin'),
+            new PrivateChannel('confirmeds'),
+            new Channel('public'),
         ];
     }
 }

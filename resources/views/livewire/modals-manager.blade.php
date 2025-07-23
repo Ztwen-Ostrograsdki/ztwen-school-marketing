@@ -10,6 +10,10 @@
     @livewire('modals.communique-manager-modal')
 
 
+    <button data-modal-target="school-images-manager-modal" data-modal-toggle="school-images-manager-modal" class="hidden" type="button"></button>
+    @livewire('modals.school-images-manager')
+
+
     <button data-modal-target="logout-modal" data-modal-toggle="logout-modal" class="hidden" type="button"></button>
     @livewire('auth.logout-page')
 

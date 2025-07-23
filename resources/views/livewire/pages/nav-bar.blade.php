@@ -80,7 +80,7 @@
                                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mon abonnements</a>
                             </li>
                             <li>
-                                <a href="{{route('create.school', ['uuid' => "uudeuueueu"])}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Ajouter une école</a>
+                                <a href="{{auth_user()->to_create_school_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Ajouter une école</a>
                             </li>
                             <li>
                                 <a href="{{auth_user()->to_profil_edit_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Editer mon profil</a>
@@ -263,7 +263,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center p-2 bg-amber-600 text-gray-900 rounded-lg hover:bg-amber-800 group">
+                    <a x-on:click="$dispatch('LogoutLiveEvent')" type="button" class="flex cursor-pointer items-center p-2 bg-amber-600 text-gray-900 rounded-lg hover:bg-amber-800 group">
                         <span class="fas fa-user-large-slash"></span>
                         <span class="flex-1 ms-3 whitespace-nowrap">Se déconnecter</span>
                     </a>

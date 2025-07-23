@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use Akhaled\LivewireSweetalert\Toast;
+use App\Helpers\Robots\ModelsRobots;
 use App\Helpers\Robots\RobotsBeninHelpers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -77,7 +78,7 @@ class RegisterPage extends Component
 
                     $this->user = $user;
 
-                    $this->title = "Mise à jour des informations de " . $user->email;
+                    $this->title = "Mise à jour du compte " . $user->email;
 
                     self::setDefaultValues();
                 }
@@ -121,9 +122,9 @@ class RegisterPage extends Component
 
         $departments = RobotsBeninHelpers::getDepartments();
 
-        $this->department_name = $departments[$this->department];
+        $this->department_key = (array_keys($departments, $this->department))[0];
 
-        $this->department_key = $this->department;
+        $this->department_name = $this->department;
 
         $this->photo_path = $this->user->profil_photo;
 
@@ -173,6 +174,17 @@ class RegisterPage extends Component
                     ]
                 );
 
+                if($this->validatePhoneNumber()){
+
+                    self::updator();
+
+                }
+                else{
+
+                    return $this->addError('contacts', "Le format des contacts est incorrect");
+
+                }
+
             }
             else{
 
@@ -187,18 +199,18 @@ class RegisterPage extends Component
                         'gender' => 'required|string',
                     ]
                 );
+                if($this->validatePhoneNumber()){
+
+                    self::updatorWithoutProfilPhoto();
+
+                }
+                else{
+
+                    return $this->addError('contacts', "Le format des contacts est incorrect");
+
+                }
             }
 
-            if($this->validatePhoneNumber()){
-
-                self::updator();
-
-            }
-            else{
-
-                return $this->addError('contacts', "Le format des contacts est incorrect");
-
-            }
         }
         else{
 
@@ -235,8 +247,6 @@ class RegisterPage extends Component
         
         $user = false;
 
-        $all_data_is_ok = true;
-
         $photo_root = "profil_photos";
         
         DB::beginTransaction();
@@ -268,7 +278,7 @@ class RegisterPage extends Component
             if($profil_upadted){
 
                 $data = [
-                    'department' => $this->department,
+                    'department' => $this->department_name,
                     'city' => $this->city,
                     'contacts' => $this->contacts,
                     'gender' => ucwords($this->gender),
@@ -345,6 +355,81 @@ class RegisterPage extends Component
     }
 
 
+    public function updatorWithoutProfilPhoto()
+    {
+        
+        $user = false;
+
+        DB::beginTransaction();
+
+        try {
+
+            if(true){
+
+                $data = [
+                    'department' => $this->department_name,
+                    'city' => $this->city,
+                    'contacts' => $this->contacts,
+                    'gender' => ucwords($this->gender),
+                    'marital_status' => ucwords($this->marital_status),
+                    'pseudo' => ucwords($this->pseudo),
+                    'firstname' => Str::upper($this->firstname),
+                    'lastname' => ucwords($this->lastname),
+                ];
+
+                if($data){
+
+                    if(true){ //Véfifier si connecter ici
+
+                        $user = $this->user->update($data);
+
+                        if($user){
+
+                            $message = "Incription lancée avec succès! Un courriel vous a été envoyé pour confirmation, veuillez vérifier votre boite mail.";
+                
+                            $this->toast($message, 'success', 5000);
+
+                            session()->flash('success', $message);
+
+                        }
+                        else{
+
+                            $message = "L'incription a échoué! Veuillez réessayer!";
+                
+                            session()->flash('error', $message);
+                
+                            $this->toast($message, 'error', 7000);
+                
+                        }
+                    }
+                    else{
+
+                        $message = "L'incription a échoué, vous n'êtes pas connecté à internet!";
+
+                        session()->flash('error', $message);
+
+                        $this->toast($message, 'error', 7000);
+                    }
+
+                    
+                }
+            }
+
+            DB::commit();
+
+
+        } catch (Throwable $e) {
+
+            DB::rollBack(); // Annule tout
+
+            $this->toast("Une erreure est survenue lors l'insertion de vos données dans la base de données: MESSAGE: " . $e->getMessage(), 'info');
+
+            
+        }
+        
+    }
+
+
 
     
 
@@ -355,8 +440,7 @@ class RegisterPage extends Component
 
         $sendEmailToUser = false;
 
-        $this->pseudo = '@' . Str::substr($this->firstname, 0, 3) . '.' . Str::substr($this->lastname, 0, 3) . '' . rand(20, 99);
-
+        $this->pseudo = ModelsRobots::generatePseudo($this->firstname);
         
         $all_data_is_ok = true;
 
@@ -396,7 +480,7 @@ class RegisterPage extends Component
             if($all_data_is_ok){
 
                 $data = [
-                    'department' => $this->department,
+                    'department' => $this->department_name,
                     'city' => $this->city,
                     'contacts' => $this->contacts,
                     // 'address' => ucwords($this->address),
@@ -523,7 +607,8 @@ class RegisterPage extends Component
 
         $this->department_name = $departments[$department];
 
-        $this->department_key = $department;
+        $this->department_key = (array_keys($departments, $this->department_name))[0];
+        
     }
 
     public function updatedLastname($lastname)

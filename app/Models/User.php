@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Helpers\Robots\ModelsRobots;
 use App\Helpers\TraitsManagers\UserTrait;
 use App\Observers\ObserveUser;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -90,7 +92,19 @@ class User extends Authenticatable
 
             $user->uuid = Str::uuid();
 
-            $user->address = $user->city . " - " . $user->department;
+            if($user->department && $user->city){
+
+                $user->address = $user->city . " - " . $user->department;
+
+            }
+            else{
+
+                $user->city = null;
+
+                $user->department = null;
+                
+                $user->address = null;
+            }
 
             $user->identifiant = $user->makeUserIdentifySequence();
 
@@ -98,7 +112,33 @@ class User extends Authenticatable
 
         static::updating(function ($user){
 
-            $user->address = $user->city . " - " . $user->department;
+            if($user->department && $user->city){
+
+                $user->address = $user->city . " - " . $user->department;
+
+            }
+            else{
+
+                $user->city = null;
+
+                $user->department = null;
+
+                $user->address = null;
+            }
+
+            if($user->pseudo){
+
+                if(substr($user->pseudo, 0, 1) !== '@'){
+
+                    $user->pseudo = '@' . $user->pseudo;
+
+                }
+
+            }
+            else{
+
+                $user->pseudo = ModelsRobots::generatePseudo($user->firstname);
+            }
 
         });
     }
@@ -123,9 +163,9 @@ class User extends Authenticatable
         return $this->hasMany(Stat::class);
     }
 
-    public function school()
+    public function schools()
     {
-        return $this->hasOne(School::class);
+        return $this->hasMany(School::class);
     }
 
     public function current_subscription()
@@ -155,7 +195,12 @@ class User extends Authenticatable
 
     public function to_profil_edit_route()
     {
-        return route('register', ['uuid' => $this->uuid]);
+        return route('user.profil.edition', ['uuid' => $this->uuid]);
+    }
+
+    public function to_create_school_route()
+    {
+        return route('create.school', ['user_uuid' => $this->uuid]);
     }
     
     

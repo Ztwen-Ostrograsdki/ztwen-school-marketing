@@ -9,6 +9,7 @@ use App\Notifications\RealTimeNotification;
 use App\Notifications\SendDynamicMailToUser;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class ModelsRobots{
 
@@ -17,6 +18,13 @@ class ModelsRobots{
     public function __construct($model = null) {
 
         $this->model = $model;
+    }
+
+    public static function generatePseudo($sequence = null)
+    {
+        if(!$sequence) $sequence = Str::random();
+
+        return '@' . Str::substr($sequence, 0, 3) . '' . generateRandomNumber(4);
     }
 
 
@@ -44,7 +52,7 @@ class ModelsRobots{
 
             return User::whereHas('roles', function($query) use ($roles, $except) {
 
-                $query->whereIn('admins.name', $roles);
+                $query->whereIn('roles.name', $roles);
 
                 if($except) $query->where('users.id', '<>', $except);
 
@@ -63,7 +71,7 @@ class ModelsRobots{
 
             return User::whereHas('roles', function($query) use ($roles, $except) {
 
-                $query->whereIn('admins.name', $roles);
+                $query->whereIn('roles.name', $roles);
 
                 if($except) $query->where('users.id', '<>', $except);
 
@@ -85,7 +93,7 @@ class ModelsRobots{
 
             return User::whereHas('roles', function($query) use ($roles, $except) {
 
-                $query->whereIn('admins.name', $roles);
+                $query->whereIn('roles.name', $roles);
 
                 if($except) $query->where('users.id', '<>', $except);
 
@@ -104,7 +112,7 @@ class ModelsRobots{
 
             return User::whereHas('roles', function($query) use ($roles, $except) {
 
-                $query->whereIn('admins.name', $roles);
+                $query->whereIn('roles.name', $roles);
 
                 if($except) $query->where('users.id', '<>', $except);
 
@@ -130,7 +138,7 @@ class ModelsRobots{
         if($limit_to_take)
             return User::whereHas('roles', function($query) use ($roles) {
 
-                $query->whereIn('admins.name', $roles);
+                $query->whereIn('roles.name', $roles);
     
             })
             ->orWhere(function($query){
@@ -143,7 +151,7 @@ class ModelsRobots{
 
             return User::whereHas('roles', function($query) use ($roles) {
 
-                $query->whereIn('admins.name', $roles);
+                $query->whereIn('roles.name', $roles);
     
             })
             ->orWhere(function($query){

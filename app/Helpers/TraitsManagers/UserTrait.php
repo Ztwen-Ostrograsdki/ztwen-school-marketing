@@ -111,6 +111,11 @@ trait UserTrait{
         // ])->save();
     }
 
+    public function hasSchoolRoles($school_id, $roles = [])
+    {
+        return false;
+    }
+
     public static function makeUserIdentifySequence()
     {
         return "ZTW@MRKT-" . date('Y') . generateRandomNumber(6);
