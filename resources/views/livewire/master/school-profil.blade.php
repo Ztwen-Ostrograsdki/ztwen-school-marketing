@@ -13,6 +13,7 @@
                         </span>
                     </span>
                 </span>
+                <span class="text-sm block text-yellow-400 font-mono mt-2"> Une école {{ $school->getSchoolType() }}</span>
                 <span class="block text-sm my-2 px-3">
                     {{ $school->quotes }}
                 </span>
@@ -132,13 +133,19 @@
             <div class="px-6 mt-2 overflow-x-auto card">
                 <h5 class="text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4"># Contenu de la page</h5>
                 <div class="text-xs sm:text-sm mt-4 md:mt-0 flex flex-wrap gap-3 justify-start ">
-                    <a href="#school_images" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
+                    <a href="#school_description" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
+                        <span>
+                            <span class="fas fa-images mr-1"></span>
+                            #L'école en description
+                        </span>
+                    </a>
+                    <a href="#school_images" class="block text-black cursor-pointer bg-yellow-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
                         <span>
                             <span class="fas fa-images mr-1"></span>
                             #L'école en images
                         </span>
                     </a>
-                    <a href="#school_stats" class="block text-black cursor-pointer bg-amber-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-amber-700 focus:ring-amber-800" type="button">
+                    <a href="#school_stats" class="block text-black cursor-pointer bg-amber-700 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-amber-700 focus:ring-amber-800" type="button">
                         <span>
                             <span class="fas fa-chart-simple mr-1"></span>
                             # Les statistiques
@@ -157,6 +164,32 @@
                         </span>
                     </a>
                     
+                </div>
+            </div>
+        </div>
+
+
+        <div id="school_description" class="p-6 card text-sm shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
+            <div class="px-6 mt-2 overflow-x-auto card">
+                <h5 class="text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4"># Description de l'école 
+                    <span class="text-gray-400 hover:text-rose-300 underline underline-offset-4">{{ $school_name }}</span>
+                </h5>
+                <div class="text-xs md:text-lg">
+                    <p>
+                        Située au {{ $school->geographic_position }} du {{ $school->country }} dans le département de {{ $school->department }}, plus précisement dans la ville de {{ $school->city }}, l'école (<span class="lowercase">{{ $school->getSchoolType() }}</span>) <span class="text-yellow-400 font-bold">{{ $school_name }}</span> a été fondée en {{ $school->creation_year }} par <span class="text-sky-500 font-bold">{{ $school->created_by }}</span>.
+                        <br>
+                    </p>
+                    <p>
+                        L'école, dépuis sa création acceuille en moyenne plus de <span class="text-amber-500 font-semibold">{{ __formatNumber3($school->capacity) }}</span> apprenants.
+                        Reconnue par ses <a href="#school_stats" class="underline underline-offset-3 hover:text-rose-300">statistiques remarquables aux différents examens</a>, il va sans doute, que <span class="text-yellow-400 font-bold">{{ $school_name }}</span> est une école de reférence pour garantir un avenir meillleur à la jeunesse de la nation.
+                    </p>
+                    <h5 class="flex justify-end cursor-pointer hover:text-rose-400 mt-3.5">
+                        <span>
+                            <span class="fas fa-phone mr-1"></span>
+                            <span>Contacts : </span>
+                            <span class="">{{ $school->contacts }}</span>
+                        </span>
+                    </h5>
                 </div>
             </div>
         </div>
@@ -224,46 +257,112 @@
             <h5 class="card text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4">
                 # Les statistiques de l'école aux examens
             </h5>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 card my-4">
-                @for ($i = 1; $i < 4; $i++)
-                    <div class="aspect-square shadow-inner shadow-sky-100 from-green-800 to-blue-900 via-sky-900 bg-linear-180 bg-black rounded-lg relative group card p-3 flex items-center justify-center flex-col font-bold letter-spacing-1 cursor-pointer hover:shadow-md hover:shadow-sky-400 gap-y-2 md:gap-y-5 ">
-                        <div>
-                            <h4 class="text-center text-lg md:text-3xl animate-pulse">
-                                BEPC 2025
-                            </h4>
-                            <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
-                                <span class="fas"> 98 </span>
-                                <span class="fas fa-percent"></span>
-                            </h3>
-                        </div>
-                        <div class="my-3 flex justify-end gap-x-2">
-                            @auth
-                                @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
-                                    <button wire:click="manageSchoolStat({{$i}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
-                                        <span wire:loading.remove wire:target="manageSchoolStat({{$i}})">
-                                            <span class="fas fa-edit"></span>
-                                            <span>Modifier</span>
-                                        </span>
-                                        <span wire:loading wire:target="manageSchoolStat({{$i}})">
-                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                            <span>En cours...</span>
-                                        </span>
-                                    </button>
-                                    <button class="cursor-pointer shadow-sm bg-amber-500 hover:bg-amber-700 text-white p-2">
-                                        <span class="fas fa-eye-slash"></span>
-                                        <span>Masquer</span>
-                                    </button>
-                                    <button class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
-                                        <span class="fas fa-trash"></span>
-                                        <span>Supprimer</span>
-                                    </button>
-                                @endif
-                            @endauth
-                        </div>
-                    </div>
-                    
-                @endfor
+            <div class="flex justify-between gap-x-2 mb-3.5">
+                <div class="justify-start">
+                    <select class="bg-black/80 text-sky-300 font-semibold letter-spacing-1 rounded-md py-2" wire:model.live='selected_stat_year' name="selected_year" id="">
+                        <option class="bg-gray-800" value="">Lister les stats par année</option>
+                        @foreach ($stats_years as $ky => $yy)
+                            <option class="bg-gray-800" value="{{$yy}}">{{ $yy }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex justify-end gap-x-2">
+                    @auth
+                        @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                            <button title="Ajouter une stat..." wire:click="manageSchoolStat" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="manageSchoolStat">
+                                    <span class="fas fa-images"></span>
+                                    <span>Ajouter</span>
+                                </span>
+                                <span wire:loading wire:target="manageSchoolStat">
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>En cours...</span>
+                                </span>
+                            </button>
+                            <button title="Masquer toutes les stats..." wire:click="hideAllStats" class="cursor-pointer shadow-sm bg-orange-500 hover:bg-orange-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="hideAllStats">
+                                    <span class="fas fa-eye-slash"></span>
+                                    <span>MAsquer</span>
+                                </span>
+                                <span wire:loading wire:target="hideAllStats">
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>En cours...</span>
+                                </span>
+                            </button>
+                            <button title="Supprimer toutes les stats..." wire:click="deleteAllStats" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="deleteAllStats">
+                                    <span class="fas fa-trash"></span>
+                                    <span>Supprimer</span>
+                                </span>
+                                <span wire:loading wire:target="deleteAllStats">
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>En cours...</span>
+                                </span>
+                            </button>
+
+                        @endif
+                    @endauth
+                </div>
             </div>
+            @foreach ($school_stats as $yr => $stats)
+                <div class="w-full flex flex-col  my-2.5">
+                    <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
+                        Les examens de l'année {{ $yr }}
+                    </h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 card my-6">
+                        @foreach($stats as $stat)
+                            <div class="aspect-square shadow-inner shadow-sky-100 from-green-800 to-blue-900 via-sky-900 bg-linear-180 bg-black rounded-lg relative group card p-3 flex items-center justify-center flex-col font-bold letter-spacing-1 cursor-pointer hover:shadow-md hover:shadow-sky-400 gap-y-2 md:gap-y-5 ">
+                                <div>
+                                    <h4 class="text-center text-lg md:text-3xl animate-pulse mb-3">
+                                        {{ $stat->exam }} {{ $stat->year }}
+                                    </h4>
+                                    <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
+                                        <span class="fas"> {{ $stat->stat_value }} </span>
+                                        <span class="fas fa-percent"></span>
+                                    </h3>
+                                </div>
+                                <div class="my-3 flex justify-end gap-x-2">
+                                    @auth
+                                        @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                                            <button wire:click="manageSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
+                                                <span wire:loading.remove wire:target="manageSchoolStat({{$stat->id}})">
+                                                    <span class="fas fa-edit"></span>
+                                                    <span>Modifier</span>
+                                                </span>
+                                                <span wire:loading wire:target="manageSchoolStat({{$stat->id}})">
+                                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                    <span>En cours...</span>
+                                                </span>
+                                            </button>
+                                            <button wire:click="hideSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-orange-400 hover:bg-orange-600 text-white p-2">
+                                                <span wire:loading.remove wire:target="hideSchoolStat({{$stat->id}})">
+                                                    <span class="fas fa-eye-slash"></span>
+                                                    <span>Masquer</span>
+                                                </span>
+                                                <span wire:loading wire:target="hideSchoolStat({{$stat->id}})">
+                                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                    <span>En cours...</span>
+                                                </span>
+                                            </button>
+                                            <button wire:click="deleteSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
+                                                <span wire:loading.remove wire:target="deleteSchoolStat({{$stat->id}})">
+                                                    <span class="fas fa-trash"></span>
+                                                    <span>Modifier</span>
+                                                </span>
+                                                <span wire:loading wire:target="deleteSchoolStat({{$stat->id}})">
+                                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                    <span>En cours...</span>
+                                                </span>
+                                            </button>
+                                            
+                                        @endif
+                                    @endauth
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
         </div>
 
 
@@ -359,11 +458,11 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-75"
-        class="fixed inset-0 bg-black/85 flex flex-col items-center justify-center z-50"
+        class="fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-50"
         style="display: none;"
         @click="show = false"
     >
-        <h5 class="mx-auto flex flex-col gap-y-1 text-lg w-auto text-center py-3 font-semibold letter-spacing-1 bg-gray-950 my-3" >
+        <h5 class="mx-auto flex flex-col gap-y-1 text-sm w-auto text-center p-3 font-semibold letter-spacing-1 bg-black/75 my-3" >
             <span class=" text-sky-500 uppercase" x-text="schoolName"></span>
             <span class=" text-yellow-500" x-text="simple_name"></span>
         </h5>

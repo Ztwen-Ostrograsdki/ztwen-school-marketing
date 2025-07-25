@@ -28,7 +28,7 @@
         @livewire('pages.nav-bar')
             <button type="button" class="hidden" data-drawer-target="drawer-admin-navigation" data-drawer-show="drawer-admin-navigation" aria-controls="drawer-admin-navigation"></button>
 
-        <main class="pt-4 mt-14 px-2">
+        <main class="pt-4 mt-2 px-2">
             @livewire("pages.live-notifications-toaster")
             @livewire("pages.offline-alert")
             

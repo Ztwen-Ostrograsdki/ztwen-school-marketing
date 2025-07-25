@@ -50,6 +50,15 @@ class ObserveSchool
     public function updated(School $school): void
     {
         SchoolDataHasBeenUpdatedEvent::dispatch($school);
+
+        $admins = ModelsRobots::getUserAdmins(false);
+
+        if(!empty($admins)){
+
+            $msg_to_admins = "Des données de l'école " . $school->name . " ont été mises à jour!";
+
+            Notification::sendNow($admins, new RealTimeNotification($msg_to_admins));
+        }
     }
 
     /**
@@ -59,7 +68,7 @@ class ObserveSchool
     {
         SchoolDataHasBeenUpdatedEvent::dispatch($school);
 
-        $admins = ModelsRobots::getUserAdmins();
+        $admins = ModelsRobots::getUserAdmins(false);
 
         if(!empty($admins)){
 

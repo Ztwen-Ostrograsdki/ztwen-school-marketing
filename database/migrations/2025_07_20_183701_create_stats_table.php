@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->unsignedBigInteger('user_id')->nullable()->default(null);
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
-            $table->decimal('stat')->nullable()->default(null);
+             $table->decimal('stat_value', 10, 2)->default(0);
             $table->string('exam')->nullable()->default(null);
             $table->string('title')->default('EXAMEN 20XX');
             $table->string('year')->default('20XX');

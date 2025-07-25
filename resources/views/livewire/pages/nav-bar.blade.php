@@ -24,6 +24,9 @@
                         Administration
                     </a>
                 @endauth
+                <a href="{{route('schools.page')}}" class="text-sm font-medium @if(request()->route()->named('schools.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
+                    Les écoles
+                </a>
                 <a href="{{route('about.us')}}" class="text-sm font-medium @if(request()->route()->named('about.us')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
                     A propos
                 </a>

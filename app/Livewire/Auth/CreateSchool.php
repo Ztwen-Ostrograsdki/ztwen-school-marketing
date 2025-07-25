@@ -21,7 +21,7 @@ class CreateSchool extends Component
 {
     use WithFileUploads, Toast;
 
-    public $user, $countries = [], $cities = [], $departments = [], $levels = [], $systems = [], $department_name, $department_key;
+    public $user, $countries = [], $cities = [], $departments = [], $geographic_positions = [], $levels = [], $systems = [], $department_name, $department_key;
 
     public array $images = [];
 
@@ -32,6 +32,18 @@ class CreateSchool extends Component
     public $country;
 
     public $contacts;
+
+    public $is_public = "true";
+
+    public $is_true = true;
+
+    public $is_false = false;
+
+    public $geographic_position;
+
+    public $created_by;
+
+    public $creation_year;
 
     public $capacity;
 
@@ -102,6 +114,8 @@ class CreateSchool extends Component
 
         $this->systems = RobotsBeninHelpers::getSytems();
 
+        $this->geographic_positions = RobotsBeninHelpers::getGeographicPositions();
+
         if($school){
 
             $this->name = $school->name;
@@ -109,6 +123,14 @@ class CreateSchool extends Component
             $this->simple_name = $school->simple_name;
 
             $this->contacts = $school->contacts;
+
+            $this->created_by = $school->created_by;
+
+            $this->creation_year = $school->creation_year;
+
+            $this->geographic_position = $school->geographic_position;
+
+            $this->is_public = $school->is_public ? "true" : "false";
 
             $this->department_name = $school->department;
 
@@ -146,11 +168,15 @@ class CreateSchool extends Component
     public function insert()
     {
         if($this->school){
+
             $this->validate(
                 [
                     'name' => 'required|string',
                     'simple_name' => 'required|string',
                     'contacts' => 'required|string',
+                    'created_by' => 'required|string',
+                    'creation_year' => 'required|string',
+                    'geographic_position' => 'required|string',
                     'department' => 'required|string',
                     'city' => 'required|string',
                     'quotes' => 'required|string',
@@ -168,6 +194,9 @@ class CreateSchool extends Component
                     'name' => 'required|string',
                     'simple_name' => 'required|string',
                     'contacts' => 'required|string',
+                    'created_by' => 'required|string',
+                    'creation_year' => 'required|string',
+                    'geographic_position' => 'required|string',
                     'department' => 'required|string',
                     'city' => 'required|string',
                     'quotes' => 'required|string',
@@ -239,6 +268,10 @@ class CreateSchool extends Component
                     'name' => $this->name,
                     'simple_name' => $this->simple_name,
                     'contacts' => $this->contacts,
+                    'is_public' => self::getIsPublicValue(),
+                    'created_by' => $this->created_by,
+                    'creation_year' => $this->creation_year,
+                    'geographic_position' => $this->geographic_position,
                     'department' => $this->department_name,
                     'city' => $this->city,
                     'quotes' => $this->quotes,
@@ -329,6 +362,10 @@ class CreateSchool extends Component
                     'name' => $this->name,
                     'simple_name' => $this->simple_name,
                     'contacts' => $this->contacts,
+                    'is_public' => self::getIsPublicValue(),
+                    'created_by' => $this->created_by,
+                    'creation_year' => $this->creation_year,
+                    'geographic_position' => $this->geographic_position,
                     'department' => $this->department_name,
                     'city' => $this->city,
                     'quotes' => $this->quotes,
@@ -488,6 +525,18 @@ class CreateSchool extends Component
     public function updatedImages()
     {
         $this->resetErrorBag();
+    }
+
+    public function updatedIsPublic($value)
+    {
+        if($value == 'true') $this->is_public = true;
+
+        elseif($value == 'false') $this->is_public = false;
+    }
+    
+    public function getIsPublicValue()
+    {
+        return $this->is_public;
     }
 
     public function removeImage($index)

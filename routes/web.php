@@ -13,6 +13,7 @@ use App\Livewire\Master\SchoolsListing;
 use App\Livewire\Master\UsersListing;
 use App\Livewire\Pages\AboutUs;
 use App\Livewire\Pages\Home;
+use App\Livewire\Pages\SchoolsPages;
 use App\Livewire\Shop\PackProfil;
 use App\Livewire\Shop\PacksPage;
 use App\Livewire\User\MyAssistantsListing;
@@ -58,6 +59,8 @@ Route::get('a-propos-de-' . Str::lower(Str::slug(str_replace('@', '', config('ap
 Route::get('ecole/s={slug}/u={uuid}', SchoolProfil::class)->name('school.profil');
 
 Route::get('boutique/packs-disponibles', PacksPage::class)->name('packs.page');
+
+Route::get('ecoles/liste', SchoolsPages::class)->name('schools.page');
 
 Route::get('boutique/u={uuid}/pack={slug}', PackProfil::class)->name('pack.profil');
 

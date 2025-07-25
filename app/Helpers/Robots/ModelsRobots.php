@@ -85,7 +85,7 @@ class ModelsRobots{
             ->distinct()->get();
     }
 
-    public static function getUserAdmins($pluckingColumn = 'id', $except = null)
+    public static function getUserAdmins($pluckingColumn = false, $except = null)
     {
         $roles = ['master', 'admin-1', 'admin-2', 'admin-3', 'admin-4', 'admin-5'];
 

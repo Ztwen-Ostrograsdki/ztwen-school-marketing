@@ -7,6 +7,7 @@ use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Helpers\Robots\SpatieManager;
 use App\Models\School;
+use App\Models\Stat;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
@@ -25,6 +26,8 @@ class SchoolProfil extends Component
     public $school_name = "Ecole";
 
     public $counter = 2;
+
+    public $selected_stat_year;
 
     public function mount($slug, $uuid)
     {
@@ -55,16 +58,69 @@ class SchoolProfil extends Component
 
             return abort(404);
         }
+
+        if(session()->has('selected_stat_year')){
+
+            $this->selected_stat_year = session('selected_stat_year');
+        }
+        else{
+
+            $this->selected_stat_year = date('Y');
+        }
     }
     
     public function render()
     {
-        return view('livewire.master.school-profil');
+        if(session()->has('selected_stat_year')){
+
+            $this->selected_stat_year = session('selected_stat_year');
+        }
+
+        $selected_stat_year = $this->selected_stat_year;
+
+        $school_stats = Stat::where(function ($query) {
+                        if($this->selected_stat_year && $this->selected_stat_year !== ''){
+
+                            $query->where('school_id', $this->school->id)->where('year', $this->selected_stat_year);
+
+                        }
+                        else{
+
+                            $query->where('school_id', $this->school->id);
+                        }
+                    })
+                    ->orderBy('created_at')
+                    ->get()
+                    ->groupBy(function ($stat) {
+
+                    return $stat->year;
+                });
+
+        $stats_years = Stat::where('school_id', $this->school->id)->orderBy('year', 'desc')->pluck('year')->toArray();
+        
+
+
+        return view('livewire.master.school-profil', compact('school_stats', 'stats_years'));
+    }
+
+    public function updatedSelectedStatYear($selected)
+    {
+        session()->put('selected_stat_year', $selected);
     }
 
     public function manageSchoolStat($stat_id = null)
     {
-        $this->dispatch('ManageStatLiveEvent', $stat_id);
+        $this->dispatch('ManageStatLiveEvent', $this->school->id, $stat_id);
+    }
+
+    public function deleteSchoolStat($stat_id)
+    {
+
+    }
+
+    public function hideSchoolStat($stat_id)
+    {
+        
     }
 
 

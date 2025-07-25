@@ -35,6 +35,10 @@ class School extends Model
         'observation',
         'likes',
         'folder',
+        'is_public',
+        'created_by',
+        'creation_year',
+        'geographic_position',
 
     ];
 
@@ -43,6 +47,8 @@ class School extends Model
     protected $casts = [
         'objectives' => 'array',
         'images' => 'array',
+        'is_active' => 'boolean',
+        'is_public' => 'boolean',
     ];
 
     public function to_profil_route()
@@ -99,6 +105,11 @@ class School extends Model
     public function hasImages()
     {
         return !empty($this->images);
+    }
+
+    public function getSchoolType() : string
+    {
+        return $this->is_public ? 'Public' : 'Privée';
     }
 
     public function refreshImagesFolder()

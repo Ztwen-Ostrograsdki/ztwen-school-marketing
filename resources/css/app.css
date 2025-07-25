@@ -68,6 +68,14 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
+label {
+    cursor: pointer;
+}
+
+label:hover {
+    color: rgb(149, 228, 30);
+}
+
 .swal2-actions button {
     border: thin solid white !important;
 }

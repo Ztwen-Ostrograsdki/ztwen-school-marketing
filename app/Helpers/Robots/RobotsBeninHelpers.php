@@ -33,6 +33,22 @@ class RobotsBeninHelpers {
 		];
 	}
 
+	public static function getGeographicPositions()
+	{
+		return [
+			'nord' => "Nord",
+			'sud' => "Sud",
+			'ouest' => "Ouest",
+			'est' => "Est",
+			'centre' => "Centre",
+			'nord-est' => "Nord Est",
+			'nord-ouest' => "Nord Ouest",
+			'sud-est' => "Sud Est",
+			'sud-ouest' => "Sud Ouest"
+
+		];
+	}
+
 
 	public static function getCountries($target = null)
 	{

@@ -15,10 +15,14 @@ return new class extends Migration
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
+            $table->boolean('is_public')->default(false);
             $table->unsignedBigInteger('likes')->nullable()->default(2);
             $table->boolean('is_active')->default(false);
             $table->string('name')->nullable()->default(null);
             $table->string('contacts')->nullable()->default(null);
+            $table->string('creation_year')->nullable()->default(null);
+            $table->string('created_by')->nullable()->default(null);
+            $table->string('geographic_position')->nullable()->default(null);
             $table->string('simple_name')->nullable()->default(null);
             $table->string('level')->nullable()->default(null);
             $table->string('slug')->unique();

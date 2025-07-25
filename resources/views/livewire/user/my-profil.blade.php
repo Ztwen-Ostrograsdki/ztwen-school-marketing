@@ -45,16 +45,7 @@
             <div class="text-xs sm:text-sm mt-4 md:mt-0 flex gap-x-2 justify-center">
                 @auth
                     @if(auth_user()->id == $user->id)
-                    <a href="{{route('school.profil', ['uuid' => "uudeuueueu", 'slug' => "ECOLE-AER"])}}" class="block text-white cursor-pointer bg-purple-700 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-purple-900 focus:ring-purple-800" type="button">
-                        <span>
-                            <span class="fas fa-school mr-1"></span>
-                            @if($user->id == auth_user_id())
-                            Mon école
-                            @else
-                            Son école
-                            @endif
-                        </span>
-                    </a>
+                    
                     <button wire:click='openAddAssistantModal' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
                         <span wire:loading.remove wire:target='openAddAssistantModal'>
                             <span class="fas fa-user-plus mr-1"></span>
@@ -177,20 +168,7 @@
                             Créer
                         </span>
                     </a>
-                    @if($user->schools)
-                    <a href="#" class="text-black cursor-pointer bg-yellow-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
-                        <span class="w-full flex items-center px-1.5">
-                            <span class="fas fa-pen mr-1"></span>
-                            Editer
-                        </span>
-                    </a>
-                    <a href="#" class="text-white cursor-pointer bg-red-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-500 focus:ring-yellow-800" type="button">
-                        <span class="w-full flex items-center px-1.5">
-                            <span class="fas fa-pen mr-1"></span>
-                            Fermer
-                        </span>
-                    </a>
-                    @endif
+                    
                 </div> 
                 @endif
             @endauth
@@ -208,48 +186,62 @@
                                 <span class="text-sm">{{ $school->name }}</span>
                             </a>
                         </h5>
-                        <div class="w-full text-sm">
+                        <div class="w-full text-xs md:text-sm">
                             <h5 class="flex justify-between">
-                                <span>Ecole:</span> 
+                                <span>Ecole  
+                                    <span class="text-yellow-400"> ({{ $school->getSchoolType() }}) </span> :</span> 
                                 <span>
                                     <span class="mr-2.5">{{ $school->name }}</span>
                                     (<span class="text-sky-500">{{ $school->simple_name }}</span>)
                                 </span>
                             </h5>
-                            <h5 class="flex justify-between">
-                                <span>Contacts:</span> 
+                            <h5 class="flex justify-end cursor-pointer hover:text-rose-400">
+                                <span>
+                                    <span>Créée en  </span>
+                                    <span class="fas fa-calendar mr-1"></span>
+                                    <span class="">{{ $school->creation_year }}</span>
+                                </span>
+                            </h5>
+                            <h5 class="flex justify-end cursor-pointer hover:text-rose-400">
+                                <span>
+                                    <span>Fondée par </span>
+                                    <span class="fas fa-user mr-1"></span>
+                                    <span class="">{{ $school->created_by }}</span>
+                                </span>
+                            </h5>
+
+                            <h5 class="flex justify-end cursor-pointer hover:text-rose-400">
                                 <span>
                                     <span class="fas fa-phone mr-1"></span>
                                     <span class="">{{ $school->contacts }}</span>
                                 </span>
                             </h5>
 
-                            <h5 class="flex justify-between">
-                                <span>Localisation: </span>
+                            <h5 class="flex justify-end cursor-pointer hover:text-rose-400">
                                 <span>
                                     <span class="fas fa-map-location-dot mr-1"></span>
+                                    <span>Située au </span>
+                                    <span>{{ $school->geographic_position }}</span> - 
                                     <span>{{ $school->country }}</span> - 
                                     <span>{{ $school->department }}</span> - 
                                     <span>{{ $school->city }}</span>
                                 </span>
                             </h5>
-                            <h5 class="flex justify-between">
-                                <span>Système  d'enseignement: </span>
+                            <h5 class="flex justify-end cursor-pointer hover:text-rose-400">
                                 <span>
                                     <span>Enseignement(s) : </span>
                                     <span>{{ $school->system }}</span>  
                                 </span>
                             </h5>
-                            <h5 class="flex justify-between">
-                                <span>Niveau pédagogique: </span>
+                            <h5 class="flex justify-end cursor-pointer hover:text-rose-400">
                                 <span>
-                                    <span>Niveau(x) : </span>
+                                    <span>Niveau(x) </span>
                                     <span>{{ $school->level }}</span>  
                                 </span>
                             </h5>
-                            <h5 class="flex justify-between items-center ">
-                                <span>Capacité en nombres: </span>
+                            <h5 class="flex justify-end cursor-pointer hover:text-rose-400 items-center ">
                                 <span class="">
+                                    <span>Plus de </span>
                                     <span class="fas fa-users mr-1"></span>
                                     <span>{{ __formatNumber3($school->capacity) }}</span>  
                                     <span>apprenants</span>

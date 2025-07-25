@@ -1,4 +1,4 @@
-<div class="fixed mt-2" style="z-index: 800;">
+<div class="fixed mt-14" style="z-index: 800;">
     @if(auth_user() && $toasters_data)
         @foreach ($toasters_data as $key => $toaster)
             @php

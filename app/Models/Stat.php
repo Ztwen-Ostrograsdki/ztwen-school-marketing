@@ -4,12 +4,15 @@ namespace App\Models;
 
 use App\Models\School;
 use App\Models\User;
+use App\Observers\ObserveStat;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(ObserveStat::class)]
 class Stat extends Model
 {
     protected $fillable = [
-        'stat',
+        'stat_value',
         'exam',
         'title',
         'user_id',
@@ -17,6 +20,25 @@ class Stat extends Model
         'year',
         'is_active',
     ];
+
+    protected $casts = [
+        'stat_value' => 'decimal:2'
+    ];
+
+    public static function booted()
+    {
+        static::created(function ($stat){
+
+            
+
+
+        });
+
+        static::updating(function ($stat){
+
+            
+        });
+    }
 
 
     public function user()

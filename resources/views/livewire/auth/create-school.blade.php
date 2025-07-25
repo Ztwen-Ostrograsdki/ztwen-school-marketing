@@ -55,6 +55,14 @@
                             Traitement en cours...
                             </h5>
                         </div>
+                        @if($errors->any())
+                        <div class="text-center w-full mx-auto my-3">
+                            <h5 class="w-full bg-red-200 text-lg text-red-600 border border-red-400 rounded-xl p-3 letter-spacing-2">
+                            <span class="fa fa-warning"></span>
+                              Le formulaire est incorrect!
+                            </h5>
+                        </div>
+                        @endif
 
                     </div>
                     <form wire:submit.prevent='insert' class="text-xs sm:text-sm letter-spacing-1">
@@ -76,6 +84,52 @@
                                                 <label for="simple_name" class="block mb-2 font-thin text-gray-900 dark:text-white">Sigle de l'école</label>
                                                 <input wire:model.blur='simple_name' type="text" name="simple_name" id="simple_name" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Renseigner le sigle ou le diminutif de votre école" >
                                                 @error('simple_name')
+                                                    <p class="mt-2 ml-2 text-xs text-red-500 letter-spacing-2 ">
+                                                    {{ $message }}
+                                                    </p>
+                                                @enderror
+                                            </div>
+                                            <div class="col-span-6">
+                                                <label for="created_by" class="block mb-2 font-thin text-gray-900 dark:text-white">Le fondateur</label>
+                                                <input wire:model.blur='created_by' type="text" name="created_by" id="created_by" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Qui a fondé cette école ?" >
+                                                @error('created_by')
+                                                    <p class="mt-2 ml-2 text-xs text-red-500 letter-spacing-2 ">
+                                                    {{ $message }}
+                                                    </p>
+                                                @enderror
+                                            </div>
+                                            <div class="sm:col-span-2">
+                                                <label for="creation_year" class="block mb-2 font-thin text-gray-900 dark:text-white">Année de création</label>
+                                                <select wire:model.live='creation_year' id="creation_year" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-transparent text-xs sm:text-sm  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option class="bg-indigo-950"  value="{{null}}">Ecole créée en</option>
+                                                    @for ($y = date('Y'); $y >= 1900; $y--)
+                                                        <option class="bg-indigo-950" value="{{$y}}">{{$y}}</option>
+                                                    @endfor
+                                                </select>
+                                                @error('creation_year')
+                                                    <p class="mt-2 ml-2 text-xs text-red-500 letter-spacing-2 ">
+                                                    {{ $message }}
+                                                    </p>
+                                                @enderror
+                                            </div>
+                                            <div class="sm:col-span-2">
+                                                <label for="is_public" class="block mb-2 font-thin text-gray-900 dark:text-white">Une école </label>
+                                                <select wire:model.live='is_public' id="is_public" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-transparent text-xs sm:text-sm  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option disabled class="bg-indigo-950"  value="{{null}}">Privée ? Public ?</option>
+                                                   <option class="bg-indigo-950" value="true">Public</option> 
+                                                   <option class="bg-indigo-950" value="false">Privée</option> 
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="sm:col-span-2">
+                                                <label for="geographic_position" class="block mb-2 font-thin text-gray-900 dark:text-white">Position géographique</label>
+                                                <select wire:model.live='geographic_position' id="geographic_position" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-transparent text-xs sm:text-sm  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option class="bg-indigo-950"  value="{{null}}">Située au </option>
+                                                    @foreach ($geographic_positions as $gk => $gp)
+                                                        <option class="bg-indigo-950" value="{{$gp}}">{{$gp}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('geographic_position')
                                                     <p class="mt-2 ml-2 text-xs text-red-500 letter-spacing-2 ">
                                                     {{ $message }}
                                                     </p>
