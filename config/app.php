@@ -14,6 +14,19 @@ return [
 
     ],
 
+    'targets_types' => [
+        "Enseignants du primaire" => "Enseignants du primaire",
+        "Enseignants du secondaire" => "Enseignants du secondaire",
+        "Enseignants du supérieur" => "Enseignants du supérieur",
+        "Parents d'élèves" => "Parents d'élèves",
+        "Ecoliers" => "Ecoliers",
+        "Ecoliers" => "Ecoliers",
+        "Elèves" => "Elèves",
+        "Elèves" => "Elèves",
+        "Etudiants" => "Etudiants",
+        "Tout le monde" => "Tout le monde",
+    ],
+
     'notifications_sections' => [
         'news' => "Récentes",
         'unread' => "Non lues",

@@ -4,9 +4,13 @@ namespace App\Models;
 
 use App\Models\School;
 use App\Models\User;
+use App\Observers\ObserveInfo;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+
+#[ObservedBy(ObserveInfo::class)]
 class Info extends Model
 {
 

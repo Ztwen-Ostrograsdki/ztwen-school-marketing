@@ -196,7 +196,7 @@ class StatsManagerModal extends Component
 
                         $this->reset();
 
-                        $this->toast("La statistique a été ajoutée avec succès", 'success');
+                        $this->toast("La statistique a été enregistrée et publiée avec succès", 'success');
 
                     }
 

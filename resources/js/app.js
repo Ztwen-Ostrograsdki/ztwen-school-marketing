@@ -7,3 +7,29 @@
 import "@sweetalert2/theme-dark/dark.css";
 
 import "./echo";
+
+import tinymce from "tinymce/tinymce";
+import "tinymce/themes/silver/theme";
+import "tinymce/icons/default/icons";
+import "tinymce/plugins/code";
+import "tinymce/plugins/link";
+import "tinymce/plugins/lists";
+
+window.initTinyMCE = () => {
+    if (tinymce.editors.length > 0) {
+        tinymce.remove();
+    }
+
+    tinymce.init({
+        selector: "textarea.tinymce",
+        plugins: "code link lists",
+        toolbar:
+            "undo redo | bold italic underline | bullist numlist | code | link",
+        height: 300,
+        setup(editor) {
+            editor.on("change", function () {
+                editor.save();
+            });
+        },
+    });
+};

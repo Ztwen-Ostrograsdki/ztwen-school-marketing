@@ -18,16 +18,11 @@
                             </span>
                             <a class="hover:text-pink-300" href="{{$school->to_profil_route()}}">
                                 <span class="">{{ $school->name }}</span>
+                                (<span class="text-sky-500">{{ $school->simple_name }}</span>)
                             </a>
                         </h5>
                         <div class="w-full ">
-                            <h5 class="flex justify-between">
-                                <span class="text-yellow-300">Ecole:</span> 
-                                <span class="text-gray-400">
-                                    <span class="mr-2.5">{{ $school->name }}</span>
-                                    (<span class="text-sky-500">{{ $school->simple_name }}</span>)
-                                </span>
-                            </h5>
+                            
                             <div class="my-2 italic">
                                 <p>
                                     Située au {{ $school->geographic_position }} du {{ $school->country }} dans le département de {{ $school->department }}, plus précisement dans la ville de {{ $school->city }}, l'école (<span class="lowercase">{{ $school->getSchoolType() }}</span>) <a href="{{$school->to_profil_route()}}" class="text-yellow-400 font-bold">{{ $school->name }}</a> a été fondée en {{ $school->creation_year }} par <span class="text-sky-500 font-bold">{{ $school->created_by }}</span>.
@@ -58,8 +53,11 @@
                                 </span>
                             </h5>
                             
-                            <h5 >
-                                <h6 class="py-1.5">Des images de l'école {{ $school->simple_name }} : </h6>
+                            <div>
+                                <h6 class="text-amber-400 uppercase font-semibold letter-spacing-1
+                                ">
+                                    # L'école en images
+                                </h6>
                                 <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-2">
                                     @foreach ($school->images as $key => $image)
                                         <div class="aspect-square bg-gray-100 relative group card">
@@ -72,7 +70,30 @@
                                         </div>
                                     @endforeach
                                 </div>
-                            </h5>
+                            </div>
+                            @if($school->hasStats())
+                            <div class="mx-auto w-full mt-4 shadow-lg rounded-lg">
+                                <h6 class="text-amber-400 uppercase font-semibold letter-spacing-1
+                                ">
+                                    # Quelques statistiques de cette école
+                                </h6>
+                                <div class="flex flex-col gap-y-3 my-2 items-center justify-center">
+                                    @foreach ($school->getSchoolStatOfYear() as $school_stat)
+                                        <div class="w-full flex items-center justify-center flex-col gap-y-2 rounded-xl p-3 from-green-800 to-blue-900 via-sky-900 bg-gradient-to-r py-8">
+                                            <div>
+                                                <h4 class="text-center text-lg md:text-3xl animate-pulse mb-3">
+                                                    {{ $school_stat->exam }} {{ $school_stat->year }}
+                                                </h4>
+                                                <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
+                                                    <span class="fas"> {{ $school_stat->stat_value }} </span>
+                                                    <span class="fas fa-percent"></span>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 @endforeach

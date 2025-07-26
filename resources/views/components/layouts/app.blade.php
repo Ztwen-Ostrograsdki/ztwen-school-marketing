@@ -17,6 +17,8 @@
 
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
 
+        
+
         @livewireStyles
 
 
@@ -162,6 +164,14 @@
         @livewireScripts
 
         @livewireSweetalertScripts
+
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => {
+                    initTinyMCE();
+                }, 300);
+            });
+        </script>
     </body>
 </html>
 

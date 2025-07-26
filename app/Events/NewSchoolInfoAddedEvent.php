@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Stat;
+use App\Models\Info;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,14 +11,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewSchoolStatAddedEvent implements ShouldBroadcast
+class NewSchoolInfoAddedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
+     /**
      * Create a new event instance.
      */
-    public function __construct(public ?Stat $stat = null)
+    public function __construct(public ?Info $info = null)
     {
         //
     }

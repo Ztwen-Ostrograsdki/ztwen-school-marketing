@@ -46,15 +46,25 @@ e.private("App.Models.User." + window.ClientUser.id)
     });
 
 // ADMIN LISTENED EVENT
-e.private("admin").listen(
-    "NotificationDispatchedToAdminsSuccessfullyEvent",
-    (user) => {
+e.private("admin")
+    .listen("NotificationDispatchedToAdminsSuccessfullyEvent", (user) => {
         Livewire.dispatch(
             "LiveNotificationDispatchedToAdminsSuccessfullyEvent",
             user
         );
-    }
-);
+    })
+    .listen("SchoolStatUpdatedEvent", (stat) => {
+        Livewire.dispatch("LiveSchoolStatUpdatedEvent", stat);
+    })
+    .listen("NewSchoolStatAddedEvent", (stat) => {
+        Livewire.dispatch("LiveNewSchoolStatAddedEvent", stat);
+    })
+    .listen("SchoolInfoUpdatedEvent", (info) => {
+        Livewire.dispatch("LiveSchoolInfoUpdatedEvent", info);
+    })
+    .listen("NewSchoolInfoAddedEvent", (info) => {
+        Livewire.dispatch("LiveNewSchoolInfoAddedEvent", info);
+    });
 
 // USERS EMAIL VERIFIED LISTENED EVENT
 e.private("confirmeds")
@@ -79,9 +89,21 @@ e.channel("public")
     .listen("SchoolDataHasBeenUpdatedEvent", (user) => {
         Livewire.dispatch("LiveSchoolDataHasBeenUpdatedEvent", user);
     })
-    .listen("NewSchoolCreatedEvent", (user) => {
-        Livewire.dispatch("LiveNewSchoolCreatedEvent", user);
+    .listen("NewSchoolCreatedEvent", (school) => {
+        Livewire.dispatch("LiveNewSchoolCreatedEvent", school);
     })
     .listen("NewUserCreatedEvent", (user) => {
         Livewire.dispatch("LiveNewUserCreatedEvent", user);
+    })
+    .listen("SchoolStatUpdatedEvent", (stat) => {
+        Livewire.dispatch("LiveSchoolStatUpdatedEvent", stat);
+    })
+    .listen("NewSchoolStatAddedEvent", (stat) => {
+        Livewire.dispatch("LiveNewSchoolStatAddedEvent", stat);
+    })
+    .listen("SchoolInfoUpdatedEvent", (info) => {
+        Livewire.dispatch("LiveSchoolInfoUpdatedEvent", info);
+    })
+    .listen("NewSchoolInfoAddedEvent", (info) => {
+        Livewire.dispatch("LiveNewSchoolInfoAddedEvent", info);
     });

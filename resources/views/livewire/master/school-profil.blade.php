@@ -93,12 +93,12 @@
                                 <span>En cours...</span>
                             </span>
                         </button>
-                        <button title="Enregistrer une info, un offre..." wire:click="manageSchoolInfo" class="cursor-pointer shadow-sm bg-gray-500 hover:bg-gray-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
-                            <span wire:loading.remove wire:target="manageSchoolInfo">
+                        <button title="Enregistrer une info, un offre..." wire:click="addNewSchoolInfo" class="cursor-pointer shadow-sm bg-gray-500 hover:bg-gray-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="addNewSchoolInfo">
                                 <span class="fas fa-newspaper"></span>
                                 <span>Ajouter</span>
                             </span>
-                            <span wire:loading wire:target="manageSchoolInfo">
+                            <span wire:loading wire:target="addNewSchoolInfo">
                                 <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                 <span>En cours...</span>
                             </span>
@@ -269,12 +269,22 @@
                 <div class="flex justify-end gap-x-2">
                     @auth
                         @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
-                            <button title="Ajouter une stat..." wire:click="manageSchoolStat" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
-                                <span wire:loading.remove wire:target="manageSchoolStat">
-                                    <span class="fas fa-images"></span>
+                            <button title="Ajouter une stat..." wire:click="addNewSchoolStat" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="addNewSchoolStat">
+                                    <span class="fas fa-chart-simple"></span>
                                     <span>Ajouter</span>
                                 </span>
-                                <span wire:loading wire:target="manageSchoolStat">
+                                <span wire:loading wire:target="addNewSchoolStat">
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>En cours...</span>
+                                </span>
+                            </button>
+                            <button title="Rendre visibles toutes les stats..." wire:click="unhideAllStats" class="cursor-pointer shadow-sm bg-green-500 hover:bg-green-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="unhideAllStats">
+                                    <span class="fas fa-eye"></span>
+                                    <span>Rendre visible</span>
+                                </span>
+                                <span wire:loading wire:target="unhideAllStats">
                                     <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                     <span>En cours...</span>
                                 </span>
@@ -334,6 +344,7 @@
                                                     <span>En cours...</span>
                                                 </span>
                                             </button>
+                                            @if($stat->is_active)
                                             <button wire:click="hideSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-orange-400 hover:bg-orange-600 text-white p-2">
                                                 <span wire:loading.remove wire:target="hideSchoolStat({{$stat->id}})">
                                                     <span class="fas fa-eye-slash"></span>
@@ -344,14 +355,26 @@
                                                     <span>En cours...</span>
                                                 </span>
                                             </button>
+                                            @else
+                                            <button wire:click="unhideSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-green-400 hover:bg-green-600 text-white p-2">
+                                                <span wire:loading.remove wire:target="unhideSchoolStat({{$stat->id}})">
+                                                    <span class="fas fa-eye-slash"></span>
+                                                    <span>Rendre visible</span>
+                                                </span>
+                                                <span wire:loading wire:target="unhideSchoolStat({{$stat->id}})">
+                                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                    <span>En cours...</span>
+                                                </span>
+                                            </button>
+                                            @endif
                                             <button wire:click="deleteSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
                                                 <span wire:loading.remove wire:target="deleteSchoolStat({{$stat->id}})">
                                                     <span class="fas fa-trash"></span>
-                                                    <span>Modifier</span>
+                                                    <span>Supprimer</span>
                                                 </span>
                                                 <span wire:loading wire:target="deleteSchoolStat({{$stat->id}})">
                                                     <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                                    <span>En cours...</span>
+                                                    <span>Suppression...</span>
                                                 </span>
                                             </button>
                                             
@@ -370,41 +393,93 @@
             <h5 class="card text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4">
                 # Les Infos et Communiqués
             </h5>
-            <div class="flex flex-wrap gap-y-7 card my-4">
-                @for ($i = 1; $i < 4; $i++)
-                    <div class="border border-r-gray-500 bg-black/60 p-3 letter-spacing-1 rounded-xl shadow-inner shadow-sky-400">
-                        <h4 class="text-start text-purple-400 font-bold uppercase">
-                            # Annonce | Info N° {{$i}}
-                        </h4>
-                        <div class="text-gray-300 text-base md:text-lg">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quisquam omnis blanditiis dolor, corrupti accusantium id perspiciatis alias labore molestias esse quos, mollitia molestiae placeat. Magnam cum nobis maiores necessitatibus amet.
+            <div class="flex justify-end gap-x-2">
+                @auth
+                    @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                        <button title="Ajouter une info | communiqué | annonce..." wire:click="addNewSchoolInfo" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="addNewSchoolInfo">
+                                <span class="fas fa-chart-simple"></span>
+                                <span>Ajouter</span>
+                            </span>
+                            <span wire:loading wire:target="addNewSchoolInfo">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        <button title="Rendre visibles toutes les infos | communiqués | annonces..." wire:click="unhideAllInfos" class="cursor-pointer shadow-sm bg-green-500 hover:bg-green-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="unhideAllInfos">
+                                <span class="fas fa-eye"></span>
+                                <span>Rendre visible</span>
+                            </span>
+                            <span wire:loading wire:target="unhideAllInfos">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        <button title="Masquer toutes les infos | communiqués | annonces..." wire:click="hideAllInfos" class="cursor-pointer shadow-sm bg-orange-500 hover:bg-orange-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="hideAllInfos">
+                                <span class="fas fa-eye-slash"></span>
+                                <span>MAsquer</span>
+                            </span>
+                            <span wire:loading wire:target="hideAllInfos">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        <button title="Supprimer toutes les infos | communiqués | annonces..." wire:click="deleteAllInfos" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="deleteAllInfos">
+                                <span class="fas fa-trash"></span>
+                                <span>Supprimer</span>
+                            </span>
+                            <span wire:loading wire:target="deleteAllInfos">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+
+                    @endif
+                @endauth
+            </div>
+            <div class="flex flex-col gap-y-7 card my-4">
+                @foreach($school_infos as $type => $infos)
+                    <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
+                        #La section {{ $type }}
+                    </h5>
+                    @foreach ($infos as $school_info)
+                        <div class="border border-r-gray-500 bg-black/60 p-3 letter-spacing-1 rounded-xl shadow-inner shadow-sky-400">
+                            <h4 class="text-start text-purple-400 font-bold uppercase">
+                                # Annonce | Info N° {{$loop->iteration}}
+                            </h4>
+                            <div class="text-gray-300 text-base md:text-lg">
+                                {{ $school_info->content }}
+                            </div>
+                            <div class="my-3 flex justify-end gap-x-2">
+                                @auth
+                                    @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                                        <button wire:click="manageSchoolInfo({{$school_info}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
+                                            <span wire:loading.remove wire:target="manageSchoolInfo({{$school_info}})">
+                                                <span class="fas fa-newspaper"></span>
+                                                <span>Modifier</span>
+                                            </span>
+                                            <span wire:loading wire:target="manageSchoolInfo({{$school_info}})">
+                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                <span>En cours...</span>
+                                            </span>
+                                        </button>
+                                        <button class="cursor-pointer shadow-sm bg-amber-500 hover:bg-amber-700 text-white p-2">
+                                            <span class="fas fa-eye-slash"></span>
+                                            <span>Masquer</span>
+                                        </button>
+                                        <button class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
+                                            <span class="fas fa-trash"></span>
+                                            <span>Supprimer</span>
+                                        </button>
+                                    @endif
+                                @endauth
+                            </div>
                         </div>
-                        <div class="my-3 flex justify-end gap-x-2">
-                            @auth
-                                @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
-                                    <button wire:click="manageSchoolInfo({{$i}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
-                                        <span wire:loading.remove wire:target="manageSchoolInfo({{$i}})">
-                                            <span class="fas fa-newspaper"></span>
-                                            <span>Modifier</span>
-                                        </span>
-                                        <span wire:loading wire:target="manageSchoolInfo({{$i}})">
-                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                            <span>En cours...</span>
-                                        </span>
-                                    </button>
-                                    <button class="cursor-pointer shadow-sm bg-amber-500 hover:bg-amber-700 text-white p-2">
-                                        <span class="fas fa-eye-slash"></span>
-                                        <span>Masquer</span>
-                                    </button>
-                                    <button class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
-                                        <span class="fas fa-trash"></span>
-                                        <span>Supprimer</span>
-                                    </button>
-                                @endif
-                            @endauth
-                        </div>
-                    </div>
-                @endfor
+                    @endforeach
+                @endforeach
             </div>
         </div>
 

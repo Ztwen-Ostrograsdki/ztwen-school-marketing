@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Pack;
 use App\Models\Payment;
+use App\Models\Stat;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Observers\ObserveSchool;
@@ -134,6 +135,103 @@ class School extends Model
             }
 
 
+        }
+    }
+
+    public function stats()
+    {
+        return $this->hasMany(Stat::class);
+    }
+
+    public function hasStats($year = null)
+    {
+        return $year ? 
+                    !empty($this->stats()->where('stats.is_active', true)->where('stats.year', $year)->get()) : 
+                    !empty($this->stats);
+    }
+
+
+    public function infos()
+    {
+        return $this->hasMany(Info::class);
+    }
+
+    public function hasInfos($type = null, $target = null)
+    {
+        if($target && $type){
+
+            return !empty($this->infos()->where('infos.is_active', true)->where('infos.type', $type)->where('infos.target', $target)->get());
+        }
+        elseif($target){
+
+            !empty($this->infos()->where('infos.is_active', true)->where('infos.target', $target)->get());
+
+        }
+        elseif($type){
+
+            !empty($this->infos()->where('infos.is_active', true)->where('infos.type', $type)->get());
+
+        }
+
+        return !empty($this->infos()->where('infos.is_active', true)->get());
+        
+    }
+
+    public function getSchoolInfos($type = null)
+    {
+        if(!self::hasInfos($type)) return [];
+
+        if($type){
+
+            return $this->infos()->where('infos.is_active', true)->where('infos.type', $type)->get();
+        }
+
+        return Info::where(function ($query) {
+                            $query->where('school_id', $this->id)->where('infos.is_active', true);
+                        })
+                        ->orderBy('created_at')
+                        ->get()
+                        ->groupBy(function ($info) {
+
+                        return $info->type;
+                    });
+                
+        
+        
+    }
+
+    public function getSchoolStatOfYear($year = null)
+    {
+
+        if(self::hasStats($year)){
+
+            if($year){
+
+                if($this->hasStats($year)){
+
+                    return $this->stats()->where('year', $year)->where('stats.is_active', true)->get();
+
+                }
+            }
+            else{
+
+                $stats = Stat::where(function ($query) {
+                            $query->where('school_id', $this->id)->where('stats.is_active', true);
+                        })
+                        ->orderBy('created_at')
+                        ->get()
+                        ->groupBy(function ($stat) {
+
+                        return $stat->year;
+                    });
+                
+                    return $stats[array_key_first($stats->toArray())];
+
+            }
+        }
+        else{
+
+            return [];
         }
     }
 

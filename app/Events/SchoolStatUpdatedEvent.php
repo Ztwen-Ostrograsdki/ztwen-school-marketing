@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\School;
+use App\Models\Stat;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -18,7 +18,7 @@ class SchoolStatUpdatedEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public ?School $school = null)
+    public function __construct(public ?Stat $stat = null)
     {
         //
     }

@@ -49,7 +49,7 @@ trait ListenToEchoEventsTrait{
     }
 
     #[On("LiveNewUserCreatedEvent")]
-    public function userCreated()
+    public function userCreated($user = null)
     {
         $this->counter = getRandom();
     }
@@ -72,6 +72,36 @@ trait ListenToEchoEventsTrait{
     {
         $this->counter = getRand();
     }
+
+    // School STAT CRUD events
+    #[On("LiveNewSchoolStatAddedEvent")]
+    public function schoolStatCreated($stat = null)
+    {
+        $this->counter = getRandom();
+    }
+
+    #[On("LiveSchoolStatUpdatedEvent")]
+    public function schoolStatUpdated($stat = null)
+    {
+        $this->counter = getRand();
+    }
+    
+    
+    // School INFOS CRUD events
+    #[On("LiveNewSchoolInfoAddedEvent")]
+    public function schoolInfoCreated($info = null)
+    {
+        $this->counter = getRandom();
+    }
+
+    #[On("LiveSchoolInfoUpdatedEvent")]
+    public function schoolInfoUpdated($info = null)
+    {
+        $this->counter = getRand();
+    }
+
+
+
 
 
 }
