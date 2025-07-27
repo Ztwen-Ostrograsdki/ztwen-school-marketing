@@ -1,8 +1,14 @@
 <?php
 namespace App\Helpers\TraitsManagers;
 
+use App\Helpers\Robots\ModelsRobots;
 use App\Jobs\JobToSendConfirmationMailRequestToUser;
+use App\Jobs\JobToSendPasswordResetKeyToUser;
+use App\Models\AssistantToken;
+use App\Notifications\RealTimeNotification;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 
@@ -100,15 +106,7 @@ trait UserTrait{
 
     public function sendPasswordResetKeyToUser(?string $key = null)
     {
-        // $password_reset_key = generateRandomNumber(6);
-        
-        // if($key) $password_reset_key = $key;
-
-        // $this->notify(new SendPasswordResetKeyToUser($password_reset_key));
-
-        // $this->forceFill([
-        //     'password_reset_key' => Hash::make($password_reset_key)
-        // ])->save();
+        return JobToSendPasswordResetKeyToUser::dispatch($this);
     }
 
     public function hasSchoolRoles($school_id, $roles = [])
@@ -118,7 +116,7 @@ trait UserTrait{
 
     public static function makeUserIdentifySequence()
     {
-        return "ZTW@MRKT-" . date('Y') . generateRandomNumber(6);
+        return date('Y') . generateRandomNumber(6);
     }
 
     public function markUserAsVerifiedOrNot(bool $as_verified, bool $as_not_verified)
@@ -174,7 +172,17 @@ trait UserTrait{
     public function userBlockerOrUnblockerRobot($action = true, $reason = null)
     {
         if($action){
-            return $this->forceFill([
+
+            $admins = ModelsRobots::getUserAdmins(false);
+            
+            if(!empty($admins)){
+
+                $msg_to_admins = "Le compte de l'utilisateur " . $this->getFullName(true) . " vient d'être bloqué!";
+
+                Notification::sendNow($admins, new RealTimeNotification($msg_to_admins));
+            }
+
+            $this->forceFill([
                 'blocked' => true,
                 'blocked_at' => Carbon::now(),
                 'blocked_because' => $reason
@@ -245,6 +253,42 @@ trait UserTrait{
         
 
         return $data;
+    }
+
+
+    public function generateAssistantToken(array $for_users, $school_id, array $roles)
+    {
+        $token = Str::random(6);
+
+        $max_usesable = count($for_users);
+
+        $delay = Carbon::now()->addHours(24);
+
+        $msg = "Votre clé d'affiliation pour assistance a été générée avec succès! Cette clé est : " . $token . ". Elle expirera le " . __formatDateTime($delay) . ". Cette clé est utilisable seulement par " . $max_usesable . " utilisateur(s). Elle sera détruite automatiquement juste après les utilisations ou après expiration.";
+
+        if(!empty($for_users)){
+
+            $msg = "Votre clé d'affiliation pour assistance a été générée avec succès! Cette clé est : " . $token . ". Elle expirera le " . __formatDateTime($delay) . ". Cette clé est utilisable par " . $max_usesable . " utilisateurs dont les reféfences sont " . implode(" - ", $for_users) . ". La clé sera détruite automatiquement juste après les utilisations ou après expiration.";
+
+        }
+
+        $data = [
+            'token' => Hash::make($token),
+            'only_for' => $for_users,
+            'delay' => $delay,
+            'user_id' => $this->id,
+            'school_id' => $school_id,
+            'max_usesable' => $max_usesable,
+            'privileges' => $roles
+        ];
+
+        $created = AssistantToken::create($data);
+
+        if($created){
+
+            Notification::sendNow([$this], new RealTimeNotification($msg));
+
+        }
     }
 
 

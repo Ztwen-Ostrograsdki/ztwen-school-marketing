@@ -5,6 +5,7 @@ use App\Livewire\Auth\EmailVerificationPage;
 use App\Livewire\Auth\ForgotPasswordPage;
 use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\RegisterPage;
+use App\Livewire\Auth\ResetPasswordPage;
 use App\Livewire\Auth\SubscribePage;
 use App\Livewire\Master\AssistantsListing;
 use App\Livewire\Master\Dashboard;
@@ -76,13 +77,16 @@ Route::middleware(['guest'])->group(function(){
     Route::get('mot-de-passe-oublie', ForgotPasswordPage::class)->name('password.forgot');
 
     Route::get('/verification-email/r={token}/email={email}/{key?}', EmailVerificationPage::class)->name('email.verification');
+
+    Route::get('/mot-de-passe-oublie', ForgotPasswordPage::class)->name('password.forgot');
+    
 });
 
-// Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
+Route::get('/reinitialisation-mot-de-passe/token={token?}/email={email?}', ResetPasswordPage::class)->name('password.reset');
 
-    // Route::get('/reinitialisation-mot-de-passe/token={token?}/email={email?}', ResetPasswordPage::class)->name('password.reset');
-    // Route::get('/reinitialisation-mot-de-passe/par-email/email={email?}/{key?}', ResetPasswordPage::class)->name('password.reset.by.email');
-    // Route::get('/mot-de-passe-oublie', ForgotPasswordPage::class)->name('password.forgot');
+Route::get('/reinitialisation-mot-de-passe/par-email/email={email?}/{key?}', ResetPasswordPage::class)->name('password.reset.by.email');
+
+
 
 Route::get('/403', function () {
     abort(403);

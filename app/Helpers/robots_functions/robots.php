@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Helpers\Robots\SpatieManager;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -103,23 +104,23 @@ if(!function_exists('__isConnectedToInternet')){
 
 }
 
-// if(!function_exists('__translateRoleName')){
+if(!function_exists('__translateRoleName')){
 
-//     function __translateRoleName($role_name)
-//     {
-//         return SpatieManager::translateRoleName($role_name);
-//     }
+    function __translateRoleName($role_name)
+    {
+        return SpatieManager::translateRoleName($role_name);
+    }
 
-// }
+}
 
-// if(!function_exists('__translatePermissionName')){
+if(!function_exists('__translatePermissionName')){
 
-//     function __translatePermissionName($permission_name)
-//     {
-//         return SpatieManager::translatePermissionName($permission_name);
-//     }
+    function __translatePermissionName($permission_name)
+    {
+        return SpatieManager::translatePermissionName($permission_name);
+    }
 
-// }
+}
 
 
 

@@ -76,6 +76,14 @@ class School extends Model
             $school->slug = Str::slug($school->name) . '-' . generateRandomNumber();
 
         });
+        
+        static::updated(function ($school){
+
+            $school->refreshImagesFolder();
+
+        });
+
+
     }
 
     public function user()

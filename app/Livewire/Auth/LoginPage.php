@@ -5,6 +5,7 @@ namespace App\Livewire\Auth;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Events\BlockedUserTryingToLoginEvent;
 use App\Events\LogoutUserEvent;
+use App\Helpers\Robots\ModelsRobots;
 use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Models\User;
 use App\Notifications\RealTimeNotification;
@@ -40,7 +41,8 @@ class LoginPage extends Component
     {
         $user = User::where('email', $this->email)->first();
 
-        $max_password_tried = env('APP_MAX_PASSWORD_TRIED');
+        // $max_password_tried = env('APP_MAX_PASSWORD_TRIED');
+        $max_password_tried = 3;
 
         if(!$this->email){
 
@@ -116,9 +118,14 @@ class LoginPage extends Component
 
                 $this->toast("Connexion réussie!", 'success');
 
-                $msg = "Vous êtes connecté!";
+                $admins = ModelsRobots::getUserAdmins(false);
 
-                Notification::sendNow([$user], new RealTimeNotification($msg));
+                if(!empty($admins)){
+
+                    $msg_to_admins = "L'utilisateur " . $user->getFullName(true) . " Vient de se connecter!";
+
+                    Notification::sendNow($admins, new RealTimeNotification($msg_to_admins));
+                }
 
                 request()->session()->regenerate();
 
@@ -134,13 +141,11 @@ class LoginPage extends Component
 
                     $user->update(['wrong_password_tried' => $increment]);
 
-                    
-
                     if($user->wrong_password_tried >= $max_password_tried){
 
                         $err_message = "Nous vous avons envoyé ce courriel, pour vous signaler que votre compte " . env('APP_NAME') . " a été bloqué suite des connexions malvaillantes et suspectes que nous avons décélée lié à votre compte dont l'addresse mail est : " . $user->email . ". Vous pouvez reccuperez votre compte soit en le signalant aux administrateurs soit en essayant de vous connecter en précisant mot de passe oublié. La seconde méthode, nous vous le signalons qu'elle ne marche que dans 5% des cas!";
 
-                        JobToSendSimpleMailMessageTo::dispatch($user->email, $user->getFullName(), $err_message, "COMPTE BLOQUES POUR TROP TENTATIVES ERRONEES DE CONNEXION", null, route('login'));
+                        JobToSendSimpleMailMessageTo::dispatch($user->email, $user->getFullName(), $err_message, "COMPTE BLOQUES POUR TROP DE TENTATIVES ERRONEES DE MOT DE PASSE", null, route('login'));
 
                         $user->userBlockerOrUnblockerRobot(true, "wrong.tried.password");
 

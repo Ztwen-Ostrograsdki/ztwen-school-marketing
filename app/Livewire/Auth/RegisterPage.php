@@ -555,7 +555,7 @@ class RegisterPage extends Component
 
         } catch (Throwable $e) {
 
-            DB::rollBack(); // Annule tout
+            DB::rollBack(); 
 
             self::deletePhotoFromStorage();
 

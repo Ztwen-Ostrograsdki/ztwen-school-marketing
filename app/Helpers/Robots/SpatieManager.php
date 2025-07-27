@@ -219,7 +219,6 @@ trait SpatieManager{
 			'admin-3'=> "Admin niveau 3",
 			'admin-4'=> "Admin niveau 4",
 			'admin-5'=> "Admin niveau 5",
-			'infos-manager'=> "Gestion des communiqués",
 			'epreuves-manager'=> "Gestion des épreuves",
 			'viewer'=> "Lecture seule",
 			'schools-manager'=> "Gestion des écoles",
@@ -232,7 +231,7 @@ trait SpatieManager{
 			'subscriptions-manager'=> "Gestion des souscriptions | abonnements",
 			'transactions-manager'=> "Gestion des transactions",
 			'stats-manager'=> "Gestion des statistiques",
-			'info-manager'=> "Gestion des communiqués | infos | annonces",
+			'infos-manager'=> "Gestion des communiqués | infos | annonces",
 			'school-images-manager'=> "Gestion des images des écoles",
 
 		];
@@ -240,6 +239,19 @@ trait SpatieManager{
 		return $role_name && isset($data[$role_name]) ? $data[$role_name] : $role_name ;
 
 
+	}
+
+	public static function getAssistantRolables()
+	{
+		return [
+			'assistants-manager',
+			'packs-manager',
+			'subscriptions-manager',
+			'transactions-manager',
+			'stats-manager',
+			'infos-manager',
+			'school-images-manager',
+		];
 	}
 
 

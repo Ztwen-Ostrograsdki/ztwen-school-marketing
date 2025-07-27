@@ -1,5 +1,5 @@
 <div>
-    <section class=" max-w-3xl mx-auto pt-[10%] relative items-center justify-center mt-10 rounded-lg py-5">
+    <section class=" max-w-3xl mx-auto  relative items-center justify-center mt-1 rounded-lg py-5">
         <div class="hidden md:block">
             <div class="top-blue w-[100px] h-[100px] from-blue-300 to-gray-300 via-purple-300 bg-linear-90 rounded-full absolute  top-[33%] right-[8%]"></div>
             <div class="top-blue w-[100px] h-[100px] from-blue-300 to-gray-300 via-purple-300 bg-linear-90 rounded-full absolute  top-[40%] left-[5%]"></div>

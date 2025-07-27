@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Helpers\Services\EmailTemplateBuilder;
-use App\Mail\SendConfirmationMailRequestToUserMail;
+use App\Mail\MailToSendPasswordResetKeyToUser;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
-class JobToSendConfirmationMailRequestToUser implements ShouldQueue
+class JobToSendPasswordResetKeyToUser implements ShouldQueue
 {
     use Queueable;
 
@@ -27,7 +27,7 @@ class JobToSendConfirmationMailRequestToUser implements ShouldQueue
         public ?User $user,
     )
     {
-        $this->user = $user;
+        
     }
 
     /**
@@ -47,7 +47,7 @@ class JobToSendConfirmationMailRequestToUser implements ShouldQueue
 
         } catch (\Throwable $th) {
 
-            to_flash('error', "Une erreur est survenue lors de la génération du lien de confirmation. Veuillez donc réessayer!");
+            to_flash('error', "Une erreur est survenue lors de la génération du lien de restoration de compte. Veuillez donc réessayer!");
             
             DB::rollBack();
 
@@ -63,19 +63,19 @@ class JobToSendConfirmationMailRequestToUser implements ShouldQueue
 
         $user = $this->user;
 
-        $lien = route('email.verification', ['token' => env('APP_MY_TOKEN'), 'email' => $user->email, 'key' => $key]);
+        $lien = route('password.reset.by.email', ['email' => $user->email, 'key' => $key]);
 
         $user->forceFill(['password_reset_key' => Hash::make($key)])->save();
 
         $greating = $user->greatingMessage($user->getUserNamePrefix(true, false)) . ", ";
 
-        $html = EmailTemplateBuilder::render('email-confirmation', [
+        $html = EmailTemplateBuilder::render('password-reset', [
             'lien' => $lien,
             'greating' => $greating,
             'key' => $key
         ]);
 
-        return Mail::to($user->email)->send(new SendConfirmationMailRequestToUserMail($user, $key, $html));
+        return Mail::to($user->email)->send(new MailToSendPasswordResetKeyToUser($user, $key, $html));
     }
 }
 

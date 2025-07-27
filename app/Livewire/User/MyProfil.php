@@ -2,13 +2,18 @@
 
 namespace App\Livewire\User;
 
+use Akhaled\LivewireSweetalert\Confirm;
+use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
+use App\Models\School;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class MyProfil extends Component
 {
-    use ListenToEchoEventsTrait;
+    use ListenToEchoEventsTrait, Toast, Confirm;
     
     public $uuid, $user_id;
 
@@ -22,7 +27,7 @@ class MyProfil extends Component
     {
         if($id && $uuid){
 
-            $user = User::where('id', $id)->where('uuid', $uuid)->firstOrFail();
+            $user = User::where('identifiant', $id)->where('uuid', $uuid)->firstOrFail();
 
             if($user){
 
@@ -56,9 +61,72 @@ class MyProfil extends Component
         return view('livewire.user.my-profil', compact('all_subscribes', 'all_posts', 'all_likes'));
     }
 
-    public function removeImage($path)
+
+    public function removeImage($image_path, int $school_id)
     {
-            
+        // SpatieManager::ensureThatUserCan(['schools-manager']);
+
+        $html = "<h6 class='font-semibold text-base text-orange-400 py-0 my-0'>
+                    <p> Vous êtes sur le point de supprimer une image </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action est irréversible! </p>";
+
+        $options = ['event' => 'confirmImageDeletion', 'confirmButtonText' => 'Validé', 'cancelButtonText' => 'Annulé', 'data' => ['image_path' => $image_path, 'school_id' => $school_id]];
+
+        $this->confirm($html, $noback, $options);
+
+    }
+
+    #[On('confirmImageDeletion')]
+    public function confirmImageRemoving($data)
+    {
+        // SpatieManager::ensureThatUserCan(['school-manager']);
+
+        $image_path = $data['image_path'];
+
+        $school_id = $data['school_id'];
+
+        $school = School::where('id', $school_id)->firstOrFail();
+
+        if($school && $image_path){
+
+            $images = (array)$school->images;
+
+            if(in_array($image_path, $images)){
+
+                $image_key = array_keys($images, $image_path)[0];
+
+                if(Storage::disk('public')->exists($image_path)){
+
+                    if(Storage::disk('public')->delete($image_path)){
+
+                        unset($images[$image_key]);
+
+                        $images = array_values($images); 
+
+                        $updated = $school->update(['images' => $images]);
+
+                        if($updated) $this->toast( "L'image a été retirée avec succès!", 'success');
+
+                    }
+                    else{
+
+                        return $this->toast( "Une erreure s'est produite, l'image n'a pas pu être supprimée!", 'error');
+                    }
+
+                    
+                }
+                else{
+
+                    return $this->toast( "Erreur stockage: Le fichier est introuvable!", 'error');
+                }
+
+            }
+            else{
+                return $this->toast( "Une erreure s'est produite!", 'error');
+            }
+        }
     }
 
     public function openAddAssistantModal()

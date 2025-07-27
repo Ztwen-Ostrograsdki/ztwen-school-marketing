@@ -251,17 +251,23 @@
                                 <h6 class="py-1.5">Des images de {{ $school->simple_name }} : </h6>
                                 <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-2">
                                     @foreach ($school->images as $key => $image)
-                                        <div class="group relative border rounded overflow-hidden" style="z-index: 2000 !important;" x-data="{ show: false }"
+                                        <div class="group relative border rounded overflow-hidden" style="z-index: 40 !important;" x-data="{ show: false }"
                                             x-init="setTimeout(() => show = true, {{ $key * 100 }})"
                                             x-show="show"
                                             x-transition:enter="transition ease-out duration-500"
                                             x-transition:enter-start="opacity-0 scale-90"
                                             x-transition:enter-end="opacity-100 scale-100">
                                             <img src="{{ url('storage', $image) }}" class="object-cover w-full h-32" alt="Image ">
-                                            <span wire:click="removeImage({{ $key }})"
+                                            @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                                            <span wire:click="removeImage('{{$image}}', '{{$school->id}}')"
                                                 class="absolute inset-0 bg-red-600 bg-opacity-50 text-white text-xs font-semibold opacity-0 group-hover:opacity-70 transition duration-300 flex items-center justify-center cursor-pointer">
-                                                ✖ Retirer cette image
+                                                <span wire:loading.remove wire:target="removeImage('{{$image}}', '{{$school->id}}')">✖ Retirer cette image</span>
+                                                <span wire:loading wire:target="removeImage('{{$image}}', '{{$school->id}}')">
+                                                    <span  class="fas fa-rotate animate-spin"></span>
+                                                    <span>Suppression ...</span>
+                                                </span>
                                             </span>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>

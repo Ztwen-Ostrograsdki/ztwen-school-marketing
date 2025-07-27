@@ -2,18 +2,49 @@
 
 namespace App\Livewire\Modals;
 
+use Akhaled\LivewireSweetalert\Confirm;
+use Akhaled\LivewireSweetalert\Toast;
+use App\Helpers\Robots\SpatieManager;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Spatie\Permission\Models\Role;
 
 class NewAssistantModal extends Component
 {
+    use Toast, Confirm;
+
     public $modal_name = "#add-new-assistant-modal";
 
-    public $assistant, $assistant_email, $assistant_ID, $assistant_roles = [], $assistant_identifiant;
+    #[Validate('required|string')]
+    public $assistant;
+
+    public $assistant_email;
+
+    public $assistant_ID;
+
+    #[Validate('required')]
+    public $assistant_roles = [];
+
+    public $assistant_identifiant;
+
+    #[Validate('required|numeric')]
+    public $school_id;
 
     public function render()
     {
-        return view('livewire.modals.new-assistant-modal');
+        $schools = [];
+
+        $rolables = SpatieManager::getAssistantRolables();
+
+        $roles = Role::whereIn('name', $rolables)->pluck('name')->toArray();
+
+        if(auth_user()){
+            
+            $schools = auth_user()->schools;
+        }
+
+        return view('livewire.modals.new-assistant-modal', compact('roles', 'schools'));
     }
 
     #[On("AddNewAssistantLiveEvent")]
@@ -29,18 +60,29 @@ class NewAssistantModal extends Component
 
     public function addAssistant()
     {
-        if($this->assistant_identifiant){
+        $this->validate();
 
-            if(filter_var($this->assistant_identifiant, FILTER_VALIDATE_EMAIL)){
 
+        if($this->assistant){
+
+            if(filter_var($this->assistant, FILTER_VALIDATE_EMAIL)){
+
+                $this->validate([
+                    'assistant' => 'exists:users,email',
+                ]);
 
             }
             else{
 
+                $this->validate([
+                    'assistant' => 'exists:users,identifiant',
+                ]);
 
             }
 
         }
+
+        dd($this);
 
     }
 }

@@ -22,13 +22,23 @@
                                     <h2 class="text-sm sm:text-xl font-bold uppercase text-shadow shadow-amber-400">La liste de vos assistants</h2>
                                     <p class="text-gray-400 mt-1">Vous pouvez gérer vos différents assistants. </p>
                                 </div>
-                                <div class="text-xs sm:text-base mt-4 md:mt-0 flex gap-x-2 justify-end">
-                                    <a href="{{route('user.profil', ['id' => 3,  'uuid' => "uudeuueueu"])}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
+                                <div class="text-xs sm:text-sm mt-4 md:mt-0 flex gap-x-2 justify-end">
+                                    <a href="{{$user->to_profil_route()}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
                                         <span>
                                             <span class="fas fa-home mr-1"></span>
                                             Mon profil
                                         </span>
                                     </a>
+                                    <button wire:click='generateAssistantTokenFor' class="block text-black cursor-pointer bg-green-400 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
+                                        <span wire:loading.remove wire:target='generateAssistantTokenFor'>
+                                            <span class="fas fa-key mr-1"></span>
+                                            Générer une clé
+                                        </span>
+                                        <span wire:loading wire:target='generateAssistantTokenFor'>
+                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                            <span>Un instant, en cours...</span>
+                                        </span>
+                                    </button>
                                     <button wire:click='openAddAssistantModal' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
                                         <span wire:loading.remove wire:target='openAddAssistantModal'>
                                             <span class="fas fa-user-plus mr-1"></span>

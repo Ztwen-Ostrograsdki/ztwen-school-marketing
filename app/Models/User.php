@@ -190,7 +190,7 @@ class User extends Authenticatable
 
     public function to_profil_route()
     {
-        return route('user.profil', ['id' => $this->id, 'uuid' => $this->uuid]);
+        return route('user.profil', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
     } 
 
     public function to_profil_edit_route()
@@ -206,7 +206,7 @@ class User extends Authenticatable
     
     public function to_my_assistants_list_route()
     {
-        return route('my.assistants', ['id' => $this->id, 'uuid' => $this->uuid]);
+        return route('my.assistants', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
     }
 
     public function getNotifications()
