@@ -4,13 +4,16 @@ namespace App\Models;
 
 use App\Models\School;
 use App\Models\User;
+use App\Observers\ObserveAssistanceRequest;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+#[ObservedBy(ObserveAssistanceRequest::class)]
 class AssistantRequest extends Model
 {
     protected $fillable = [
-        'user_id',
+        'director_id',
         'school_id',
         'assistant_id',
         'status',
@@ -39,9 +42,19 @@ class AssistantRequest extends Model
 
 
 
+    public function director()
+    {
+        return $this->belongsTo(User::class, 'director_id');
+    }
+
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'director_id');
+    }
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'director_id');
     }
 
     public function school()
@@ -51,13 +64,13 @@ class AssistantRequest extends Model
     
     public function assistant()
     {
-        return User::where('id', $this->assistant_id)->first();
+        return $this->belongsTo(User::class, 'assistant_id');
     }
 
-
-//     Route::get('/gestion/demande-assistance-gestion-ecole=reponse/v/ru={request_uuid}/au={assistant_uuid}/su={sender_uuid}', AssistantRequestedResponsePage::class)->name('assistant.request.response');
-
-// Route::get('/gestion/demande-assistance-gestion-ecole=reponse/l/ru={request_uuid}/au={assistant_uuid}/su={sender_uuid}/tk={token}', AssistantRequestedResponsePage::class)->name('assistant.request.approved');
+    public function receiver()
+    {
+        return $this->belongsTo(User::class, 'assistant_id');
+    }
 
 
     public function to_assistant_request_route($token = true)
@@ -68,8 +81,8 @@ class AssistantRequest extends Model
             route('assistant.request.approved', 
                 [
                     'request_uuid' => $this->uuid, 
-                    'assistant_uuid' => $this->assistant()->uuid, 
-                    'sender_uuid' => $this->user->uuid, 
+                    'assistant_uuid' => $this->assistant->uuid, 
+                    'sender_uuid' => $this->director->uuid, 
                     'token' => $token
                 ]
             );
@@ -79,8 +92,8 @@ class AssistantRequest extends Model
         route('assistant.request.approved', 
             [
                 'request_uuid' => $this->uuid, 
-                'assistant_uuid' => $this->assistant()->uuid, 
-                'sender_uuid' => $this->user->uuid
+                'assistant_uuid' => $this->assistant->uuid, 
+                'sender_uuid' => $this->director->uuid
             ]
         );
     }

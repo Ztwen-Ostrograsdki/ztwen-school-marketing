@@ -100,6 +100,19 @@ trait ListenToEchoEventsTrait{
         $this->counter = getRand();
     }
 
+    // School ASSISTANTS CRUD events
+    #[On("LiveNewAssistanceRequestCreatedEvent")]
+    public function schoolAssistantRequestCreated($info = null)
+    {
+        $this->counter = getRandom();
+    }
+
+    #[On("LiveSchoolAssistantRequestUpdatedEvent")]
+    public function schoolAssistantRequestUpdated($info = null)
+    {
+        $this->counter = getRand();
+    }
+
 
 
 

@@ -2,7 +2,8 @@
 
 namespace App\Events;
 
-use App\Models\AssistantRequest;
+use App\Models\School;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,14 +12,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewAssistanceRequestCreatedEvent implements ShouldBroadcast
+class InitializationToCreateNewAssistantRequestEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public AssistantRequest $assistant_request)
+    public function __construct(public User $sender, public User $receiver, public School $school, public array $privileges)
     {
         //
     }
@@ -31,9 +32,7 @@ class NewAssistanceRequestCreatedEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('App.Models.User.' . $this->assistant_request->director->id),
-            new PrivateChannel('App.Models.User.' . $this->assistant_request->assistant->id),
-            new PrivateChannel('admin'),
+            new PrivateChannel('App.Models.User.' . $this->sender->id),
         ];
     }
 }

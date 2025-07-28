@@ -4,7 +4,9 @@
             <h5 class="card letter-spacing-1 flex bg-black/70 text-center mx-auto flex-col gap-y-2 text-gray-200 border rounded-sm">
                 <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl  uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
                     <span class="">
-                        La liste de mes assistants: <span class="uppercase text-orange-500"></span>
+                        La liste de mes assistants: <span class="uppercase text-orange-500">
+                            {{ __zero(count($my_assistants)) }}
+                        </span>
                     </span>
                     <span class="card absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
                 </p>

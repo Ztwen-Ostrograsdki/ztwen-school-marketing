@@ -46,7 +46,7 @@ class AssistantRequestedResponsePage extends Component
 
             if($request){
 
-                if($request->user->uuid == $sender_uuid && $request->assistant()->uuid == $assistant_uuid){
+                if($request->director->uuid == $sender_uuid && $request->assistant->uuid == $assistant_uuid){
 
                     if($request->status !== 'Approuvé'){
 
@@ -54,11 +54,11 @@ class AssistantRequestedResponsePage extends Component
 
                         $this->assistant_request = $request;
 
-                        $this->assistant = $request->assistant();
+                        $this->assistant = $request->assistant;
 
                         $this->sender_uuid = $sender_uuid;
 
-                        $this->sender = $request->user;
+                        $this->sender = $request->director;
 
                         if($token){
 
@@ -71,7 +71,7 @@ class AssistantRequestedResponsePage extends Component
                     }
                     else{
 
-                        return redirect($request->assistant()->to_profil_route());
+                        return redirect($request->assistant->to_profil_route());
 
                     }
                 }
@@ -80,13 +80,10 @@ class AssistantRequestedResponsePage extends Component
                     return abort(403);
                 }
 
-
             }
             else{
 
                 $this->not_request_sent = true;
-
-
             }
 
         }
@@ -122,7 +119,7 @@ class AssistantRequestedResponsePage extends Component
                     
                     $this->assistant->update(['assistant_of' => $this->sender->id]);
 
-                    $this->request->update(['status' => 'Approuvé', 'approved_at' => Carbon::today()]);
+                    $this->request->update(['status' => 'Approuvé', 'approved_at' => now()]);
 
                     DB::commit();
 
@@ -131,7 +128,6 @@ class AssistantRequestedResponsePage extends Component
 
                         $this->request_approved_successfully = true;
 
-                        // Notify
 
 
                     });

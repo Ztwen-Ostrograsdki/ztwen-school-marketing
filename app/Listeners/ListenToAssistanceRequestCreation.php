@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\NewAssistanceRequestCreatedEvent;
+use App\Events\InitializationToCreateNewAssistantRequestEvent;
 use App\Jobs\JobToSendEmailToUserForAssistanceRequest;
 use App\Notifications\RealTimeNotification;
 use Illuminate\Bus\Batch;
@@ -14,7 +14,7 @@ use Throwable;
 
 class ListenToAssistanceRequestCreation
 {
-    public function handle(NewAssistanceRequestCreatedEvent $event): void
+    public function handle(InitializationToCreateNewAssistantRequestEvent $event): void
     {
         
         $batch = Bus::batch([
@@ -27,7 +27,7 @@ class ListenToAssistanceRequestCreation
         })
         ->catch(function(Batch $batch, Throwable $er) use ($event){
 
-            $message = "Une erreure s'est produite lors de génération de la requête d'affiliation de " . $event->receiver->getFullNama() . " en tant de assistant de gestion de l'école " . $event->school->name . " que vous avez lancé!";
+            $message = "Une erreure s'est produite lors de génération de la requête d'affiliation de " . $event->receiver->getFullName() . " en tant que assistant de gestion de l'école " . $event->school->name . " que vous avez lancé!";
 
             Notification::sendNow([$event->sender], new RealTimeNotification($message));
 

@@ -28,6 +28,8 @@ class JobToSendEmailToUserForAssistanceRequest implements ShouldQueue
 
     public $assistant_request;
 
+    public $key;
+
     /**
      * Create a new job instance.
      */
@@ -43,13 +45,13 @@ class JobToSendEmailToUserForAssistanceRequest implements ShouldQueue
         
         try {
 
-            $key = self::generateAssistantRequest();
+            $assistant_request = self::generateAssistantRequest();
 
             DB::commit();
 
-            DB::afterCommit(function() use ($key){
+            DB::afterCommit(function(){
 
-                self::mailBuilder($key);
+                self::mailBuilder();
 
                 Notification::sendNow([$this->sender], new RealTimeNotification($this->message_to_sender));
 
@@ -69,8 +71,9 @@ class JobToSendEmailToUserForAssistanceRequest implements ShouldQueue
     }
 
 
-    public function mailBuilder($key)
+    public function mailBuilder($key = null)
     {
+        $key = $this->key;
 
         $school = $this->school;
 
@@ -108,27 +111,27 @@ class JobToSendEmailToUserForAssistanceRequest implements ShouldQueue
         Mail::to($receiver->email)->send(new MailToSendAssistanceRequestToUser($receiver, $key, $receiver_html));
 
 
-        JobToSendSimpleMailMessageTo::dispatch($sender->email, $sender->getFullName(true), $this->message_to_receiver, "Demande d'assistance de gestion d'école", null, $lien_for_sender);
+        JobToSendSimpleMailMessageTo::dispatch($sender->email, $greating_sender, $this->message_to_sender, "Demande d'assistance de gestion d'école", null, $lien_for_sender);
     }
 
 
     public function generateAssistantRequest()
     {
-        $key = generateRandomNumber(6);
+        $this->key = generateRandomNumber(6);
 
         $delay = Carbon::now()->addHours(24);
 
-        $last = "####" . substr($key, -2);
+        $last = "####" . substr($this->key, -2);
 
-        $this->message_to_sender = "Votre clé d'affiliation pour assistance a été générée avec succès! Cette clé est : {$last}  . Elle expirera le " . __formatDateTime($delay) . ". Cette clé est utilisable seulement par " . $this->receiver->getUserNamePrefix(true, true) . " utilisateur(s). Elle sera détruite automatiquement juste après utilisation ou après expiration.";
+        $this->message_to_sender = "Votre clé d'affiliation pour assistance a été générée avec succès! Cette clé est : {$last}  . Elle expirera le " . __formatDateTime($delay) . ". Cette clé est utilisable seulement par " . $this->receiver->getUserNamePrefix(true, true) . " . Elle sera détruite automatiquement juste après utilisation ou après expiration.";
 
         $this->message_to_receiver = $this->sender->getUserNamePrefix(true, true) . " vous a envoyé une demande d'assistance de gestion d'école. La clé est : {$last} (Vérifier votre boîte mail) . Elle expirera le " . __formatDateTime($delay) . ".  Elle sera détruite automatiquement juste après l' utilisation ou après expiration.";
 
         $data = [
-            'token' => Hash::make($key),
+            'token' => Hash::make($this->key),
             'assistant_id' => $this->receiver->id,
             'delay' => $delay,
-            'user_id' => $this->sender->id,
+            'director_id' => $this->sender->id,
             'school_id' => $this->school->id,
             'privileges' => $this->privileges
         ];

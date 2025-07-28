@@ -4,6 +4,7 @@ namespace App\Livewire\Modals;
 
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
+use App\Events\InitializationToCreateNewAssistantRequestEvent;
 use App\Events\NewAssistanceRequestCreatedEvent;
 use App\Helpers\Robots\SpatieManager;
 use App\Models\School;
@@ -93,7 +94,7 @@ class NewAssistantModal extends Component
             $school = School::where('id', $this->school_id)->first();
             
 
-            NewAssistanceRequestCreatedEvent::dispatch($sender, $this->receiver, $school, $this->assistant_roles);
+            InitializationToCreateNewAssistantRequestEvent::dispatch($sender, $this->receiver, $school, $this->assistant_roles);
 
             $this->toast("Le processus a été lancé", "success");
 

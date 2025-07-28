@@ -7,7 +7,7 @@
     <tr>
       <td class="bg-blue-700 text-white text-center p-6">
         <img
-          src="../images/logo.jpg"
+          src="{{ logo_url }}"
           alt="Logo"
           class="h-28 w-28 rounded-full mx-auto mb-2"
         />
@@ -18,27 +18,33 @@
 
     <tr>
       <td class="p-6">
-        <h2 class="text-xl font-semibold mb-4">{{ greating }},</h2>
+        <h2 class="text-xl font-semibold mb-4">{{ greating }}</h2>
         <p class="mb-4"></p>
 
-        <div class="text-center my-6 flex flex-col">
-          <span>
+        <div class="text-center my-6 text-lg">
+          <h6 class="text-lg">
             Vous avez réçu ce courriel suite à la demande de
             <span class="text-sky-600"> {{ sender_name }} </span> qui voudrait
             vous accorder quelques privilèges et accès pour la gestion de son
             école
+            <span class="text-amber-500 font-semibold mx-0.5"
+              >{{ school_name }}</span
+            >
             <span> </span>
             <br />
-          </span>
-          <span
-            class="block bg-green-100 text-green-800 text-lg font-bold px-4 py-2 rounded-full border border-green-300"
+          </h6>
+          <div
+            class="block bg-green-100 text-green-800 text-sm font-bold px-4 py-2 rounded-sm border border-green-300 shadow-md shadow-gray-800"
           >
-            {{ privileges }}
-          </span>
+            <h3 class="text-center w-full my-1.5">
+              Voici les privilèges qu'il voudrait vous accorder :
+            </h3>
+            <p>{{ privileges }}</p>
+          </div>
           <span></span>
         </div>
 
-        <p class="mb-4">
+        <p class="mb-4 text-white">
           Ensemble valorisons l'école béninoise et faisons la promotion de
           <span class="text-amber-500"> {{ school_name }} </span>.
         </p>
@@ -54,7 +60,7 @@
             </h3>
           </h3>
         </div>
-        <p class="mb-6">
+        <p class="mb-6 text-white">
           Veuillez confirmer la demande en cliquant sur le lien ci-dessous
         </p>
 
@@ -67,9 +73,10 @@
           </a>
         </div>
 
-        <p class="mb-6">
+        <p class="mb-6 text-gray-300">
           Si vous avez des questions ou souhaitez plus d’informations, n’hésitez
-          pas à contacter les administrateurs.
+          pas à contacter les administrateurs ou votre demandeur
+          <span class="text-sky-600"> {{ sender_name }} </span>!
         </p>
       </td>
     </tr>

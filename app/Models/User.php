@@ -180,7 +180,12 @@ class User extends Authenticatable
 
     public function my_assistants()
     {
-        return User::where('assistant_of', $this->id)->get();
+        return $this->hasMany(AssistantRequest::class, 'director_id');
+    }
+
+    public function my_directors()
+    {
+        return $this->hasMany(AssistantRequest::class, 'assistant_id');
     }
 
     public function my_chief()

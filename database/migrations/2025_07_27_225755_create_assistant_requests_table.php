@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('assistant_requests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('assistant_id')->nullable()->default(null);
+            $table->unsignedBigInteger('assistant_id');
+            $table->foreign('assistant_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->unsignedBigInteger('director_id');
+            $table->foreign('director_id')->references('id')->on('users')->cascadeOnDelete();
             $table->json('privileges')->nullable()->default(null);
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->string('token');
             $table->string('status')->default('En attente');

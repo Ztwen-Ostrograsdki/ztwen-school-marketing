@@ -33,6 +33,9 @@ e.private("App.Models.User." + window.ClientUser.id)
         }
     })
 
+    .listen("NewAssistanceRequestCreatedEvent", (ev) => {
+        Livewire.dispatch("LiveNewAssistanceRequestCreatedEvent", ev);
+    })
     .listen("LogoutUserEvent", (ev) => {
         Livewire.dispatch("LiveLogoutUserEvent", ev);
     })

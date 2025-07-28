@@ -6,6 +6,7 @@ use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Models\User;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -14,7 +15,11 @@ class MyAssistantsListing extends Component
 {
     use ListenToEchoEventsTrait, Toast, Confirm;
     
-    public $uuid, $user_id;
+    #[Locked]
+    public $uuid;
+
+    #[Locked]
+    public $user_id;
 
     public $user_name;
 
@@ -50,7 +55,11 @@ class MyAssistantsListing extends Component
 
     public function render()
     {
-        return view('livewire.user.my-assistants-listing');
+        $my_assistants = [];
+
+        $my_assistants = $this->user?->my_assistants;
+
+        return view('livewire.user.my-assistants-listing', compact('my_assistants'));
     }
 
     public function generateAssistantTokenFor()

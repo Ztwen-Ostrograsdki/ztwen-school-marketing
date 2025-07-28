@@ -203,6 +203,19 @@ if(!function_exists('__zero')){
 
 }
 
+if(!function_exists('zero')){
+
+    function zero($number, $string = false)
+    {
+        if(is_array($number)) $number = count($number);
+
+        if($string && $number == 0) return "Aucune donnée"; 
+        
+        return $number >= 10 ? $number : '0' . $number;
+    }
+
+}
+
 if(!function_exists('__formatNumber3')){
 
     function __formatNumber3(int $number)
