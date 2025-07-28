@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Auth\AssistantRequestedResponsePage;
 use App\Livewire\Auth\CreateSchool;
 use App\Livewire\Auth\EmailVerificationPage;
 use App\Livewire\Auth\ForgotPasswordPage;
@@ -86,6 +87,10 @@ Route::get('/reinitialisation-mot-de-passe/token={token?}/email={email?}', Reset
 
 Route::get('/reinitialisation-mot-de-passe/par-email/email={email?}/{key?}', ResetPasswordPage::class)->name('password.reset.by.email');
 
+
+Route::get('/gestion/demande-assistance-gestion-ecole=reponse/v/ru={request_uuid}/au={assistant_uuid}/su={sender_uuid}', AssistantRequestedResponsePage::class)->name('assistant.request.response');
+
+Route::get('/gestion/demande-assistance-gestion-ecole=reponse/l/ru={request_uuid}/au={assistant_uuid}/su={sender_uuid}/tk={token}', AssistantRequestedResponsePage::class)->name('assistant.request.approved');
 
 
 Route::get('/403', function () {

@@ -4,10 +4,8 @@ namespace App\Helpers\TraitsManagers;
 use App\Helpers\Robots\ModelsRobots;
 use App\Jobs\JobToSendConfirmationMailRequestToUser;
 use App\Jobs\JobToSendPasswordResetKeyToUser;
-use App\Models\AssistantToken;
 use App\Notifications\RealTimeNotification;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -256,40 +254,7 @@ trait UserTrait{
     }
 
 
-    public function generateAssistantToken(array $for_users, $school_id, array $roles)
-    {
-        $token = Str::random(6);
-
-        $max_usesable = count($for_users);
-
-        $delay = Carbon::now()->addHours(24);
-
-        $msg = "Votre clé d'affiliation pour assistance a été générée avec succès! Cette clé est : " . $token . ". Elle expirera le " . __formatDateTime($delay) . ". Cette clé est utilisable seulement par " . $max_usesable . " utilisateur(s). Elle sera détruite automatiquement juste après les utilisations ou après expiration.";
-
-        if(!empty($for_users)){
-
-            $msg = "Votre clé d'affiliation pour assistance a été générée avec succès! Cette clé est : " . $token . ". Elle expirera le " . __formatDateTime($delay) . ". Cette clé est utilisable par " . $max_usesable . " utilisateurs dont les reféfences sont " . implode(" - ", $for_users) . ". La clé sera détruite automatiquement juste après les utilisations ou après expiration.";
-
-        }
-
-        $data = [
-            'token' => Hash::make($token),
-            'only_for' => $for_users,
-            'delay' => $delay,
-            'user_id' => $this->id,
-            'school_id' => $school_id,
-            'max_usesable' => $max_usesable,
-            'privileges' => $roles
-        ];
-
-        $created = AssistantToken::create($data);
-
-        if($created){
-
-            Notification::sendNow([$this], new RealTimeNotification($msg));
-
-        }
-    }
+    
 
 
     

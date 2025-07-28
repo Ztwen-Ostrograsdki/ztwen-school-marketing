@@ -9,9 +9,9 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MailToSendPasswordResetKeyToUser extends Mailable implements ShouldQueue
+class MailToSendAssistanceRequestToUser extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
@@ -45,7 +45,7 @@ class MailToSendPasswordResetKeyToUser extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Votre clé de réinitialisation de votre mot de passe",
+            subject: "Demande pour assistance de gestion d'école sur la plateforme",
         );
     }
 

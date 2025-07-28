@@ -1,0 +1,88 @@
+<x-main class="bg-gray-100 text-gray-800 flex items-center justify-center">
+  <table
+    class="max-w-6xl font-roboto sm:w-5/6 xs:w-5/6 mx-auto bg-white my-5 rounded-xl shadow-lg overflow-hidden"
+    cellpadding="0"
+    cellspacing="0"
+  >
+    <tr>
+      <td class="bg-blue-700 text-white text-center p-6">
+        <img
+          src="../images/logo.jpg"
+          alt="Logo"
+          class="h-28 w-28 rounded-full mx-auto mb-2"
+        />
+        <h1 class="text-2xl font-bold my-0">ZTWEN-Marketing@</h1>
+        <h6 class="my-0 py-2">{{ app_full_name }}</h6>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="p-6">
+        <h2 class="text-xl font-semibold mb-4">{{ greating }},</h2>
+        <p class="mb-4"></p>
+
+        <div class="text-center my-6 flex flex-col">
+          <span>
+            Vous avez réçu ce courriel suite à la demande de
+            <span class="text-sky-600"> {{ sender_name }} </span> qui voudrait
+            vous accorder quelques privilèges et accès pour la gestion de son
+            école
+            <span> </span>
+            <br />
+          </span>
+          <span
+            class="block bg-green-100 text-green-800 text-lg font-bold px-4 py-2 rounded-full border border-green-300"
+          >
+            {{ privileges }}
+          </span>
+          <span></span>
+        </div>
+
+        <p class="mb-4">
+          Ensemble valorisons l'école béninoise et faisons la promotion de
+          <span class="text-amber-500"> {{ school_name }} </span>.
+        </p>
+
+        <div class="text-center my-6">
+          <h2
+            class="text-sm mb-4 my-0 uppercase text-center text-orange-600"
+          ></h2>
+          <h3 class="mb-4">
+            <h3 class="my-0 py-0">
+              <span>Votre clé d'acceptation de la demande est : </span>
+              <span class="font-semibold text-yellow-400">{{ key }}</span>
+            </h3>
+          </h3>
+        </div>
+        <p class="mb-6">
+          Veuillez confirmer la demande en cliquant sur le lien ci-dessous
+        </p>
+
+        <div class="text-center">
+          <a
+            href="{{ lien }}"
+            class="inline-block bg-blue-700 text-white px-6 py-3 rounded-lg text-sm font-semibold shadow hover:bg-blue-800 transition no-underline"
+          >
+            Accepter d'être l'assistant de {{ sender_name }}
+          </a>
+        </div>
+
+        <p class="mb-6">
+          Si vous avez des questions ou souhaitez plus d’informations, n’hésitez
+          pas à contacter les administrateurs.
+        </p>
+      </td>
+    </tr>
+
+    <tr class="">
+      <td class="">
+        <div class="bg-gray-100 text-center p-4 text-gray-500">
+          <p class="text-center mx-auto w-full text-xs">
+            &copy; {{ date }} {{ plateforme }}.
+          </p>
+          <p class="text-center">Tous droits réservés.</p>
+        </div>
+      </td>
+    </tr>
+  </table>
+</x-main>

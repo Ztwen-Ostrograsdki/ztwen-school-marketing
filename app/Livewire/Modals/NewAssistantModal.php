@@ -4,7 +4,10 @@ namespace App\Livewire\Modals;
 
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
+use App\Events\NewAssistanceRequestCreatedEvent;
 use App\Helpers\Robots\SpatieManager;
+use App\Models\School;
+use App\Models\User;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -28,8 +31,10 @@ class NewAssistantModal extends Component
 
     public $assistant_identifiant;
 
-    #[Validate('required|numeric')]
+    #[Validate('required|numeric|exists:schools,id')]
     public $school_id;
+
+    public $receiver;
 
     public function render()
     {
@@ -62,7 +67,6 @@ class NewAssistantModal extends Component
     {
         $this->validate();
 
-
         if($this->assistant){
 
             if(filter_var($this->assistant, FILTER_VALIDATE_EMAIL)){
@@ -71,6 +75,8 @@ class NewAssistantModal extends Component
                     'assistant' => 'exists:users,email',
                 ]);
 
+                $this->receiver = User::where('email', $this->assistant)->first();
+
             }
             else{
 
@@ -78,11 +84,23 @@ class NewAssistantModal extends Component
                     'assistant' => 'exists:users,identifiant',
                 ]);
 
+                $this->receiver = User::where('identifiant', $this->assistant)->first();
+
             }
+
+            $sender = auth_user();
+
+            $school = School::where('id', $this->school_id)->first();
+            
+
+            NewAssistanceRequestCreatedEvent::dispatch($sender, $this->receiver, $school, $this->assistant_roles);
+
+            $this->toast("Le processus a été lancé", "success");
+
+            $this->hideModal();
 
         }
 
-        dd($this);
-
+        
     }
 }
