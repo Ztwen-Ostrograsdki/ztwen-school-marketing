@@ -9,9 +9,8 @@ use App\Models\User;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-
-#[Title("La liste de mes assistants")]
-class MyAssistantsListing extends Component
+#[Title("Requêtes d'assistance reçues")]
+class MyReceivedsAssistantRequestsPage extends Component
 {
     use ListenToEchoEventsTrait, Toast, Confirm;
     
@@ -53,22 +52,16 @@ class MyAssistantsListing extends Component
 
     public function render()
     {
-        $my_assistants = [];
+        $my_assistings = [];
 
-        $my_assistants = $this->user?->my_assistants()->where('assistant_requests.delay', '>', now())->get();
+        if($this->user && $this->user->my_directors) $my_assistings = $this->user->my_directors()->where('assistant_requests.delay', '>', now())->get();
 
-        return view('livewire.user.my-assistants-listing', compact('my_assistants'));
+        return view('livewire.user.my-receiveds-assistant-requests-page', compact('my_assistings'));
     }
 
-    public function generateAssistantTokenFor()
+    public function deleteRequest()
     {
-        $this->dispatch('AddNewAssistantLiveEvent');
+        
 
-    }
-
-
-    public function openAddAssistantModal()
-    {
-        // $this->dispatch('AddNewAssistantLiveEvent');
     }
 }

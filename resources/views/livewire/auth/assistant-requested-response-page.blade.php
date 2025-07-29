@@ -20,37 +20,33 @@
         <div class="top-blue w-[60px] h-[60px] from-purple-300 to-gray-300 via-sky-300 bg-linear-90 rounded-full absolute  bottom-[-8%] left-[10%]"></div>
     </div>
     <div class="flex h-full items-center">
-      <main class="w-full max-w-md mx-auto p-6">
+      <main class="w-full max-w-lg mx-auto p-6">
         <div class="mt-7 border border-sky-500 shadow-2xl shadow-gray-900 bg-black/60 backdrop-blur-lg">
           <div class="p-4 sm:p-7">
             <div class="text-center">
-                <p class="py-2 mb-4 relative inline-block text-transparent bg-clip-text text-sm uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
+                <p class="py-2 mb-4 relative inline-block  text-sm uppercase font-bold letter-spacing-2 text-amber-500 border-b border-amber-500"> 
                     <span class="">
                         Validation de la demande d'assistance
                     </span>
-                    <span class="absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
                 </p>
             </div>
+            <div class="text-center font-semibold letter-spacing-1 my-3 text-xs"> 
+              <h6>
+                Demande pour la gestion de l'école 
+                <span class="text-amber-400"> {{ $school->name }} </span> 
+                envoyée par 
+                <span class="text-green-500">{{ $sender->getFullName() }}</span>
+              </h6>
+            </div>
             <div class="mt-5">
-
-              @if(session()->has('success'))
-              <span class="text-dark letter-spacing-1 font-semibold bg-green-400 border block text-sm rounded-md p-2 border-green-950 text-center">
-                {{ session('success')}}
-              </span>
-              @endif
-
-              @if(session()->has('error'))
-              <span class="text-dark text-sm letter-spacing-1 font-semibold bg-red-400 border block rounded-md p-2 border-red-950 text-center">
-                {{ session('error')}}
-              </span>
-              @endif
+              @if(!$request_approved_successfully)
               <!-- Form -->
-              <form wire:submit.prevent='savePassword'>
-                <div class="grid gap-y-4">
+              <form wire:submit.prevent='submit'>
+                <div class="flex flex-col gap-y-3.5">
                   <!-- Form Group -->
-                  @if(!$token)
-                  <div>
-                    <label for="password_reset_key" class="block text-sm mb-2 cursor-pointer font-semibold letter-spacing-1 text-gray-300">La clé</label>
+                  @if(!request()->route('token'))
+                  <div class="mb-4">
+                    <label for="token" class="block text-sm mb-2 cursor-pointer font-semibold letter-spacing-1 text-gray-300">La clé</label>
                     <div class="relative">
                       <input placeholder="Renseignez la clé..." wire:model.live='token' type="text" id="token" name="token" class="py-3 px-4 block w-full border border-sky-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-transparent dark:focus:ring-gray-600" required aria-describedby="token-error">
                       @error('token')
@@ -64,39 +60,34 @@
                     @error('token')
                       <p class="text-xs text-red-600 mt-2" id="token-error">{{ $message }}</p>
                     @enderror
-                  </div>
-                    @error('email')
-                      <p class="text-xs text-red-600 mt-2" id="email-error">{{ $message }}</p>
-                    @enderror
-                  </div>
-                  @endif
-
-                  @if($key_expired)
-                    <a  href="#" class="w-full cursor-pointer py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orande-600 text-white hover:bg-orange-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                        Cette requête est déjà expiré ou n'existe plus!
-                    </a>
-                  @else
-                    @if($not_request_sent)
-                    <a  class="w-full cursor-pointer py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                      Nous n'avons trouvé aucune requête correspondant à ce lien, elle a déjà dûe été supprimée! 
-                    </a>
-                    @else
-                    <a type="button" wire:click='submit' wire:loading.class='opacity-50' wire:target='submit' class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                        <span>
-                            <span wire:loading.remove wire:target='submit'>
-                                Approver la demande
-                            </span>
-                            <span wire:loading wire:target='submit'>
-                                <span class="fas animate-spin fa-rotate"></span>
-                                Processus en cours...
-                            </span>
-                        </span>
-                    </a>
-                    @endif
                   @endif
                 </div>
+                <a type="button" wire:click='submit' wire:loading.class='opacity-50' wire:target='submit' class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    <span>
+                        <span wire:loading.remove wire:target='submit'>
+                            Approver la demande
+                        </span>
+                        <span wire:loading wire:target='submit'>
+                            <span class="fas animate-spin fa-rotate"></span>
+                            Validation en cours...
+                        </span>
+                    </span>
+                  </a>
               </form>
               <!-- End Form -->
+              @else
+
+                <h6 class="text-center py-5 px-2 mb-4 text-gray-300 bg-green-600/80 rounded-lg shadow-lg shadow-gray-800">
+                  Bravo, Vous avez approuvé la demande!
+                  Vous avez désormais accès à la gestion de l'école 
+                  <span class="text-amber-400"> {{ $school->name }} </span> 
+                </h6>
+
+                <a class="p-3 bg-blue-600 flex rounded-md my-3 justify-center items-center hover:bg-blue-800 text-white text-center font-semibold letter-spacing-1" href="{{$assistant->to_my_receiveds_assistants_requests_list_route()}}">
+                  Ma page des requêtes
+                </a>
+
+              @endif
             </div>
           </div>
         </div>

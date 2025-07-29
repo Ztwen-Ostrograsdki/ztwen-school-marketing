@@ -73,7 +73,7 @@ class AssistantRequest extends Model
     }
 
 
-    public function to_assistant_request_route($token = true)
+    public function to_assistant_request_route($token = false)
     {
         if($token){
 
@@ -89,7 +89,7 @@ class AssistantRequest extends Model
         }
         
         return 
-        route('assistant.request.approved', 
+        route('assistant.request.response', 
             [
                 'request_uuid' => $this->uuid, 
                 'assistant_uuid' => $this->assistant->uuid, 

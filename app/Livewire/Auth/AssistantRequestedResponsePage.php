@@ -3,6 +3,8 @@
 namespace App\Livewire\Auth;
 
 use Akhaled\LivewireSweetalert\Toast;
+use App\Events\AssistantRequestApprovedEvent;
+use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Models\AssistantRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +33,8 @@ class AssistantRequestedResponsePage extends Component
 
     public $sender;
 
+    public $school;
+
     public $key_expired = false;
 
     public $not_request_sent = false;
@@ -44,6 +48,11 @@ class AssistantRequestedResponsePage extends Component
 
             $request = AssistantRequest::where('uuid', $request_uuid)->firstOrFail();
 
+            if($request->director_id == auth_user()->id){
+
+                return abort(403);
+            }
+
             if($request){
 
                 if($request->director->uuid == $sender_uuid && $request->assistant->uuid == $assistant_uuid){
@@ -53,6 +62,8 @@ class AssistantRequestedResponsePage extends Component
                         $this->request_uuid = $request_uuid;
 
                         $this->assistant_request = $request;
+
+                        $this->school = $request->school;
 
                         $this->assistant = $request->assistant;
 
@@ -105,11 +116,13 @@ class AssistantRequestedResponsePage extends Component
 
         $hash_key = $this->assistant_request->token;
 
+        $delay = $this->assistant_request->delay;
+
         $check = Hash::check($token, $hash_key);
 
         if($check){
 
-            $this->key_expired = Carbon::parse($this->assistant_request->delay)->timestamp  >= Carbon::today()->timestamp;
+            $this->key_expired = $delay < now();
 
             if(!$this->key_expired){
 
@@ -117,18 +130,19 @@ class AssistantRequestedResponsePage extends Component
 
                 try {
                     
-                    $this->assistant->update(['assistant_of' => $this->sender->id]);
-
-                    $this->request->update(['status' => 'Approuvé', 'approved_at' => now()]);
+                    $this->assistant_request->update(['status' => 'Approuvé', 'approved_at' => now()]);
 
                     DB::commit();
 
-
                     DB::afterCommit(function(){
+
+                        AssistantRequestApprovedEvent::dispatch($this->assistant_request);
 
                         $this->request_approved_successfully = true;
 
+                        $message = "Votre demande d'assistance pour la gestion de l'école " . $this->school->name . " envoyée à " . $this->assistant->getUserNamePrefix(true, true) . " a été approuvé avec succès il y'a quelques minutes.";
 
+                        JobToSendSimpleMailMessageTo::dispatch($this->assistant_request->director->email, $this->assistant_request->director->name, $message, "DEMANDE APPROUVEE", null, $this->assistant_request->director->to_my_assistants_list_route());
 
                     });
 
@@ -137,8 +151,14 @@ class AssistantRequestedResponsePage extends Component
                     
                     DB::rollBack();
 
-                    $this->toast("Une erreure s'est produite, veuillez vérifier la requête et réessayer!", 'error');
+                    $this->toast("Une erreure s'est produite, veuillez vérifier la requête et réessayer! : " . $th->getMessage(), 'error');
                 }
+            }
+            else{
+
+                $this->assistant_request->delete();
+
+                return abort(419);
             }
         }
 

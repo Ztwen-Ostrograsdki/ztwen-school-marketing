@@ -12,6 +12,8 @@ use App\Notifications\RealTimeNotification;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Middleware\Skip;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -117,6 +119,8 @@ class JobToSendEmailToUserForAssistanceRequest implements ShouldQueue
 
     public function generateAssistantRequest()
     {
+        $existed = AssistantRequest::where('assistant_id', $this->receiver->id)->where('director_id', $this->sender->id)->where('school_id', $this->school->id)->where('status', '<>', 'Approuvé')->delete();
+
         $this->key = generateRandomNumber(6);
 
         $delay = Carbon::now()->addHours(24);
@@ -148,5 +152,18 @@ class JobToSendEmailToUserForAssistanceRequest implements ShouldQueue
 
         return false;
        
+    }
+
+    public function middleware() : array
+    {
+        $existed_approved = AssistantRequest::where('assistant_id', $this->receiver->id)->where('director_id', $this->sender->id)->where('school_id', $this->school->id)->where('status', 'Approuvé')->whereNotNull('approved_at')->first();
+
+        $existed_not_approved_not_delay = AssistantRequest::where('assistant_id', $this->receiver->id)->where('director_id', $this->sender->id)->where('school_id', $this->school->id)->where('status', '<>', 'Approuvé')->where('delay', '>', now())->whereNull('approved_at')->first();
+
+        return [
+            (new WithoutOverlapping($this->sender->id))->expireAfter(120),
+            Skip::when($existed_approved),
+            Skip::when($existed_not_approved_not_delay),
+        ];
     }
 }

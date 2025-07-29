@@ -36,6 +36,9 @@ e.private("App.Models.User." + window.ClientUser.id)
     .listen("NewAssistanceRequestCreatedEvent", (ev) => {
         Livewire.dispatch("LiveNewAssistanceRequestCreatedEvent", ev);
     })
+    .listen("AssistantRequestApprovedEvent", (ev) => {
+        Livewire.dispatch("LiveAssistantRequestApprovedEvent", ev);
+    })
     .listen("LogoutUserEvent", (ev) => {
         Livewire.dispatch("LiveLogoutUserEvent", ev);
     })
@@ -55,6 +58,12 @@ e.private("admin")
             "LiveNotificationDispatchedToAdminsSuccessfullyEvent",
             user
         );
+    })
+    .listen("NewAssistanceRequestCreatedEvent", (ev) => {
+        Livewire.dispatch("LiveNewAssistanceRequestCreatedEvent", ev);
+    })
+    .listen("AssistantRequestApprovedEvent", (ev) => {
+        Livewire.dispatch("LiveAssistantRequestApprovedEvent", ev);
     })
     .listen("SchoolStatUpdatedEvent", (stat) => {
         Livewire.dispatch("LiveSchoolStatUpdatedEvent", stat);

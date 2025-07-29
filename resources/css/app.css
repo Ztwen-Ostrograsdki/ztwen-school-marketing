@@ -254,6 +254,35 @@ tr:hover {
     letter-spacing: 0.5px;
 }
 
+tr {
+    border: thin solid black;
+}
+
+tr:nth-child(odd) {
+    background: rgba(9, 41, 198, 0.12) !important;
+}
+
+tr:nth-child(even) {
+    background: transparent !important;
+}
+
+tr.tr-head {
+    background: rgba(3, 13, 63, 0.92) !important;
+}
+
+table {
+    border-collapse: collapse;
+}
+th,
+td {
+    border: thin solid rgb(37, 64, 216) !important;
+}
+
+tr:hover {
+    background: rgba(3, 43, 43, 0.92) !important;
+    border: thin solid rgb(139, 226, 10) !important;
+}
+
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */

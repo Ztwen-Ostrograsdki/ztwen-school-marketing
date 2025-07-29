@@ -213,6 +213,11 @@ class User extends Authenticatable
     {
         return route('my.assistants', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
     }
+    
+    public function to_my_receiveds_assistants_requests_list_route()
+    {
+        return route('my.assistants.requests', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
+    }
 
     public function getNotifications()
     {

@@ -20,6 +20,7 @@ use App\Livewire\Shop\PackProfil;
 use App\Livewire\Shop\PacksPage;
 use App\Livewire\User\MyAssistantsListing;
 use App\Livewire\User\MyProfil;
+use App\Livewire\User\MyReceivedsAssistantRequestsPage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -53,6 +54,12 @@ Route::middleware(['auth'])->group(function(){
     Route::get('profil/k={id}/u={uuid}/mon-profil', MyProfil::class)->name('user.profil');
 
     Route::get('profil/k={id}/u={uuid}/mes-assistants', MyAssistantsListing::class)->name('my.assistants');
+
+    Route::get('profil/k={id}/u={uuid}/gestion-ecoles/mes-demandes',  MyReceivedsAssistantRequestsPage::class)->name('my.assistants.requests');
+
+    Route::get('/gestion/demande-assistance-gestion-ecole=reponse/v/ru={request_uuid}/au={assistant_uuid}/su={sender_uuid}', AssistantRequestedResponsePage::class)->name('assistant.request.response');
+
+    Route::get('/gestion/demande-assistance-gestion-ecole=reponse/l/ru={request_uuid}/au={assistant_uuid}/su={sender_uuid}/tk={token}', AssistantRequestedResponsePage::class)->name('assistant.request.approved');
 });
 
 
@@ -88,9 +95,7 @@ Route::get('/reinitialisation-mot-de-passe/token={token?}/email={email?}', Reset
 Route::get('/reinitialisation-mot-de-passe/par-email/email={email?}/{key?}', ResetPasswordPage::class)->name('password.reset.by.email');
 
 
-Route::get('/gestion/demande-assistance-gestion-ecole=reponse/v/ru={request_uuid}/au={assistant_uuid}/su={sender_uuid}', AssistantRequestedResponsePage::class)->name('assistant.request.response');
 
-Route::get('/gestion/demande-assistance-gestion-ecole=reponse/l/ru={request_uuid}/au={assistant_uuid}/su={sender_uuid}/tk={token}', AssistantRequestedResponsePage::class)->name('assistant.request.approved');
 
 
 Route::get('/403', function () {

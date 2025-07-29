@@ -7,6 +7,7 @@ use Akhaled\LivewireSweetalert\Toast;
 use App\Events\InitializationToCreateNewAssistantRequestEvent;
 use App\Events\NewAssistanceRequestCreatedEvent;
 use App\Helpers\Robots\SpatieManager;
+use App\Models\AssistantRequest;
 use App\Models\School;
 use App\Models\User;
 use Livewire\Attributes\On;
@@ -92,7 +93,42 @@ class NewAssistantModal extends Component
             $sender = auth_user();
 
             $school = School::where('id', $this->school_id)->first();
-            
+
+            $existed_approved = AssistantRequest::where('assistant_id', $this->receiver->id)->where('director_id', $sender->id)->where('school_id', $this->school_id)->where('status', 'Approuvé')->whereNotNull('approved_at')->first();
+
+            $existed_not_approved = AssistantRequest::where('assistant_id', $this->receiver->id)->where('director_id', $sender->id)->where('school_id', $this->school_id)->where('status', '<>', 'Approuvé')->whereNull('approved_at')->first();
+
+            if($existed_approved){
+
+                $message = "Attention: " . $this->receiver->getFullName() . " vous assiste déjà dans la gestion de l'école " . $school->name . " avec les privilèges : " . implode(" - ", $existed_approved->privileges) . " depuis le " . __formatDateTime($existed_approved->approved_at);
+
+                $this->addError('assistant', $this->receiver->getFullName() . " vous assiste déjà!");
+
+                $this->toast($message, "info");
+
+                return;
+            }
+
+            if($existed_not_approved){
+
+                $d = $existed_not_approved->delay;
+
+                if($d > now()){
+
+                    $message = "Attention: Vous avez déjà envoyé une demande à " . $this->receiver->getFullName() . " pour vous assister dans la gestion de l'école " . $school->name . " avec les privilèges : " . implode(" - ", $existed_not_approved->privileges) . " depuis le " . __formatDateTime($existed_not_approved->created_at);
+
+                    $this->addError('assistant', $this->receiver->getFullName() . " a déjà une demande en cours!");
+
+                    $this->toast($message, "info");
+
+                    return;
+                }
+                else{
+
+                    $existed_not_approved->delete();
+                }
+            }
+
 
             InitializationToCreateNewAssistantRequestEvent::dispatch($sender, $this->receiver, $school, $this->assistant_roles);
 

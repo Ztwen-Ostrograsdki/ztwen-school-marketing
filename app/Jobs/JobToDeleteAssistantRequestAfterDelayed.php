@@ -6,10 +6,12 @@ use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Models\AssistantRequest;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Middleware\Skip;
+use Illuminate\Queue\SerializesModels;
 
 class JobToDeleteAssistantRequestAfterDelayed implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     public $assistant_name, $school_name, $created_at, $message_to_sender, $message_to_assistant, $sender_name, $assistant_email, $sender_email;
 
@@ -37,6 +39,12 @@ class JobToDeleteAssistantRequestAfterDelayed implements ShouldQueue
      */
     public function handle(): void
     {
+        if(!$this->assistant_request->exists){
+
+            return;
+        }
+
+
         $assistant_request = $this->assistant_request;
 
         if($assistant_request->delay && ($assistant_request->status !== 'Approuvé' || !$assistant_request->approved_at)){
@@ -51,5 +59,13 @@ class JobToDeleteAssistantRequestAfterDelayed implements ShouldQueue
 
             }
         }
+    }
+
+    public function middleware() : array
+    {
+        return [
+            Skip::when(!$this->assistant_request->exists),
+
+        ];
     }
 }

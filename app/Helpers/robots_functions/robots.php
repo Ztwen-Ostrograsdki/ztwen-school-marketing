@@ -655,6 +655,75 @@ if(!function_exists('__selfUser')){
     }
 
 }
+
+if(!function_exists('__formatDateAgo')){
+
+    function __formatDateAgo($start, $end = null)
+    {
+        Carbon::setLocale('fr');
+
+        $start = Carbon::parse($start);
+
+        if(!$end) $end = now();
+
+        $end = Carbon::parse($end);
+        
+        return $start->diffForHumans($end);
+    }
+
+}
+
+if(!function_exists('__ago')){
+
+    function __ago($start, $end = null)
+    {
+        Carbon::setLocale('fr');
+
+        $start = Carbon::parse($start);
+
+        if(!$end) $end = now();
+
+        $end = Carbon::parse($end);
+        
+        return $start->diffForHumans($end);
+    }
+
+}
+
+if(!function_exists('__asAgo')){
+
+    function __asAgo($start, $end = null)
+    {
+        Carbon::setLocale('fr');
+
+        $start = Carbon::parse($start);
+
+        if(!$end) $end = now();
+
+        $end = Carbon::parse($end);
+        
+        return $start->diffForHumans($end);
+    }
+
+}
+
+if(!function_exists('__agoFormat')){
+
+    function __agoFormat($start, $end = null)
+    {
+        Carbon::setLocale('fr');
+
+        $start = Carbon::parse($start);
+
+        if(!$end) $end = now();
+
+        $end = Carbon::parse($end);
+        
+        return $start->diffForHumans($end);
+    }
+
+}
+
 if(!function_exists('__formatDate')){
 
     function __formatDate($date)
