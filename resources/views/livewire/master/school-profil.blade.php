@@ -24,11 +24,20 @@
     </div>
     <div class="mx-auto pb-10 mt-6 bg-transparent flex flex-col gap-y-20  overflow-hidden">
         <div class="p-6 card shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
-            <h5 class="text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4">
+            <h5 class="text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4 flex justify-between items-center">
                 <span>
                     #Auteur | fondateur
                     <span class="fas fa-user-shield ml-1"></span>
                 </span>
+
+                @auth
+                    @if($school->id !== auth_user_id() && auth_user()->assist_this_school($school->id))
+                        <span class="text-sm">
+                            <small class="rounded-md bg-green-300 p-2 text-green-700">Vous assisté cette école</small>
+                        </span>
+                    @endif
+                @endauth
+                    
             </h5>
             
             <div class="flex items-center space-x-4">
@@ -60,7 +69,7 @@
             <div class="px-6 mt-6 overflow-x-auto card">
                 <div class="text-xs sm:text-sm mt-4 md:mt-0 flex flex-wrap gap-3 justify-start ">
                     @auth
-                        @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                        @if($school->user_id == auth_user_id())
                         <a href="{{$school->to_school_update_route()}}" class="block text-white cursor-pointer bg-green-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
                             <span>
                                 <span class="fas fa-pen mr-1"></span>
@@ -83,38 +92,39 @@
                                 <span>Un instant, chargement...</span>
                             </span>
                         </button>
+                        @endif
+                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['stats-manager']))
                         <button title="Enregistrer une statistique" wire:click="manageSchoolStat" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                             <span wire:loading.remove wire:target="manageSchoolStat">
                                 <span class="fas fa-chart-simple"></span>
-                                <span>Ajouter</span>
+                                <span>Ajouter stats</span>
                             </span>
                             <span wire:loading wire:target="manageSchoolStat">
                                 <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                 <span>En cours...</span>
                             </span>
                         </button>
-                        <button title="Enregistrer une info, un offre..." wire:click="addNewSchoolInfo" class="cursor-pointer shadow-sm bg-gray-500 hover:bg-gray-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                        @endif
+                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
+                        <button title="Enregistrer une info, un offre..." wire:click="addNewSchoolInfo" class="cursor-pointer shadow-sm bg-purple-400 hover:bg-purple-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                             <span wire:loading.remove wire:target="addNewSchoolInfo">
                                 <span class="fas fa-newspaper"></span>
-                                <span>Ajouter</span>
+                                <span>Ajouter infos</span>
                             </span>
                             <span wire:loading wire:target="addNewSchoolInfo">
                                 <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                 <span>En cours...</span>
                             </span>
                         </button>
+                        @endif
                         
+                        @if($school->user_id == auth_user_id())
                         <button class="bg-red-600 cursor-pointer hover:bg-red-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                             <span class="fas fa-trash mr-1"></span>
                             Suppr. les assistants.
                         </button>
-                        <a href="#" class="block text-white cursor-pointer bg-purple-700 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-purple-900 focus:ring-purple-800" type="button">
-                            <span>
-                                <span class="fas fa-newspaper mr-1"></span>
-                                Communiqué
-                            </span>
-                        </a>
                         @endif
+                        
                     @endauth
                     
                     <button class="bg-green-600 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
@@ -199,7 +209,7 @@
             <h5 class="text-sky-400 text-sm sm:text-xl font-semibold flex justify-between letter-spacing-1 pb-4"># L'école en images
                <div class="flex gap-x-2 justify-start text-xs sm:text-sm">
                     @auth
-                        @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['school-images-manager']))
                             <button title="Ajouter des images..." wire:click="addImages" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                                 <span wire:loading.remove wire:target="addImages">
                                     <span class="fas fa-images"></span>
@@ -236,7 +246,7 @@
                             </div>
                         </div>
                         @auth
-                            @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                            @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['school-images-manager']))
                                 <div class="mt-1">
                                     <span wire:click="removeImageFromImagesOf('{{$school_image}}')" title="Supprimer cette image de la liste des images de l'école {{$school_name}}" class="py-2 hover:bg-red-500 text-center text-sm bg-red-300 text-red-800 cursor-pointer inline-block w-full font-semibold">
                                         <span wire:loading.remove wire:target="removeImageFromImagesOf('{{$school_image}}')">Retirer cette image</span>
@@ -268,7 +278,7 @@
                 </div>
                 <div class="flex justify-end gap-x-2">
                     @auth
-                        @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                       @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['stats-manager']))
                             <button title="Ajouter une stat..." wire:click="addNewSchoolStat" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                                 <span wire:loading.remove wire:target="addNewSchoolStat">
                                     <span class="fas fa-chart-simple"></span>
@@ -333,7 +343,7 @@
                                 </div>
                                 <div class="my-3 flex justify-end gap-x-2">
                                     @auth
-                                        @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['stats-manager']))
                                             <button wire:click="manageSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
                                                 <span wire:loading.remove wire:target="manageSchoolStat({{$stat->id}})">
                                                     <span class="fas fa-edit"></span>
@@ -395,7 +405,7 @@
             </h5>
             <div class="flex justify-end gap-x-2">
                 @auth
-                    @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                    @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
                         <button title="Ajouter une info | communiqué | annonce..." wire:click="addNewSchoolInfo" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                             <span wire:loading.remove wire:target="addNewSchoolInfo">
                                 <span class="fas fa-chart-simple"></span>
@@ -455,7 +465,7 @@
                             </div>
                             <div class="my-3 flex justify-end gap-x-2">
                                 @auth
-                                    @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                                    @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
                                         <button wire:click="manageSchoolInfo({{$school_info}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
                                             <span wire:loading.remove wire:target="manageSchoolInfo({{$school_info}})">
                                                 <span class="fas fa-newspaper"></span>
@@ -498,7 +508,7 @@
                         </div>
                         <div class="my-3 flex justify-end gap-x-2">
                             @auth
-                                @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
+                                @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
                                     <button wire:click="manageSchoolInfo({{$i}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
                                         <span wire:loading.remove wire:target="manageSchoolInfo({{$i}})">
                                             <span class="fas fa-newspaper"></span>

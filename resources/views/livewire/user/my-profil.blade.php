@@ -87,7 +87,7 @@
                 @endif
             @endauth
         </div>
-        <div class="font-semibold letter-spacing-1 text-gray-300 text-sm md:text-lg flex flex-col mx-auto p-5">
+        <div class="font-semibold letter-spacing-1 text-gray-300 text-sm flex flex-col mx-auto p-5">
             <h6 class="flex gap-x-2 items-center">
                 <span class="text-gray-400">
                     <span class="fas fa-user"></span>
@@ -118,7 +118,7 @@
             </h6>
             <h6 class="flex gap-x-2 items-center">
                 <span class="text-gray-400">
-                    <span class="fas fa-person-circle-question"></span>
+                    <span class="fab fa-keycdn"></span>
                     <span>Identifiant : </span>
                 </span>
                 <span>{{ $user->identifiant }}</span>

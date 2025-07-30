@@ -1,6 +1,7 @@
 <?php
 namespace App\Livewire\Traits;
 
+use App\Helpers\Robots\SpatieManager;
 use App\Models\Info;
 use App\Models\Stat;
 use App\Notifications\RealTimeNotification;
@@ -20,6 +21,8 @@ trait SchoolActionsTraits {
 
 	public function deleteSchoolStat($stat_id)
     {
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true);
+
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
                     <p> Voulez-vous vraiment supprimer cette statistique ? </p>
                 </h6>";
@@ -66,6 +69,8 @@ trait SchoolActionsTraits {
 
     public function hideSchoolStat($stat_id)
     {
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true);
+
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
                     <p> Voulez-vous vraiment masquer cette statistique ? </p>
                 </h6>";
@@ -110,6 +115,8 @@ trait SchoolActionsTraits {
 
     public function hideAllStats()
     { 
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true);
+
         $phrase = $this->selected_stat_year ? " de l'année {$this->selected_stat_year} " : " publiées jusqu'à présent ";
 
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
@@ -157,6 +164,8 @@ trait SchoolActionsTraits {
     
     public function unhideSchoolStat($stat_id)
     {
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true);
+
         if($stat_id){
 
             $stat = Stat::find($stat_id);
@@ -214,6 +223,8 @@ trait SchoolActionsTraits {
 	// SCHOOL INFOS ACTIONS
 	public function deleteSchoolInfos($info_id)
     {
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true);
+
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
                     <p> Voulez-vous vraiment supprimer cette donnée ? </p>
                 </h6>";
@@ -260,6 +271,8 @@ trait SchoolActionsTraits {
 
     public function hideSchoolInfo($info_id)
     {
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true);
+
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
                     <p> Voulez-vous vraiment masquer cette donnée ? </p>
                 </h6>";
@@ -304,6 +317,8 @@ trait SchoolActionsTraits {
 
     public function hideAllInfos()
     { 
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true);
+
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
                     <p> Voulez-vous vraiment masquer toutes les données (infos | communiqués | annonces ) ? </p>
                 </h6>";
@@ -318,6 +333,8 @@ trait SchoolActionsTraits {
     #[On('confirmToHideAllInfos')]
     public function onHideAllInfos()
     {
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true);
+
         $message = "Toutes les données (infos | communiqués | annonces ) sont masquées et donc inacessibles à présents  par vos visiteurs!";
 
 		$updates = $this->school->infos()->where('infos.is_active', true)->update(['is_active' => false]);
@@ -358,6 +375,8 @@ trait SchoolActionsTraits {
 
     public function unhideAllInfos()
     {
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true);
+
         $message = "Toutes les données (infos | communiqués | annonces) publiées qui sont masquées sont à présents accessibles par vos visiteurs!";
 
 		$updates = $this->school->infos()->where('stats.is_active', false)->update(['is_active' => true]);
@@ -373,7 +392,7 @@ trait SchoolActionsTraits {
 
 	public function removeAllImages()
     {
-        // SpatieManager::ensureThatUserCan(['schools-manager']);
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['school-images-manager'], true);
 
         $html = "<h6 class='font-semibold text-base text-orange-400 py-0 my-0'>
                     <p> Vous êtes sur le point de supprimer toutes les images de {$this->school_name} </p>
@@ -390,7 +409,6 @@ trait SchoolActionsTraits {
     #[On('confirmImagesDeletion')]
     public function confirmAllImagesRemoving()
     {
-        // SpatieManager::ensureThatUserCan(['school-manager']);
 
         if($this->school){
 
@@ -432,7 +450,7 @@ trait SchoolActionsTraits {
 
     public function removeImageFromImagesOf($image_path)
     {
-        // SpatieManager::ensureThatUserCan(['schools-manager']);
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['school-images-manager'], true);
 
         $html = "<h6 class='font-semibold text-base text-orange-400 py-0 my-0'>
                     <p> Vous êtes sur le point de supprimer une image </p>
@@ -449,8 +467,6 @@ trait SchoolActionsTraits {
     #[On('confirmImageDeletion')]
     public function confirmImageRemoving($data)
     {
-        // SpatieManager::ensureThatUserCan(['school-manager']);
-
         $image_path = $data['image_path'];
 
         if($image_path){
@@ -495,10 +511,5 @@ trait SchoolActionsTraits {
             }
         }
     }
-
-
-
-
-
 
 }

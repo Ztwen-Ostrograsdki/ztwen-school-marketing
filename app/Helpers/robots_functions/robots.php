@@ -602,6 +602,15 @@ if(!function_exists('getUser')){
 
 }
 
+if(!function_exists('__ensureThatAssistantCan')){
+
+    function __ensureThatAssistantCan($assistant_id, $school_id, ?array $roles = [], $redirect_if_unauthorized = false)
+    {
+        return SpatieManager::ensureThatAssistantCan($assistant_id, $school_id, $roles, $redirect_if_unauthorized);
+    }
+
+}
+
 if(!function_exists('findUser')){
 
     function findUser($id)

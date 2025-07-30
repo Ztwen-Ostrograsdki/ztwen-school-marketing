@@ -5,6 +5,7 @@ namespace App\Livewire\User;
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
+use App\Helpers\Robots\SpatieManager;
 use App\Models\School;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -58,13 +59,15 @@ class MyProfil extends Component
 
         $all_likes = getRand(1000, 959599);
 
+
+
         return view('livewire.user.my-profil', compact('all_subscribes', 'all_posts', 'all_likes'));
     }
 
 
     public function removeImage($image_path, int $school_id)
     {
-        // SpatieManager::ensureThatUserCan(['schools-manager']);
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $school_id, ['schools-images-manager'], true);
 
         $html = "<h6 class='font-semibold text-base text-orange-400 py-0 my-0'>
                     <p> Vous êtes sur le point de supprimer une image </p>
@@ -81,11 +84,12 @@ class MyProfil extends Component
     #[On('confirmImageDeletion')]
     public function confirmImageRemoving($data)
     {
-        // SpatieManager::ensureThatUserCan(['school-manager']);
 
         $image_path = $data['image_path'];
 
         $school_id = $data['school_id'];
+
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $school_id, ['schools-images-manager'], true);
 
         $school = School::where('id', $school_id)->firstOrFail();
 
@@ -142,6 +146,7 @@ class MyProfil extends Component
 
     public function manageSchoolInfo($info_id = null)
     {
+        
         $this->dispatch('ManageCommuniqueLiveEvent', $info_id);
     }
 

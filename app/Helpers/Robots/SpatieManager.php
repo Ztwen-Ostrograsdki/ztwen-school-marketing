@@ -1,6 +1,8 @@
 <?php
 namespace App\Helpers\Robots;
 
+use App\Models\AssistantRequest;
+use App\Models\School;
 use App\Models\User;
 
 trait SpatieManager{
@@ -321,6 +323,51 @@ trait SpatieManager{
 
 		if($cannot) return redirect()->to('/403');
 
+	}
+
+	public static function ensureThatAssistantCan($user_id, $school_id, ?array $roles = [], $redirect_if_unauthorized = false)
+	{
+
+		$assistant = User::find($user_id);
+
+		$school = School::where('id', $school_id)->first();
+
+		if($school && $school->user_id == $user_id){
+
+			return true;
+		}
+
+		if($school){
+
+			if($assistant->assist_this_school($school_id)){
+
+				$assistant_request = AssistantRequest::where('assistant_id', $user_id)->where('school_id', $school_id)->whereNotNull('approved_at')->first();
+			
+				if(!$assistant_request) return false;
+				
+				foreach($roles as $role){
+
+					if(in_array($role, $assistant_request->privileges)){
+
+						return true;
+					}
+				}
+
+				return $redirect_if_unauthorized ? redirect()->to('/403') : false;
+
+			}
+			else{
+
+				return $redirect_if_unauthorized ? redirect()->to('/403') : false;
+
+
+			}
+
+		}
+
+		return $redirect_if_unauthorized ? redirect()->to('/403') : false;
+
+		
 	}
 
 

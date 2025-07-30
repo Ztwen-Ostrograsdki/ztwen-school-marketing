@@ -69,12 +69,18 @@
                                     @foreach($my_assistings as $assistant_request)
                                         <tr wire:key="Liste-de-mes-assistants-{{$assistant_request->id}}" class="hover:bg-gray-50 transition-colors duration-150">
                                             <td class="px-2 py-2 whitespace-nowrap">
-                                                <div class="ml-4">
+                                                <a class="hover:underline hover:underline-offset-4" href="{{ $assistant_request->school->to_profil_route() }}" class="ml-4">
                                                     <div class="">{{ $assistant_request->school->name }}</div>
                                                     <div class="text-sm text-amber-400">
                                                         {{ $assistant_request->school->simple_name }}
                                                     </div>
-                                                </div>
+                                                    <div class="text-sm text-green-700 text-right font-semibold my-1.5">
+                                                        @if($assistant_request->approved_at)
+                                                            <small class="rounded-md bg-green-300 p-1">Vous avez approuvé cette demande</small>
+                                                        @endif
+                                                        
+                                                    </div>
+                                                </a>
                                             </td>
                                             <td class="px-2 py-2 whitespace-nowrap">
                                                 <div class="flex flex-wrap gap-2">

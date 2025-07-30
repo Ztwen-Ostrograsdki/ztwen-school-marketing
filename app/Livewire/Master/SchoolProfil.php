@@ -115,23 +115,28 @@ class SchoolProfil extends Component
 
     public function addNewSchoolStat($stat_id = null)
     {
-        $this->dispatch('ManageStatLiveEvent', $this->school->id);
+        if(__ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true)){
+            $this->dispatch('ManageStatLiveEvent', $this->school->id);
+        }
+        
     }
     
     public function manageSchoolStat($stat_id = null)
     {
-        $this->dispatch('ManageStatLiveEvent', $this->school->id, $stat_id);
+        if(__ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true)) $this->dispatch('ManageStatLiveEvent', $this->school->id, $stat_id);
     }
 
     
 
     public function manageSchoolInfo($info_id = null)
     {
+        if(__ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true))
         $this->dispatch('ManageCommuniqueLiveEvent', $this->school->id, $info_id);
     }
 
     public function addNewSchoolInfo()
     {
+        if(__ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true))
         $this->dispatch('ManageCommuniqueLiveEvent', $this->school->id);
     }
     

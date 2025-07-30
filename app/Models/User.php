@@ -244,4 +244,15 @@ class User extends Authenticatable
     {
         return $this->emailVerified();
     }
+
+    public function assist_this_school($school_id, $with_author = false)
+    {
+        if($with_author && count($this->schools)){
+
+            return $this->schools()->where('schools.id', $school_id)->exists();
+        }
+
+        return AssistantRequest::where('assistant_id', $this->id)->whereNotNull('approved_at')->where('school_id', $school_id)->exists();
+
+    }
 }

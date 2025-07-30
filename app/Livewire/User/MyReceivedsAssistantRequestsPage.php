@@ -54,7 +54,7 @@ class MyReceivedsAssistantRequestsPage extends Component
     {
         $my_assistings = [];
 
-        if($this->user && $this->user->my_directors) $my_assistings = $this->user->my_directors()->where('assistant_requests.delay', '>', now())->get();
+        if($this->user && $this->user->my_directors) $my_assistings = $this->user->my_directors;
 
         return view('livewire.user.my-receiveds-assistant-requests-page', compact('my_assistings'));
     }

@@ -55,7 +55,7 @@ class MyAssistantsListing extends Component
     {
         $my_assistants = [];
 
-        $my_assistants = $this->user?->my_assistants()->where('assistant_requests.delay', '>', now())->get();
+        $my_assistants = $this->user?->my_assistants;
 
         return view('livewire.user.my-assistants-listing', compact('my_assistants'));
     }
@@ -65,10 +65,5 @@ class MyAssistantsListing extends Component
         $this->dispatch('AddNewAssistantLiveEvent');
 
     }
-
-
-    public function openAddAssistantModal()
-    {
-        // $this->dispatch('AddNewAssistantLiveEvent');
-    }
+    
 }
