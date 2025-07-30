@@ -8,8 +8,8 @@
     <div class="max-w-3xl card mx-auto mt-5 shadow-gray-900 border border-sky-400 bg-black/70 rounded-xl shadow-2xl">
         <div class="p-6">
             <div class="flex items-center space-x-4">
-            <div class="flex-shrink-0" @click="currentImage = '{{ user_profil_photo() }}'; userName = '{{ $user_name }}'; email = '{{ $user_email }}'; show = true">
-                <img class="h-20 w-20 rounded-full object-cover border-2 border-indigo-500" src="{{user_profil_photo()}}" alt="Profile picture">
+            <div class="flex-shrink-0" @click="currentImage = '{{ user_profil_photo($user) }}'; userName = '{{ $user_name }}'; email = '{{ $user_email }}'; show = true">
+                <img class="h-20 w-20 rounded-full object-cover border-2 border-indigo-500" src="{{user_profil_photo($user)}}" alt="Profile picture">
             </div>
             <div class="flex-1 min-w-0">
                 <p class="text-lg font-bold text-sky-500 truncate">

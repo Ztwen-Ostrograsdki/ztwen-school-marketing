@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 if(!function_exists('getMonths')){
 
@@ -769,6 +770,15 @@ if(!function_exists('deleteFileIfExists')){
 
             File::delete($path);
         }
+    }
+
+}
+
+if(!function_exists('admin_roles')){
+
+    function admin_roles()
+    {
+        return Role::all();
     }
 
 }

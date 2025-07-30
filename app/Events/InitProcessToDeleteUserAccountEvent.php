@@ -11,16 +11,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class LogoutUserEvent implements ShouldBroadcast
+class InitProcessToDeleteUserAccountEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $user)
+    public function __construct(
+        public User $admin_generator,
+        public array $users_id,
+    )
     {
-        //
+
     }
 
     /**
@@ -31,7 +34,7 @@ class LogoutUserEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('App.Models.User.' . $this->user->id),
+            new PrivateChannel('App.Models.User.' . $this->admin_generator->id),
         ];
     }
 }

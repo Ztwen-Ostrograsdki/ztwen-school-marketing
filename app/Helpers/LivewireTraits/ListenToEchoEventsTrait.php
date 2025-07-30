@@ -14,8 +14,25 @@ trait ListenToEchoEventsTrait{
     {
         $this->counter = getRandom();
     }
+
+
+    #[On("LiveRolesWasUpdatedEvent")]
+    public function spatieRoleUpdated($req = null)
+    {
+        $this->counter = getRand();
+    }
     
+    #[On("LiveUserAccountWasBlockedEvent")]
+    public function reloadDataAfterAccountBlocked($req = null)
+    {
+        $this->counter = getRand();
+    }
     
+    #[On("LiveUserAccountWasDeletedEvent")]
+    public function reloadDataAfterAccountDeleted($req = null)
+    {
+        $this->counter = getRand();
+    }
 
 
 
@@ -112,9 +129,8 @@ trait ListenToEchoEventsTrait{
     {
         $this->counter = getRand();
     }
-
-
-
+    
+    
 
 
 }

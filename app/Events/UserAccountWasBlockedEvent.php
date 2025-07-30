@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class LogoutUserEvent implements ShouldBroadcast
+class UserAccountWasBlockedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,15 +23,17 @@ class LogoutUserEvent implements ShouldBroadcast
         //
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('App.Models.User.' . $this->user->id),
+            new PrivateChannel('admin'),
+        ];
+    }
+
+    public function broadcastWith() : array
+    {
+        return [
+            'user' => $this->user,
         ];
     }
 }

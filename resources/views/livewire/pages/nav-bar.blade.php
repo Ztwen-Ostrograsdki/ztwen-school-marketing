@@ -210,10 +210,21 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{route('admin.roles')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('admin.roles')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
+                        <span class="fas fa-user-gear"></span>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Les rôles</span>
+                        <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                            {{ __zero(count(admin_roles())) }}
+                        </span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{route('admin.users.listing')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('admin.users.listing')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
                         <span class="fas fa-users"></span>
                         <span class="flex-1 ms-3 whitespace-nowrap">Utilisateurs</span>
-                        <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">12</span>
+                        <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                            {{ __zero(count(getUsers())) }}
+                        </span>
                     </a>
                 </li>
                 <li>

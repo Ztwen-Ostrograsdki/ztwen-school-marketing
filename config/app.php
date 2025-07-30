@@ -2,6 +2,18 @@
 
 return [
 
+    'users_list_sections' => [
+        'all' => "Tout",
+        'blocked' => "Les utilisateurs bloqués",
+        'unlockeds' => "Les utilisateurs non bloqués",
+        'confirmeds' => "Les utilisateurs confirmés",
+        'unconfirmeds' => "Les utilisateurs non confirmés",
+        'subscribing' => "Avec abonnéments actifs",
+        'unsubscribing' => "Sans abonnéments actifs",
+        'schooled' => "Ayant une école ",
+        'unschooled' => "N'ayant pas d'école ",
+
+    ],
     'infos_types' => [
         'cv' => "Cours de vacances",
         'cr' => "Cours de renforcements",

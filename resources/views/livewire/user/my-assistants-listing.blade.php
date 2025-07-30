@@ -63,9 +63,7 @@
                                         <th scope="col" class="px-6 py-4 uppercase tracking-wider">
                                             Privilèges accordés
                                         </th>
-                                        <th scope="col" class="px-6 py-4 uppercase tracking-wider">
-                                            Approuvée le
-                                        </th>
+                                        
                                         <th scope="col" class="px-6 py-4 uppercase tracking-wider">
                                             Statut
                                         </th>
@@ -79,16 +77,26 @@
                                         <tr wire:key="Liste-de-mes-assistants-{{$assistant_request->id}}" class="hover:bg-gray-50 transition-colors duration-150">
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
-                                                <div class="h-10 w-10 flex-shrink-0">
-                                                    <img class="h-10 w-10 rounded-full object-cover border-sky-500 border" src="{{ user_profil_photo($assistant_request->assistant) }}" alt="">
-                                                </div>
-                                                <div class="ml-4">
-                                                    <div class="">{{ $assistant_request->assistant->getFullName() }}</div>
-                                                    <div class="text-sm text-amber-500">
-                                                        {{ $assistant_request->assistant->email }}
+                                                    <div class="h-10 w-10 flex-shrink-0">
+                                                        <img class="h-10 w-10 rounded-full object-cover border-sky-500 border" src="{{ user_profil_photo($assistant_request->assistant) }}" alt="">
+                                                    </div>
+                                                    <div class="ml-4">
+                                                        <div class="">{{ $assistant_request->assistant->getFullName() }}</div>
+                                                        <div class="text-sm text-amber-500">
+                                                            {{ $assistant_request->assistant->email }}
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                @if($assistant_request->approved_at)
+                                                <div class="flex flex-col text-center mx-auto bg-black/50 rounded-lg text-green-700 p-2 text-xs mt-1.5">
+                                                    <span class="text-green-500">
+                                                        Approuvée le {{ __formatDate($assistant_request->approved_at) }}
+                                                    </span>
+                                                    <span class="text-orange-300 text-center">
+                                                        {{ __asAgo($assistant_request->approved_at) }}
+                                                    </span>
                                                 </div>
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex flex-wrap gap-2">
@@ -97,22 +105,7 @@
                                                     @endforeach
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="flex flex-col text-center mx-auto">
-                                                    @if($assistant_request->approved_at)
-                                                    <span class="text-green-500">
-                                                        {{ __formatDateTime($assistant_request->approved_at) }}
-                                                    </span>
-                                                    <span class="text-orange-300 text-center text-xs">
-                                                        {{ __asAgo($assistant_request->created_at, $assistant_request->approved_at) }}
-                                                    </span>
-                                                    @else
-                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold text-center rounded-full bg-orange-300 text-black">
-                                                        Pas encore
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </td>
+                                            
                                             <td class="px-6 py-4 text-center whitespace-nowrap">
                                                 @if($assistant_request->status == 'Approuvé' || $assistant_request->approved_at)
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -126,9 +119,16 @@
                                             </td>
                                             
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a type="button" class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                                    Edit
-                                                </a>
+                                                <button wire:click='editAssistant({{$assistant_request->id}})' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
+                                                    <span wire:loading.remove wire:target='editAssistant({{$assistant_request->id}})'>
+                                                        <span class="fas fa-user-edit mr-1"></span>
+                                                        Editer
+                                                    </span>
+                                                    <span wire:loading wire:target='editAssistant({{$assistant_request->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
                                                 
                                                 <a type="button" class="text-red-600 hover:text-red-900">
                                                     Delete

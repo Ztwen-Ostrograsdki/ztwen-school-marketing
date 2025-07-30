@@ -20,8 +20,10 @@
                         <div class="relative py-2">
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                                 <div class="text-amber-500/65 font-semibold letter-spacing-1">
-                                    <h2 class="text-sm sm:text-xl font-bold uppercase text-shadow shadow-amber-400">La liste des écoles assistées</h2>
-                                    <p class="text-gray-400 mt-1">Vous pouvez gérer ses écoles grâce aux privilèges qui vous sont accordés </p>
+                                    <h2 class="text-sm sm:text-xl font-bold uppercase text-shadow shadow-amber-400"></h2>
+                                    <p class="text-gray-400 mt-1">
+                                        Ici sont listées les requêtes qui vous ont été envoyées
+                                    </p>
                                 </div>
                                 <div class="text-xs sm:text-sm mt-4 md:mt-0 flex gap-x-2 justify-end">
                                     <a href="{{$user->to_profil_route()}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">

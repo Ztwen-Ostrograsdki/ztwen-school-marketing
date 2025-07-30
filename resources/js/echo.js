@@ -33,6 +33,12 @@ e.private("App.Models.User." + window.ClientUser.id)
         }
     })
 
+    .listen("LogoutUserEvent", (ev) => {
+        Livewire.dispatch("LiveLogoutUserEvent", ev);
+    })
+    .listen("UserAccountWasBlockedEvent", (ev) => {
+        Livewire.dispatch("LiveUserAccountWasBlockedEvent", ev);
+    })
     .listen("NewAssistanceRequestCreatedEvent", (ev) => {
         Livewire.dispatch("LiveNewAssistanceRequestCreatedEvent", ev);
     })
@@ -89,6 +95,12 @@ e.private("confirmeds")
     .listen("NewSchoolCreatedEvent", (user) => {
         Livewire.dispatch("LiveNewSchoolCreatedEvent", user);
     })
+    .listen("RolePermissionsWasUpdatedEvent", (info) => {
+        Livewire.dispatch("LiveRolePermissionsWasUpdatedEvent", info);
+    })
+    .listen("RolesWasUpdatedEvent", (info) => {
+        Livewire.dispatch("LiveRolesWasUpdatedEvent", info);
+    })
     .listen("NewUserCreatedEvent", (user) => {
         Livewire.dispatch("LiveNewUserCreatedEvent", user);
     });
@@ -97,6 +109,9 @@ e.private("confirmeds")
 e.channel("public")
     .listen("UserDataHasBeenUpdatedEvent", (user) => {
         Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
+    })
+    .listen("UserAccountWasDeletedEvent", (user) => {
+        Livewire.dispatch("LiveUserAccountWasDeletedEvent", user);
     })
     .listen("SchoolDataHasBeenUpdatedEvent", (user) => {
         Livewire.dispatch("LiveSchoolDataHasBeenUpdatedEvent", user);
@@ -115,6 +130,12 @@ e.channel("public")
     })
     .listen("SchoolInfoUpdatedEvent", (info) => {
         Livewire.dispatch("LiveSchoolInfoUpdatedEvent", info);
+    })
+    .listen("RolePermissionsWasUpdatedEvent", (info) => {
+        Livewire.dispatch("LiveRolePermissionsWasUpdatedEvent", info);
+    })
+    .listen("RolesWasUpdatedEvent", (info) => {
+        Livewire.dispatch("LiveRolesWasUpdatedEvent", info);
     })
     .listen("NewSchoolInfoAddedEvent", (info) => {
         Livewire.dispatch("LiveNewSchoolInfoAddedEvent", info);

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Helpers\Robots\ModelsRobots;
 use App\Helpers\TraitsManagers\UserTrait;
+use App\Models\UserRole;
 use App\Observers\ObserveUser;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -232,5 +233,15 @@ class User extends Authenticatable
     public function getReadNotifications()
     {
         return $this->readNotifications;
+    }
+
+    public function userRoles()
+    {
+        return $this->hasMany(UserRole::class);
+    }
+
+    public function confirmeds()
+    {
+        return $this->emailVerified();
     }
 }

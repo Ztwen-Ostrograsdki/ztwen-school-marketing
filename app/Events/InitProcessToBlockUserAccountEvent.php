@@ -11,17 +11,32 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class LogoutUserEvent implements ShouldBroadcast
+class InitProcessToBlockUserAccountEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $user = null;
+
+    public $admin_generator;
+
+    public $users_targets_ids = [];
+
+    public $just_block_all_users = false;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $user)
+    public function __construct(?User $user = null, User $admin_generator, ?array $users = [], bool $just_block_all_users = false)
     {
-        //
+        $this->user = $user;
+
+        $this->admin_generator = $admin_generator;
+
+        $this->users_targets_ids = $users;
+
+        $this->just_block_all_users = $just_block_all_users;
     }
+
 
     /**
      * Get the channels the event should broadcast on.
@@ -31,7 +46,7 @@ class LogoutUserEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('App.Models.User.' . $this->user->id),
+            new PrivateChannel('App.Models.User.' . $this->admin_generator->id),
         ];
     }
 }

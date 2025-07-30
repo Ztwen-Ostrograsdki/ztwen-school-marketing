@@ -47,7 +47,12 @@ class JobToDeleteAssistantRequestAfterDelayed implements ShouldQueue
 
         $assistant_request = $this->assistant_request;
 
-        if($assistant_request->delay && ($assistant_request->status !== 'Approuvé' || !$assistant_request->approved_at)){
+        if($assistant_request->status == 'Approuvé' || $assistant_request->approved_at){
+
+            return;
+        }
+
+        if($assistant_request->status != 'Approuvé' && !$assistant_request->approved_at && $assistant_request->delay < now()){
 
             $deleted = $assistant_request->delete();
 
@@ -65,6 +70,8 @@ class JobToDeleteAssistantRequestAfterDelayed implements ShouldQueue
     {
         return [
             Skip::when(!$this->assistant_request->exists),
+            Skip::when($this->assistant_request->approved_at),
+            Skip::when($this->assistant_request->status == 'Approuvé'),
 
         ];
     }

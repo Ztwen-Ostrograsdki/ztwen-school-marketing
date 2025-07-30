@@ -12,6 +12,8 @@ use App\Livewire\Master\AssistantsListing;
 use App\Livewire\Master\Dashboard;
 use App\Livewire\Master\SchoolProfil;
 use App\Livewire\Master\SchoolsListing;
+use App\Livewire\Master\SpatieRoleProfilPage;
+use App\Livewire\Master\SpatieRolesPage;
 use App\Livewire\Master\UsersListing;
 use App\Livewire\Pages\AboutUs;
 use App\Livewire\Pages\Home;
@@ -39,6 +41,12 @@ Route::middleware(['auth'])->group(function(){
     Route::get('administration/les-assistants', AssistantsListing::class)->name('admin.assistants.listing');
 
     Route::get('administration/les-ecoles', SchoolsListing::class)->name('admin.schools.listing');
+
+    Route::get('gestion/role-administrateurs', SpatieRolesPage::class)->name('admin.roles');
+
+    Route::get('gestion/role-administrateurs/ID={role_id}', SpatieRoleProfilPage::class)->name('admin.role.profil');
+
+
 
 
     // END ADMINS ROUTES
