@@ -21,6 +21,7 @@ use App\Livewire\Pages\SchoolsPages;
 use App\Livewire\Shop\PackProfil;
 use App\Livewire\Shop\PacksPage;
 use App\Livewire\User\MyAssistantsListing;
+use App\Livewire\User\MyNotifications;
 use App\Livewire\User\MyProfil;
 use App\Livewire\User\MyReceivedsAssistantRequestsPage;
 use Illuminate\Support\Facades\File;
@@ -60,6 +61,9 @@ Route::middleware(['auth'])->group(function(){
     Route::get('mon-profil/u={user_uuid}/s={school_slug}/is={school_id}/edition/edition-de-mon-ecole', CreateSchool::class)->name('school.edition');
 
     Route::get('profil/k={id}/u={uuid}/mon-profil', MyProfil::class)->name('user.profil');
+    
+    
+    Route::get('profil/k={id}/u={uuid}/mes-notifications', MyNotifications::class)->name('my.notifications');
 
     Route::get('profil/k={id}/u={uuid}/mes-assistants', MyAssistantsListing::class)->name('my.assistants');
 

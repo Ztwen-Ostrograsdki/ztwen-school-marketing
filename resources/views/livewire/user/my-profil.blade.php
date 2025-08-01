@@ -42,25 +42,23 @@
     
         <!-- Menu -->
         <div class="px-6 pb-4 overflow-x-auto">
-            <div class="text-xs sm:text-sm mt-4 md:mt-0 flex gap-x-2 justify-center">
+            <div class="text-xs sm:text-sm mt-4 md:mt-0 flex gap-x-2 justify-stat">
                 @auth
                     @if(auth_user()->id == $user->id)
+                        @if(count($user->schools))
+                            <a href="{{$user->to_my_assistants_list_route()}}"  class=" text-white cursor-pointer bg-indigo-500 focus:outline-none font-medium rounded-lg px-3 py-2 text-center hover:bg-indigo-800 focus:ring-indigo-800" type="button">
+                                <span class="fas fa-users-gear"></span>
+                                Mes assistants
+                            </a>
+                        @endif
+
+                        @if(count($user->my_directors))
+                            <a href="{{$user->to_my_receiveds_assistants_requests_list_route()}}"  class=" text-white cursor-pointer bg-amber-500 focus:outline-none font-medium rounded-lg px-3 py-2 text-center hover:bg-amber-800 focus:ring-amber-800" type="button">
+                                <span class="fas fa-person-chalkboard"></span>
+                                Mes assistés
+                            </a>
+                        @endif
                     
-                    <button wire:click='openAddAssistantModal' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
-                        <span wire:loading.remove wire:target='openAddAssistantModal'>
-                            <span class="fas fa-user-plus mr-1"></span>
-                            Ajouter un assistant
-                        </span>
-                        <span wire:loading wire:target='openAddAssistantModal'>
-                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                            <span>Un instant, chargement...</span>
-                        </span>
-                    </button>
-                    
-                    <button class="bg-red-600 cursor-pointer hover:bg-red-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
-                        <span class="fas fa-trash mr-1"></span>
-                        Suppr. les assistants.
-                    </button>
                     @endif
                     <button class="bg-green-600 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                         <span class="fas fa-message mr-1"></span>
@@ -78,11 +76,9 @@
             </h3>
             @auth
                 @if(auth_user()->id == $user->id)
-                <a href="{{$user->to_profil_edit_route()}}" class="text-black cursor-pointer bg-yellow-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
-                    <span class="w-full flex items-center px-1.5">
-                        <span class="fas fa-pen mr-1"></span>
-                        Editer
-                    </span>
+                <a href="{{$user->to_profil_edit_route()}}" class="text-black cursor-pointer bg-yellow-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800 flex" type="button">
+                    <span class="fas fa-user-pen mr-1"></span>
+                    <span>Modifier</span>
                 </a> 
                 @endif
             @endauth
@@ -138,7 +134,7 @@
                 <div class="flex gap-x-2 text-sm">
                     <a href="{{route('packs.page')}}" class="text-black cursor-pointer bg-indigo-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-500 focus:ring-yellow-800" type="button">
                         <span class="w-full flex items-center px-1.5">
-                            <span class="fas fa-pen mr-1"></span>
+                            <span class="fas fa-eye mr-1"></span>
                             Parcourir
                         </span>
                     </a>
@@ -164,7 +160,7 @@
                 <div class="flex gap-x-2 text-sm">
                     <a href="{{auth_user()->to_create_school_route()}}" class="text-black cursor-pointer bg-indigo-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-500 focus:ring-yellow-800" type="button">
                         <span class="w-full flex items-center px-1.5">
-                            <span class="fas fa-pen mr-1"></span>
+                            <span class="fas fa-plus mr-1"></span>
                             Créer
                         </span>
                     </a>
@@ -282,27 +278,25 @@
     @if(auth_user()->id == $user->id)
     <div class="max-w-3xl card mx-auto mt-5 shadow-gray-900 border border-sky-400 bg-black/70 rounded-lg shadow-2xl">
         <div class="flex justify-between items-center p-2">
-            <h3 class="letter-spacing-1 font-bold text-xl p-4 text-amber-400 underline underline-offset-3 w-full border-b-amber-400">
+            <h3 class="letter-spacing-1 font-bold text-xl p-4 text-amber-400 underline underline-offset-3 border-b-amber-400">
                 <span># Mes assistants</span>
             </h3>
             
             <div class="flex gap-x-2 text-sm">
-                <a type="button" wire:click='openAddAssistantModal' class="text-black cursor-pointer bg-indigo-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-500 focus:ring-yellow-800" type="button">
-                    <span wire:loading.remove wire:target='openAddAssistantModal' class="w-full flex items-center px-1.5">
-                        <span class="fas fa-pen mr-1"></span>
-                        Ajouter
-                    </span>
-                    <span wire:loading wire:target='openAddAssistantModal' class="w-full flex items-center px-1.5">
-                        <span class="fas fa-rotate animate-spin"></span>
-                        En cours...
-                    </span>
+                <a href="{{$user->to_my_assistants_list_route()}}" class="text-black cursor-pointer bg-indigo-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-500 focus:ring-yellow-800 flex" type="button">
+                    <span class="fas fa-users mr-1"></span>
+                    <span>Mes assistants</span>
                 </a>
-                <a href="#" class="text-black cursor-pointer bg-yellow-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
-                    <span class="w-full flex items-center px-1.5">
-                        <span class="fas fa-pen mr-1"></span>
-                        Editer
+                <button wire:click='generateAssistantTokenFor' class="flex text-black cursor-pointer bg-green-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
+                    <span wire:loading.remove wire:target='generateAssistantTokenFor'>
+                        <span class="fas fa-key mr-1"></span>
+                        Ajouter un assistant
                     </span>
-                </a>
+                    <span wire:loading wire:target='generateAssistantTokenFor'>
+                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                        <span>Un instant, en cours...</span>
+                    </span>
+                </button>
             </div> 
         </div>
        

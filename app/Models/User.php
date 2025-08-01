@@ -197,6 +197,11 @@ class User extends Authenticatable
     public function to_profil_route()
     {
         return route('user.profil', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
+    }
+    
+    public function to_my_notifications_route()
+    {
+        return route('my.notifications', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
     } 
 
     public function to_profil_edit_route()
@@ -252,7 +257,7 @@ class User extends Authenticatable
             return $this->schools()->where('schools.id', $school_id)->exists();
         }
 
-        return AssistantRequest::where('assistant_id', $this->id)->whereNotNull('approved_at')->where('school_id', $school_id)->exists();
+        return AssistantRequest::where('assistant_id', $this->id)->whereNotNull('approved_at')->where('is_active', true)->where('school_id', $school_id)->exists();
 
     }
 }

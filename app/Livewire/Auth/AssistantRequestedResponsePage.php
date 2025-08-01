@@ -130,7 +130,7 @@ class AssistantRequestedResponsePage extends Component
 
                 try {
                     
-                    $this->assistant_request->update(['status' => 'Approuvé', 'approved_at' => now()]);
+                    $this->assistant_request->update(['status' => 'Approuvé', 'approved_at' => now(), 'is_active' => true]);
 
                     DB::commit();
 
@@ -151,7 +151,7 @@ class AssistantRequestedResponsePage extends Component
                     
                     DB::rollBack();
 
-                    $this->toast("Une erreure s'est produite, veuillez vérifier la requête et réessayer! : " . $th->getMessage(), 'error');
+                    $this->toast("Une erreure s'est produite, veuillez vérifier la requête et réessayer!", 'error');
                 }
             }
             else{

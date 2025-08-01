@@ -1,19 +1,17 @@
-<div>
-    <div class="mx-auto shadow-3 shadow-sky-600 rounded-lg  my-3 max-w-6xl p-2 m-2 z-bg-secondary-light">
-        <h1 class="p-4 text-gray-300 flex items-center justify-between uppercase text-center">
-            <span class="text-xs letter-spacing-2">
-                <strong class="text-sky-400">
-                    Gestion de mes notifications 
-                
-                </strong>
-            </span>
-
-            <div class="flex gap-x-2">
-                
-            </div>
-        </h1>
+<div class="w-full max-w-[85rem] py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2">
+    <div class="mt-10">
+        <h5 class="card letter-spacing-1 flex justify-between bg-black/80 border-sky-400 border text-center mx-auto items-center px-2 gap-2 text-gray-200">
+            <p class="py-4 relative inline-block text-sm md:text-lg  uppercase font-bold letter-spacing-2 text-amber-600 text-start"> 
+                <span class="">
+                    <span class="mx-1">#</span>
+                    Mes notifications : <span class="uppercase text-orange-500">
+                    </span>
+                </span>
+            </p>
+            <span class="text-yellow-500 font-semibold">{{ __zero(count($my_notifications)) }}</span>
+        </h5>
     </div>
-    <section class="py-14 rounded-xl shadow-3 shadow-sky-600 font-poppins max-w-6xl mx-auto p-2 m-2 z-bg-secondary-light">
+    <section class="py-14 shadow-lg shadow-gray-900 font-poppins mx-auto p-2 m-2 bg-black/80 border border-sky-500">
         <div class="w-full px-4 mx-auto lg:text-base md:text-sm sm:text-sm xs:text-xs">
           <div class="w-full mx-auto">
             <div class="text-left w-full">
@@ -52,9 +50,9 @@
             <div class="py-3 w-full bg-transparent shadow ">
               <div class="w-full flex justify-between">
                 <form action="" class="w-3/5 flex justify-start">
-                  <select  class="z-bg-secondary-light  font-semibold letter-spacing-1 rounded-lg shadow-1 shadow-sky-400 text-sky-300 py-3 w-full px-2" wire:model.live='sectionned' id="user_e_notifications_section">
+                  <select  class="bg-transparent  font-semibold letter-spacing-1 rounded-lg shadow-1 shadow-sky-400 text-sky-300 py-3 w-full px-2" wire:model.live='sectionned' id="user_e_notifications_section">
                     @foreach ($notif_sections as $key => $sec)
-                      <option class="border-none" wire:key="option-{{$sec}}-{{auth()->user()->id}}" class="z-bg-secondary-light font-semibold letter-spacing-1 my-2" value="{{$key}}">{{ $sec }}</option>
+                      <option class="border-none bg-black font-semibold letter-spacing-1 my-2" wire:key="option-{{$sec}}-{{auth()->user()->id}}" value="{{$key}}">{{ $sec }}</option>
                     @endforeach
                   </select>
                 </form>
@@ -83,14 +81,14 @@
                 @php
                     $name = $notif->id;
                 @endphp
-                <div class="flex flex-col gap-0 gap-y-1 items-center w-full p-1 my-2 shadow-1 shadow-purple-500  opacity-85 transition-opacity border border-gray-400" role="alert" >
-                  <div wire:key="notif-page-{{$name}}" id="notif-{{$notif->id}}" class="flex gap-0 items-center w-full p-2 px-3 my-0 text-gray-200 bg-gray-800  opacity-85 transition-opacity" role="alert" >
-                      <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 text-gray-500 bg-gray-100 rounded-lg dark:bg-gray-800 dark:text-gray-200">
+                <div class="flex card flex-col gap-0 gap-y-1 items-center w-full p-1 my-2 shadow-1 shadow-purple-500  opacity-85 transition-opacity border border-gray-400" role="alert" >
+                  <div wire:key="notif-page-{{$name}}" id="notif-{{$notif->id}}" class="flex gap-0 items-center w-full p-2 px-3 my-0 bg-transparent  opacity-85 transition-opacity" role="alert" >
+                      <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-lg text-gray-200">
                           <span class="fas fa-envelope-open"></span>
                           <span class="sr-only">Check icon</span>
                       </div>
-                      <div class="ms-3 lg:text-sm md:text-xs xs:text-xs break-all font-semibold letter-spacing-1">{{ $notif->data ? $notif->data['message'] : 'Une notification...' }}</div>
-                      <button wire:click='deleteNotification("{{$name}}")' title="Cliquer pour Masquer cette notification" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#notif-{{$notif->id}}" aria-label="Close">
+                      <div class="ms-3  text-xs md:text-ms break-all font-semibold letter-spacing-1">{{ $notif->data ? $notif->data['message'] : 'Une notification...' }}</div>
+                      <button wire:click='deleteNotification("{{$name}}")' title="Cliquer pour Masquer cette notification" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-red-700 dark:bg-gray-800 dark:hover:bg-red-400 cursor-pointer" data-dismiss-target="#notif-{{$notif->id}}" aria-label="Close">
                           <span class="sr-only">Close</span>
                           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>

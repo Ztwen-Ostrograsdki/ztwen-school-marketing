@@ -21,6 +21,7 @@ class AssistantRequest extends Model
         'uuid',
         'privileges',
         'delay',
+        'is_active',
         'token'
     ];
 

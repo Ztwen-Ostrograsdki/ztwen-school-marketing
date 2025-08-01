@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('token');
             $table->string('status')->default('En attente');
             $table->datetime('delay');
+            $table->boolean('is_active')->default(false);
             $table->datetime('approved_at')->nullable()->default(null);
             $table->uuid('uuid')->unique();
             $table->timestamps();

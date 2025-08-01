@@ -133,9 +133,10 @@ class MyProfil extends Component
         }
     }
 
-    public function openAddAssistantModal()
+    public function generateAssistantTokenFor()
     {
         $this->dispatch('AddNewAssistantLiveEvent');
+
     }
 
     public function manageSchoolStat($stat_id = null)

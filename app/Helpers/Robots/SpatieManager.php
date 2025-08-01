@@ -341,7 +341,7 @@ trait SpatieManager{
 
 			if($assistant->assist_this_school($school_id)){
 
-				$assistant_request = AssistantRequest::where('assistant_id', $user_id)->where('school_id', $school_id)->whereNotNull('approved_at')->first();
+				$assistant_request = AssistantRequest::where('assistant_id', $user_id)->where('school_id', $school_id)->whereNotNull('approved_at')->where('is_active', true)->first();
 			
 				if(!$assistant_request) return false;
 				

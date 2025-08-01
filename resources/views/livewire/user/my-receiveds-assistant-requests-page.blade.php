@@ -83,11 +83,20 @@
                                                 </a>
                                             </td>
                                             <td class="px-2 py-2 whitespace-nowrap">
-                                                <div class="flex flex-wrap gap-2">
-                                                    @foreach ($assistant_request->privileges as $role)
-                                                        <span class="p-1 border bg-gray-500 text-white hover:bg-gray-700 rounded-xl">{{ __translateRoleName($role) }}</span>
-                                                    @endforeach
+                                                @if($assistant_request->is_active)
+                                                    <div class="flex flex-wrap gap-2">
+                                                        @foreach ($assistant_request->privileges as $role)
+                                                            <span class="p-1 border bg-gray-500 text-white hover:bg-gray-700 rounded-xl">{{ __translateRoleName($role) }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                <div class="flex flex-col text-center mx-auto bg-red-300 rounded-lg text-red-600 p-1.5 text-xs mt-1.5">
+                                                    <span class="text-red-600 fas fa-user-lock"></span>
+                                                    <span class="text-red-600 text-center">
+                                                        Accès bloqué
+                                                    </span>
                                                 </div>
+                                                @endif
                                             </td>
                                             <td class="px-2 py-2 whitespace-nowrap">
                                                 <div class="flex flex-col text-center mx-auto">

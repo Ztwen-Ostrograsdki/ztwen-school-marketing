@@ -1,19 +1,18 @@
 <?php
-
 namespace App\Livewire\User;
 
-use Akhaled\LivewireSweetalert\Confirm;
-use Akhaled\LivewireSweetalert\Toast;
+
+
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
+use App\Livewire\Traits\AssistantActionsTraits;
 use App\Models\User;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Title("La liste de mes assistants")]
 class MyAssistantsListing extends Component
 {
-    use ListenToEchoEventsTrait, Toast, Confirm;
+    use ListenToEchoEventsTrait, AssistantActionsTraits;
     
     public $uuid;
 
@@ -65,5 +64,7 @@ class MyAssistantsListing extends Component
         $this->dispatch('AddNewAssistantLiveEvent');
 
     }
+
+
     
 }

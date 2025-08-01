@@ -24,13 +24,13 @@
                                     <p class="text-gray-400 mt-1">Vous pouvez gérer vos différents assistants. </p>
                                 </div>
                                 <div class="text-xs sm:text-sm mt-4 md:mt-0 flex gap-x-2 justify-end">
-                                    <a href="{{$user->to_profil_route()}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
+                                    <a href="{{$user->to_profil_route()}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-2 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
                                         <span>
                                             <span class="fas fa-home mr-1"></span>
                                             Mon profil
                                         </span>
                                     </a>
-                                    <button wire:click='generateAssistantTokenFor' class="block text-black cursor-pointer bg-green-400 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
+                                    <button wire:click='generateAssistantTokenFor' class="block text-black cursor-pointer bg-green-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
                                         <span wire:loading.remove wire:target='generateAssistantTokenFor'>
                                             <span class="fas fa-key mr-1"></span>
                                             Ajouter un assistant
@@ -74,7 +74,7 @@
                                 </thead>
                                 <tbody class="divide-y text-gray-200 divide-gray-200">
                                     @foreach($my_assistants as $assistant_request)
-                                        <tr wire:key="Liste-de-mes-assistants-{{$assistant_request->id}}" class="hover:bg-gray-50 transition-colors duration-150">
+                                        <tr wire:key="Liste-de-mes-assistants-'{{$assistant_request->id}}'" class="hover:bg-gray-50 transition-colors duration-150">
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     <div class="h-10 w-10 flex-shrink-0">
@@ -86,6 +86,7 @@
                                                             {{ $assistant_request->assistant->email }}
                                                         </div>
                                                     </div>
+                                                    
                                                 </div>
                                                 @if($assistant_request->approved_at)
                                                 <div class="flex flex-col text-center mx-auto bg-black/50 rounded-lg text-green-700 p-2 text-xs mt-1.5">
@@ -97,12 +98,23 @@
                                                     </span>
                                                 </div>
                                                 @endif
+                                                @if(!$assistant_request->is_active)
+                                                <div class="flex flex-col text-center mx-auto bg-red-300 rounded-lg text-red-600 p-1.5 text-xs mt-1.5">
+                                                    <span class="text-red-600 fas fa-user-lock"></span>
+                                                    <span class="text-red-600 text-center">
+                                                        Accès bloqué
+                                                    </span>
+                                                </div>
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex flex-wrap gap-2">
                                                     @foreach ($assistant_request->privileges as $role)
                                                         <span class="p-1 border bg-gray-500 text-white hover:bg-gray-700 rounded-xl">{{ __translateRoleName($role) }}</span>
                                                     @endforeach
+                                                    @if(!$assistant_request->is_active)
+                                                        <span title="Cet utilisateur est vérouillé" class="fas fa-user-lock text-red-500 font-semibold ml-1.5 text-lg"></span>
+                                                    @endif
                                                 </div>
                                             </td>
                                             
@@ -117,22 +129,52 @@
                                                 </span>
                                                 @endif
                                             </td>
-                                            
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <button wire:click='editAssistant({{$assistant_request->id}})' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
-                                                    <span wire:loading.remove wire:target='editAssistant({{$assistant_request->id}})'>
-                                                        <span class="fas fa-user-edit mr-1"></span>
-                                                        Editer
-                                                    </span>
-                                                    <span wire:loading wire:target='editAssistant({{$assistant_request->id}})'>
-                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                                        <span>En cours...</span>
-                                                    </span>
-                                                </button>
-                                                
-                                                <a type="button" class="text-red-600 hover:text-red-900">
-                                                    Delete
-                                                </a>
+                                                <div class="flex flex-col gap-y-2.5">
+                                                    <button wire:click="manageAssistant('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')" class="block text-white cursor-pointer bg-blue-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
+                                                        <span wire:loading.remove wire:target="manageAssistant('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')">
+                                                            <span class="fas fa-user-edit mr-1"></span>
+                                                            Editer
+                                                        </span>
+                                                        <span wire:loading wire:target="manageAssistant('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')">
+                                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                            <span>En cours...</span>
+                                                        </span>
+                                                    </button>
+                                                    @if(!$assistant_request->is_active)
+                                                        <button wire:click="unlockAccess('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')" class="block text-white cursor-pointer bg-green-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
+                                                            <span wire:loading.remove wire:target="unlockAccess('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')">
+                                                                <span class="fas fa-unlock-keyhole mr-1"></span>
+                                                                Devérouiller
+                                                            </span>
+                                                            <span wire:loading wire:target="unlockAccess('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')">
+                                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                                <span>En cours...</span>
+                                                            </span>
+                                                        </button>
+                                                    @else
+                                                    <button wire:click="lockAccess('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')" class="block text-black cursor-pointer bg-orange-300 focus:ring-2 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-orange-800 focus:ring-orange-800" type="button">
+                                                        <span wire:loading.remove wire:target="lockAccess('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')">
+                                                            <span class="fas fa-user-lock mr-1"></span>
+                                                            Verouiller
+                                                        </span>
+                                                        <span wire:loading wire:target="lockAccess('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')">
+                                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                            <span>En cours...</span>
+                                                        </span>
+                                                    </button>
+                                                    @endif
+                                                    <button wire:click="deleteAssistant('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')" class="block text-white cursor-pointer bg-red-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-5 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                        <span wire:loading.remove wire:target="deleteAssistant('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')">
+                                                            <span class="fas fa-trash mr-1"></span>
+                                                            Supprimer
+                                                        </span>
+                                                        <span wire:loading wire:target="deleteAssistant('{{$assistant_request->id}}', '{{$assistant_request->assistant->getFullName()}}')">
+                                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                            <span>En cours...</span>
+                                                        </span>
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

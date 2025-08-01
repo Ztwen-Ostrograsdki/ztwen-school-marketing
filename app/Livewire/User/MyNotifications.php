@@ -2,34 +2,57 @@
 
 namespace App\Livewire\User;
 
+use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
+use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Models\User;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title("Mes notifications")]
 class MyNotifications extends Component
 {
-    // use Confirm, Toast;
+    use ListenToEchoEventsTrait, Toast, Confirm;
 
     public $counter = 1;
-
-    
 
     public $sectionned = 'unread';
 
     public $search = '';
 
-    protected $listeners = [
-        'LiveIHaveNewNotificationEvent' => 'reloadNotificationsData',
-    ];
+    public $uuid, $user_id;
 
-    public function mount($identifiant)
+    public $user_name;
+
+    public $user_email;
+
+    public $user;
+
+    public function mount($id, $uuid)
     {
-        if(!$identifiant){
+        if($id && $uuid){
+
+            $user = User::where('identifiant', $id)->where('uuid', $uuid)->firstOrFail();
+
+            if($user){
+
+                $this->user_id = $id;
+
+                $this->uuid = $uuid;
+
+                $this->user = $user;
+
+                $this->user_name = $user->getFullName();
+
+                $this->user_email = $user->email;
+            }
+        }
+        else{
 
             return abort(404);
-
         }
+
     }
 
 
@@ -103,6 +126,7 @@ class MyNotifications extends Component
         session()->put('my-notification-section', $sectionned);
     }
 
+    #[On("LiveIHaveNewNotificationEvent")]
     public function reloadNotificationsData($user = null)
     {
         $this->toast("Vous avez reçu une nouvelle notification!!!");
@@ -157,27 +181,7 @@ class MyNotifications extends Component
         
         
     }
-
-
-    public function userUnBlockedSuccessfully($user)
-    {
-        
-        if($user && !$user['blocked']){
-
-            $message = "L'utilisateur a été débloqué avec success!";
-
-            $this->toast($message, 'success');
-
-            to_flash('success', $message);
-
-        }
-        else{
-
-            $this->toast( "L'opération a échoué! Veuillez réessayer!", 'error');
-
-        }
-    }
-
+    
 
     #[On('LiveNotificationsDeletedSuccessfullyEvent')]
     public function reloadData()
