@@ -6,7 +6,7 @@
         <div class="relative bg-black/85 border rounded-lg shadow ">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-white">
+                <h3 class="text-sm md:text-lg font-semibold text-white">
                     Gestion des privilèges de l'assistant 
                     <span class="text-sky-300 underline underline-offset-4">{{ $assistant?->getFullName() }}</span>
                     <span class="text-amber-500 font-semibold letter-spacing-1 block text-sm"> {{ $school?->name }} </span>
@@ -21,7 +21,7 @@
             <!-- Modal body -->
             <form wire:ignore.self class="p-4 md:p-5">
                 <div class="w-full my-2">
-                    <h5 class="my-3 text-gray-500 xs:text-xs lg:text-base w-full">
+                    <h5 class="my-3 text-gray-500 text-sm md:text-base w-full">
                         <span>Veuillez sélectionner les privilèges</span>
 
                         <span class="float-right text-orange-300"> {{ count($selecteds) }} privilèges sélectionnés </span>
@@ -29,18 +29,18 @@
                 </div>
                 <div class="mt-3 w-full mb-5 group overflow-y-auto p-3" style="max-height: 400px">
 
-                    <table class="w-full text-sm text-center border rounded-lg rtl:text-right text-gray-500 dark:text-gray-400 xs:text-xs lg:text-base">
+                    <table class="w-full text-center border rounded-lg rtl:text-right text-gray-500 dark:text-gray-400 text-sm md:text-base">
             
                         @if(count($roles) > 0)
-                        <thead class="text-xs text-gray-900 uppercase bg-gray-50 dark:bg-blue-900 dark:text-gray-400 items-center">
+                        <thead class="text-xs md:text-sm text-gray-900 uppercase bg-gray-50 dark:bg-blue-900 dark:text-gray-400 items-center">
                             <tr class="tr-head">
-                                <th scope="col" class="px-6 py-4 text-left">
+                                <th scope="col" class="px-6 py-2.5 text-left">
                                     N°
                                 </th>
-                                <th scope="col" class="px-6 py-4">
+                                <th scope="col" class="px-6 py-2.5">
                                    Privilèges
                                 </th>
-                                <th scope="col" class="px-6 py-4 text-center">
+                                <th scope="col" class="px-6 py-2.5 text-center">
                                     Action à effectuer 
                                 </th>
                             </tr>
@@ -75,7 +75,7 @@
                                             <span>Retirer</span>
                                             <span class="fas fa-trash"></span>
                                         </span>
-                                        <span wire:loading wire:target="retrieveFromSelecteds('{{$role->name}})'">
+                                        <span wire:loading wire:target="retrieveFromSelecteds('{{$role->name}}')">
                                             <span class="fas fa-rotate animate-spin"></span>
                                             <span class="text-xs">En cours...</span>
                                         </span>

@@ -110,6 +110,9 @@ e.channel("public")
     .listen("UserDataHasBeenUpdatedEvent", (user) => {
         Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
     })
+    .listen("AssistantAccessWasUpdatedEvent", (user) => {
+        Livewire.dispatch("LiveAssistantAccessWasUpdatedEvent", user);
+    })
     .listen("UserAccountWasDeletedEvent", (user) => {
         Livewire.dispatch("LiveUserAccountWasDeletedEvent", user);
     })

@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\AssistantAccessWasUpdatedEvent;
 use App\Events\NewAssistanceRequestCreatedEvent;
 use App\Jobs\JobToDeleteAssistantRequestAfterDelayed;
 use App\Models\AssistantRequest;
@@ -23,7 +24,7 @@ class ObserveAssistanceRequest
      */
     public function updated(AssistantRequest $assistantRequest): void
     {
-        //
+        AssistantAccessWasUpdatedEvent::dispatch();
     }
 
     /**
@@ -31,7 +32,7 @@ class ObserveAssistanceRequest
      */
     public function deleted(AssistantRequest $assistantRequest): void
     {
-        //
+        AssistantAccessWasUpdatedEvent::dispatch();
     }
 
     /**

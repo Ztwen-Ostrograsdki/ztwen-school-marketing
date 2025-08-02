@@ -4,6 +4,7 @@ namespace App\Livewire\Traits;
 
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
+use App\Events\AssistantAccessWasUpdatedEvent;
 use App\Events\UserDataHasBeenUpdatedEvent;
 use App\Models\AssistantRequest;
 use App\Notifications\RealTimeNotification;
@@ -42,8 +43,6 @@ trait AssistantActionsTraits{
 
                 $message = "Vous venez de vérouiller les privilèges de " . $assistant_request->assistant->getFullName() . " : Il n'aura plus accès à la gestion de votre école jusqu'à sa réactivation!";
 
-                UserDataHasBeenUpdatedEvent::dispatch($assistant_request->assistant);
-
                 Notification::sendNow([$assistant_request->director], new RealTimeNotification($message));
 
                 return;
@@ -80,8 +79,6 @@ trait AssistantActionsTraits{
             if($updates){
 
                 $message = "Vous venez de réactiver les privilèges de " . $assistant_request->assistant->getFullName() . " : Il aura de nouveau accès à la gestion de votre page!";
-
-                UserDataHasBeenUpdatedEvent::dispatch($assistant_request->assistant);
 
                 Notification::sendNow([$assistant_request->director], new RealTimeNotification($message));
 
@@ -122,8 +119,6 @@ trait AssistantActionsTraits{
             $deleted = $assistant_request->delete();
 
             if($deleted){
-
-                UserDataHasBeenUpdatedEvent::dispatch($this->user);
 
                 $message = "Vous venez de supprimer définitivement " . $assistant_name . " de gestion de l'école " . $school_name . "!";
 

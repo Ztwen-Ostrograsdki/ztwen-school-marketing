@@ -28,7 +28,8 @@ class Pack extends Model
         'notify_by_email',
         'promoting',
         'promo_price',
-        'subscribed'
+        'subscribed',
+        'is_active'
 
     ];
 
@@ -51,6 +52,8 @@ class Pack extends Model
         static::creating(function ($pack){
 
             $pack->uuid = Str::uuid();
+
+            $pack->slug = Str::slug($pack->name);
 
         });
     }

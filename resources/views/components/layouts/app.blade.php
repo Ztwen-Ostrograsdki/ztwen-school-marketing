@@ -166,11 +166,11 @@
         @livewireSweetalertScripts
 
         <script>
-            window.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => {
-                    initTinyMCE();
-                }, 300);
-            });
+            // window.addEventListener('DOMContentLoaded', () => {
+            //     setTimeout(() => {
+            //         initTinyMCE();
+            //     }, 300);
+            // });
         </script>
     </body>
 </html>

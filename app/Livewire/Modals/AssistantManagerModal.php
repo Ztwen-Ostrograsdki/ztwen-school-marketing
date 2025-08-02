@@ -6,9 +6,13 @@ use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\Robots\SpatieManager;
 use App\Models\AssistantRequest;
+use App\Notifications\RealTimeNotification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
+use Throwable;
 
 class AssistantManagerModal extends Component
 {
@@ -74,8 +78,7 @@ class AssistantManagerModal extends Component
 
     public function pushIntoSelecteds($name)
     {
-        $tables = [];
-
+        
         $selecteds = $this->selecteds;
 
         if(!in_array($name, $selecteds)){
@@ -83,15 +86,11 @@ class AssistantManagerModal extends Component
             $selecteds[$name] = $name;
         }
 
-        $this->resetErrorBag();
-
         $this->selecteds = $selecteds;
     }
 
     public function retrieveFromSelecteds($name)
     {
-        $this->resetErrorBag();
-
         $selecteds = $this->selecteds;
 
         if(in_array($name, $selecteds)){
@@ -100,5 +99,47 @@ class AssistantManagerModal extends Component
         }
 
         $this->selecteds = $selecteds;
+    }
+
+    public function insert()
+    {
+        DB::beginTransaction();
+        
+        try {
+
+            $selecteds = $this->selecteds;
+
+            $translateds = [];
+
+            foreach($selecteds as $role_name){
+
+                $translateds[] = __translateRoleName($role_name);
+
+            }
+
+            $this->assistant_request->update(['privileges' => $selecteds]);
+
+            DB::commit();
+
+            DB::afterCommit(function() use ($translateds){
+
+                $message = "Vous avez mis à jour les privilèges de " . $this->assistant_request->assistant->getFullName() . " pour la gestion de l'école " . $this->assistant_request->school->name . ". Il aura désormais les accès suivant: " . implode(" -- ", $translateds);
+
+                Notification::sendNow([$this->assistant_request->director], new RealTimeNotification($message));
+
+                $this->hideModal();
+
+                $this->reset();
+
+            });
+
+        } catch (Throwable $th) {
+
+            $this->toast("Une erreure s'est produite lors de la mise à jour des privilèges de " . $this->assistant_request->assistant->getFullName(), 'error');
+
+            DB::rollBack();
+
+            
+        }
     }
 }

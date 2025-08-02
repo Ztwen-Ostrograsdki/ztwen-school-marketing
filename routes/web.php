@@ -18,6 +18,7 @@ use App\Livewire\Master\UsersListing;
 use App\Livewire\Pages\AboutUs;
 use App\Livewire\Pages\Home;
 use App\Livewire\Pages\SchoolsPages;
+use App\Livewire\Shop\PackModuleManager;
 use App\Livewire\Shop\PackProfil;
 use App\Livewire\Shop\PacksPage;
 use App\Livewire\User\MyAssistantsListing;
@@ -46,6 +47,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('gestion/role-administrateurs', SpatieRolesPage::class)->name('admin.roles');
 
     Route::get('gestion/role-administrateurs/ID={role_id}', SpatieRoleProfilPage::class)->name('admin.role.profil');
+
+    Route::get('gestion/packs/k={token}/creation-de-pack', PackModuleManager::class)->name('pack.create');
+
+    Route::get('gestion/packs/k={token}/edition-de-pack/s={pack_slug}/u={pack_uuid}', PackModuleManager::class)->name('pack.update');
 
 
 

@@ -130,6 +130,12 @@ trait ListenToEchoEventsTrait{
         $this->counter = getRand();
     }
     
+    #[On("LiveAssistantAccessWasUpdatedEvent")]
+    public function assistantAccessUpdated($req = null)
+    {
+        $this->counter = getRand();
+    }
+    
     
 
 
