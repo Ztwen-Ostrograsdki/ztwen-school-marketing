@@ -10,6 +10,8 @@ use App\Livewire\Auth\ResetPasswordPage;
 use App\Livewire\Auth\SubscribePage;
 use App\Livewire\Master\AssistantsListing;
 use App\Livewire\Master\Dashboard;
+use App\Livewire\Master\PackProfil as AdminPackProfil;
+use App\Livewire\Master\PacksListing;
 use App\Livewire\Master\SchoolProfil;
 use App\Livewire\Master\SchoolsListing;
 use App\Livewire\Master\SpatieRoleProfilPage;
@@ -48,17 +50,19 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('gestion/role-administrateurs/ID={role_id}', SpatieRoleProfilPage::class)->name('admin.role.profil');
 
-    Route::get('gestion/packs/k={token}/creation-de-pack', PackModuleManager::class)->name('pack.create');
+    Route::get('gestion/packs/liste-des-packs', PacksListing::class)->name('admin.packs.list');
+
+    Route::get('gestion/packs/k={token}/creation-de-pack', PackModuleManager::class)->name('create.pack');
 
     Route::get('gestion/packs/k={token}/edition-de-pack/s={pack_slug}/u={pack_uuid}', PackModuleManager::class)->name('pack.update');
 
-
+    Route::get('gestion/packs/k={token}/profil-de-pack/s={pack_slug}/u={pack_uuid}', AdminPackProfil::class)->name('admin.pack.profil');
 
 
     // END ADMINS ROUTES
 
-    Route::get('boutique/u={uuid}/pack={slug}/tok={token}/validation-souscription', SubscribePage::class)->name('subscribe.confirmation');
-
+    Route::get('boutique/abonnement/k={token}/pu={pack_uuid}/ps={pack_slug}/validation-souscription', SubscribePage::class)->name('subscribe.confirmation');
+    
     Route::get('mon-profil/u={uuid}/edition-profil', RegisterPage::class)->name('user.profil.edition')->middleware(['user.self']);
 
     Route::get('mon-profil/u={user_uuid}/gestion/creation-ecole', CreateSchool::class)->name('create.school');
@@ -88,7 +92,8 @@ Route::get('boutique/packs-disponibles', PacksPage::class)->name('packs.page');
 
 Route::get('ecoles/liste', SchoolsPages::class)->name('schools.page');
 
-Route::get('boutique/u={uuid}/pack={slug}', PackProfil::class)->name('pack.profil');
+Route::get('boutique/u={pack_uuid}/pack={pack_slug}', PackProfil::class)->name('pack.profil');
+
 
 
 
@@ -126,27 +131,6 @@ Route::get('/419', function () {
 Route::get('/410', function () {
     abort(410);
 })->name('error.410');
-
-
-// Route::get('/profil_photos/{path}', function($path){
-
-//     if(Storage::disk('local')->exists($path)){
-
-//         $full_path = 'profil_photos/' . $path;
-
-//         $file = Storage::disk('local')->get($full_path);
-
-//         $type = Storage::disk('local')->mimeType($full_path);
-
-//         return response($file)->header("Content-Type", $type);
-
-//     }
-//     else{
-
-//        return abort(404);
-//     }
-
-// })->where('path', '.*')->name('user.profil.photo');
 
 
 Route::post('logout', App\Livewire\Actions\Logout::class)

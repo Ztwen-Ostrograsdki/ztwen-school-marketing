@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\PacksHasBeenUpdatedEvent;
+use App\Helpers\Services\PacksManagerService;
 use App\Models\Payment;
 use App\Models\School;
 use App\Models\Subscription;
@@ -37,14 +39,26 @@ class Pack extends Model
         'privileges' => 'array',
     ];
 
+
     public function to_profil_route()
     {
-        return route('pack.profil', ['uuid' => $this->uuid, 'slug' => $this->slug]);
+        return route('pack.profil', ['pack_uuid' => $this->uuid, 'pack_slug' => $this->slug]);
+    }
+
+    
+    public function to_admin_pack_profil_route()
+    {
+        return route('admin.pack.profil', ['token' => config('app.my_token'), 'pack_slug' => $this->slug, 'pack_uuid' => $this->uuid]);
+    }
+
+    public function to_pack_edition_route()
+    {
+        return route('pack.update', ['token' => config('app.my_token'), 'pack_slug' => $this->slug, 'pack_uuid' => $this->uuid]);
     }
     
     public function to_subscribing_route()
     {
-        return route('subscribe.confirmation', ['uuid' => $this->uuid, 'slug' => $this->slug, 'token' => env('APP_MY_TOKEN')]);
+        return route('subscribe.confirmation', ['token' => config('app.my_token'), 'pack_uuid' => $this->uuid, 'pack_slug' => $this->slug]);
     }
 
     public static function booted()
@@ -53,19 +67,57 @@ class Pack extends Model
 
             $pack->uuid = Str::uuid();
 
+            if($pack->discount > 0)  $pack->promoting = true;
+
+            else $pack->promoting = false;
+
             $pack->slug = Str::slug($pack->name);
+
+            $pack->on_page = true;
+
+            $pack->notify_by_email = PacksManagerService::getDetails($pack->name)['notify_by_email'];
+
+            $pack->notify_by_sms = PacksManagerService::getDetails($pack->name)['notify_by_sms'];
+
+        });
+
+        static::updating(function ($pack){
+
+            if($pack->discount > 0)  $pack->promoting = true;
+
+            else $pack->promoting = false;
+
+            $pack->notify_by_email = PacksManagerService::getDetails($pack->name)['notify_by_email'];
+
+            $pack->notify_by_sms = PacksManagerService::getDetails($pack->name)['notify_by_sms'];
+
+        });
+
+        static::created(function ($pack){
+
+            if($pack->is_active){
+
+                //Allow users that new pack dispatched
+
+
+            }
+        });
+
+        static::updated(function ($pack){
+
+            PacksHasBeenUpdatedEvent::dispatch();
 
         });
     }
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return [];
     }
     
     public function schools()
     {
-        return $this->hasMany(School::class);
+        return [];
     }
 
     public function payments()

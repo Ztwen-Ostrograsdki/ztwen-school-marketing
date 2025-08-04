@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Shop;
 
+use App\Models\Pack;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -10,6 +11,8 @@ class PacksPage extends Component
 {
     public function render()
     {
-        return view('livewire.shop.packs-page');
+        $packs = Pack::where('is_active', true)->orderBy('price', 'desc')->get();
+
+        return view('livewire.shop.packs-page', compact('packs'));
     }
 }

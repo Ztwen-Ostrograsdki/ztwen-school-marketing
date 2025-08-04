@@ -611,6 +611,19 @@ if(!function_exists('__ensureThatAssistantCan')){
 
 }
 
+if(!function_exists('__moneyFormat')){
+
+    function __moneyFormat($amount, $currency = "FCFA")
+    {
+        if($currency) $value = number_format($amount, 0, ',', ' ') . " " . $currency;
+
+        else $value = number_format($amount, 0, ',', ' ');
+
+        return $value;
+    }
+
+}
+
 if(!function_exists('findUser')){
 
     function findUser($id)

@@ -75,6 +75,19 @@ return [
 
     ],
 
+    'app_packs' => [
+
+        'Basic' => "Basic",
+        'Pro' => "Pro",
+        'Premium' => "Premium",
+        'Premium-Gold' => "Premium-Gold"
+
+    ],
+
+    'my_token'=> "883hxxeduusedk787iixcdegshe_jehde002dee99782deeffgKMngXYategdeWzdehhde71jjxef_dqx345xedxusedk787ikgxcdegsffejehde220dee9=validate",
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

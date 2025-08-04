@@ -70,9 +70,14 @@ trait ListenToEchoEventsTrait{
     {
         $this->counter = getRandom();
     }
-
-
-
+    
+    
+    //Packs CRUD events
+    #[On("LivePacksHasBeenUpdatedEvent")]
+    public function updatedPacksList($user = null)
+    {
+        $this->counter = getRandom();
+    }
 
 
 

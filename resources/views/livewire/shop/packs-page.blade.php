@@ -1,4 +1,4 @@
-<div class="w-full max-w-[85rem] py-3 px-4 sm:px-6 lg:px-8 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2">
+<div class="w-full max-w-[85rem] py-3 px-4 sm:px-6 lg:px-8 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2 mt-10">
 
     <section class="bg-black/90 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -6,162 +6,54 @@
                 <h2 class="text-4xl font-extrabold text-gray-300 sm:text-5xl">
                     Les packs <span class="text-sky-800">{{ env('APP_NAME') }}</span> disponibles
                 </h2>
-                <p class="mt-4 text-xl text-lime-400 font-thin">
+                <p class="mt-4 text-xl text-lime-400 animate-pulse letter-spacing-1 font-semibold">
                     Choisissez votre pack cadeau, et façonner votre établissement sur la toîle!!!
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <!-- Free Plan -->
-                <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
-                    <div class="mb-8">
-                        <h3 class="text-2xl font-semibold text-white">Free</h3>
-                        <p class="mt-4 text-gray-400">Get started with our basic features.</p>
+            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($packs as $pack)
+                    <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
+                        <div class="mb-8">
+                            <h3 class="text-4xl font-semibold text-lime-500">{{ $pack->name }}</h3>
+                            <p class="mt-4 text-right text-lime-400 font-semibold letter-spacing-1 animate-pulse">
+                                @if($pack->promoting || $pack->discount > 0)
+                                    <span class="fas fa-medal"></span>
+                                    <span>En promo</span>
+                                @endif
+                            </p>
+                        </div>
+                        <div class="mb-8">
+                            @if($pack->promoting || $pack->discount > 0)
+                                <span class="flex justify-between">
+                                    <span class="text-3xl font-extrabold text-red-300 line-through decoration-3 decoration-red-500">
+                                        {{ __moneyFormat($pack->price) }}
+                                    </span>
+                                    <span class="text-orange-300 font-semibold letter-spacing-1"> {{ $pack->discount }}% de réduction </span>
+                                </span>
+                                <span class="text-3xl font-extrabold text-white">
+                                    {{ __moneyFormat($pack->promo_price) }}
+                                </span>
+                            @else
+                            <span class="text-3xl font-extrabold text-white">
+                                {{ __moneyFormat($pack->price) }}
+                            </span>
+                            @endif
+                            <span class="text-xl font-medium text-gray-400">/mois</span>
+                        </div>
+                        <ul class="mb-8 space-y-2 text-gray-400">
+                            @foreach ($pack->privileges as $privilege)
+                                <li class="flex items-center gap-x-2 hover:text-lime-500 cursor-pointer font-semibold letter-spacing-1">
+                                    <span class="fas fa-check text-green-500 font-semibold"></span>
+                                    <span>{{ $privilege }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <a href="{{ $pack->to_subscribing_route() }}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
+                            S'abonner à ce pack
+                        </a>
                     </div>
-                    <div class="mb-8">
-                        <span class="text-5xl font-extrabold text-white">$0</span>
-                        <span class="text-xl font-medium text-gray-400">/mo</span>
-                    </div>
-                    <ul class="mb-8 space-y-4 text-gray-400">
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>1 user account</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>10 transactions per month</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Basic support</span>
-                        </li>
-                    </ul>
-                    <a href="{{route('pack.profil', ['uuid' => "free", 'slug' => "pack-free"])}}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                    Sign Up
-                    </a>
-                </div>
-
-                <!-- Starter Plan -->
-                <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
-                    <div class="mb-8">
-                        <h3 class="text-2xl font-semibold text-white">Starter</h3>
-                        <p class="mt-4 text-gray-400">Perfect for small businesses and startups.</p>
-                    </div>
-                    <div class="mb-8">
-                        <span class="text-5xl font-extrabold text-white">$49</span>
-                        <span class="text-xl font-medium text-gray-400">/mo</span>
-                    </div>
-                    <ul class="mb-8 space-y-4 text-gray-400">
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>5 user accounts</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>100 transactions per month</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Standard support</span>
-                        </li>
-                    </ul>
-                    <a href="{{route('pack.profil', ['uuid' => "starter", 'slug' => "pack-starter"])}}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                    Get Started
-                    </a>
-                </div>
-
-                <!-- Pro Plan -->
-                <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
-                    <div class="mb-8">
-                        <h3 class="text-2xl font-semibold text-white">Pro</h3>
-                        <p class="mt-4 text-gray-400">Ideal for growing businesses and enterprises.</p>
-                    </div>
-                    <div class="mb-8">
-                        <span class="text-5xl font-extrabold text-white">$99</span>
-                        <span class="text-xl font-medium text-gray-400">/mo</span>
-                    </div>
-                    <ul class="mb-8 space-y-4 text-gray-400">
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Unlimited user accounts</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Unlimited transactions</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Priority support</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Advanced analytics</span>
-                        </li>
-                    </ul>
-                    <a href="{{route('pack.profil', ['uuid' => "pro", 'slug' => "pack-pro"])}}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                    Get Started
-                    </a>
-                </div>
-
-                <!-- Enterprise Plan -->
-                <div class="bg-black/40  rounded-lg shadow-sm shadow-lime-400 p-6 transform hover:scale-105 transition duration-300">
-                    <div class="mb-8">
-                        <h3 class="text-2xl font-semibold text-white">Enterprise</h3>
-                        <p class="mt-4 text-gray-400">Tailored for large-scale deployments and custom needs.</p>
-                    </div>
-                    <div class="mb-8">
-                        <span class="text-5xl font-extrabold text-white">Custom</span>
-                    </div>
-                    <ul class="mb-8 space-y-4 text-gray-400">
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Dedicated infrastructure</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Custom integrations</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Dedicated support team</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Premium SLAs</span>
-                        </li>
-                    </ul>
-                    <a href="{{route('pack.profil', ['uuid' => "basic", 'slug' => "pack-basic"])}}" class="block w-full py-3 px-6 text-center rounded-md text-white font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                    Contact Sales
-                    </a>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -207,7 +99,7 @@
                     </div>
 
                     <div class="flex w-full justify-center items-center my-4">
-                        <a href="{{route('pack.profil', ['uuid' => "basic", 'slug' => "pack-basic"])}}" class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-purple-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-green-800 hover:text-white hover:to-indigo-400 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                        <a href="#" class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-purple-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-green-800 hover:text-white hover:to-indigo-400 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                             <span>Souscrire à ce pack</span>
                             <span class="fas fa-check"></span>
                         </a>
@@ -244,7 +136,7 @@
                     </div>
 
                     <div class="flex w-full justify-center items-center my-4">
-                        <a href="{{route('pack.profil', ['uuid' => "pro", 'slug' => "pack-pro"])}}" class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                        <a href="#" class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                             <span>Souscrire à ce pack</span>
                             <span class="fas fa-check"></span>
                         </a>

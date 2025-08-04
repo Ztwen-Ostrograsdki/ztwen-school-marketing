@@ -60,7 +60,11 @@ class SpatieRoleProfilPage extends Component
 
     public function render()
     {
-        return view('livewire.master.spatie-role-profil-page');
+        $users = User::role($this->role->name)->get();
+
+        $permissions = $this->role->permissions;
+
+        return view('livewire.master.spatie-role-profil-page', compact('users', 'permissions'));
     }
 
     public function joinUserToRole()

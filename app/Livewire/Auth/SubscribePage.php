@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\Pack;
 use Livewire\Component;
 
 class SubscribePage extends Component
 {
-    public $uuid, $slug, $token;
+    public $pack_uuid, $pack_slug, $token;
 
     public $email;
 
-    public $school = "CEPG Etoile Divine de COTONOU";
+    public $school = "VOTRE ECOLE";
 
     public $amount = 30000;
 
@@ -32,13 +33,15 @@ class SubscribePage extends Component
 
     public $pack;
 
-    public function mount($uuid, $slug, $token)
+    public function mount($token, $pack_uuid, $pack_slug)
     {
-        $this->uuid = $uuid;
+        $this->pack_uuid = $pack_uuid;
 
-        $this->slug = $slug;
+        $this->pack_slug = $pack_slug;
 
         $this->token = $token;
+
+        $this->pack = Pack::where('uuid', $pack_uuid)->where('slug', $pack_slug)->where('is_active', true)->firstOrFail();
 
         $this->amount_to_show = self::__moneyFormat($this->amount);
 
@@ -52,7 +55,7 @@ class SubscribePage extends Component
 
         $this->reduction_as_money = self::__moneyFormat(($this->amount * $this->months) - $total) . ' FCFA';
 
-        if($token !== env('APP_MY_TOKEN')){
+        if($token !== config('app.my_token')){
 
             return abort(403);
         }

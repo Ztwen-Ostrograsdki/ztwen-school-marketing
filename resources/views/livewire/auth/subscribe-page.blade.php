@@ -36,8 +36,8 @@
                                 <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl  uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
                                     <span class="">
                                         Validation de la souscription au
-                                        <a href="{{route('pack.profil', ['uuid' => $uuid, 'slug' => $slug])}}" class="text-sky-400 underline hover:text-sky-600"> 
-                                            {{ $slug }}
+                                        <a href="#" class="text-sky-400 underline hover:text-sky-600"> 
+                                            {{ $pack_slug }}
                                         </a>
                                     </span>
                                     <span class="absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>

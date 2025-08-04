@@ -2,17 +2,19 @@
 
 namespace App\Livewire\Shop;
 
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title("Détails sur un pack")]
 class PackProfil extends Component
 {
-    public $uuid, $slug;
+    public $pack_uuid, $pack_slug;
 
-    public function mount($uuid, $slug)
+    public function mount($pack_uuid, $pack_slug)
     {
-        $this->uuid = $uuid;
+        $this->pack_uuid = $pack_uuid;
 
-        $this->slug = $slug;
+        $this->pack_slug = $pack_slug;
 
     }
     
