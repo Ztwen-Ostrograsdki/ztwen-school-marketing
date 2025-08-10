@@ -199,6 +199,11 @@ class User extends Authenticatable
         return route('user.profil', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
     }
     
+    public function to_subscribes_route()
+    {
+        return route('my.subscribes', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
+    }
+    
     public function to_my_notifications_route()
     {
         return route('my.notifications', ['id' => $this->identifiant, 'uuid' => $this->uuid]);

@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Auth;
 
+use App\Events\InitNewPackSubscriptionEvent;
 use App\Models\Pack;
+use App\Models\School;
 use Livewire\Component;
 
 class SubscribePage extends Component
@@ -11,9 +13,9 @@ class SubscribePage extends Component
 
     public $email;
 
-    public $school = "VOTRE ECOLE";
+    public $school;
 
-    public $amount = 30000;
+    public $school_id, $receiver_name, $receiver_contact, $amount = 0;
 
     public $amount_to_show;
 
@@ -21,41 +23,78 @@ class SubscribePage extends Component
 
     public $total;
 
-    public $free_delay = 15;
+    public $facture = 0;
 
-    public $reduction = 5;
+    public $free_delay = 0;
+
+    public $reduction = 0;
 
     public $reduction_to_show = '0 %';
 
     public $reduction_as_money;
 
-    public $contacts = "01525562662";
-
     public $pack;
 
     public function mount($token, $pack_uuid, $pack_slug)
     {
-        $this->pack_uuid = $pack_uuid;
+        if($token && $token == config('app.my_token')){
 
-        $this->pack_slug = $pack_slug;
+            if($pack_slug && $pack_uuid){
 
-        $this->token = $token;
+                $pack = Pack::where('uuid', $pack_uuid)->where('slug', $pack_slug)->where('is_active', true)->firstOrFail();
 
-        $this->pack = Pack::where('uuid', $pack_uuid)->where('slug', $pack_slug)->where('is_active', true)->firstOrFail();
+                if($pack){
 
-        $this->amount_to_show = self::__moneyFormat($this->amount);
+                    $user = findUser(auth_user_id());
 
-        $this->reduction_to_show = $this->reduction . ' %';
+                    $this->email = $user->email;
 
-        $cummul = ($this->amount * $this->months);
+                    $this->receiver_name = $user->getFullName();
 
-        $total = ($cummul - ($cummul * $this->reduction / 100));
+                    $this->receiver_contact = $user->contacts;
 
-        $this->total = self::__moneyFormat($total);
+                    $this->pack = $pack;
 
-        $this->reduction_as_money = self::__moneyFormat(($this->amount * $this->months) - $total) . ' FCFA';
+                    $this->pack_uuid = $pack_uuid;
 
-        if($token !== config('app.my_token')){
+                    $this->pack_slug = $pack_slug;
+
+                    $this->token = $token;
+
+                    $this->amount = $pack->price;
+
+                    $this->reduction = $pack->discount;
+
+                    $this->amount_to_show = self::__moneyFormat($this->amount);
+
+                    $this->reduction_to_show = $this->reduction . ' %';
+
+                    $cummul = ($this->amount * $this->months);
+
+                    $total = ($cummul - ($cummul * $this->reduction / 100));
+
+                    $this->facture = $total;
+
+                    $this->total = self::__moneyFormat($total);
+
+                    $this->reduction_as_money = self::__moneyFormat(($this->amount * $this->months) - $total) . ' FCFA';
+
+                }
+                else{
+
+                    return abort(404);
+                }
+
+
+
+            }
+            else{
+
+                return abort(404);
+            }
+
+        }
+        else{
 
             return abort(403);
         }
@@ -64,7 +103,39 @@ class SubscribePage extends Component
 
     public function render()
     {
-        return view('livewire.auth.subscribe-page');
+        $schools = auth_user()->schools;
+
+        return view('livewire.auth.subscribe-page', compact('schools'));
+    }
+
+
+    public function subscribe()
+    {
+        $this->resetErrorBag();
+        
+        $this->validate(
+            [
+                'school_id' => 'required|numeric|exists:schools,id',
+                'receiver_name' => 'required|string',
+                'receiver_contact' => 'required|string',
+            ]
+        );
+
+        $school = School::where('id', $this->school_id)->firstOrFail();
+
+        $pack = $this->pack;
+
+        $data = [
+            'receiver_name' => $this->receiver_name,
+            'receiver_contact' => $this->receiver_contact,
+            'months' => $this->months,
+            'total' => $this->facture,
+            'unique_price' => $this->pack->price,
+            'discount' => $this->reduction
+        ];
+
+        broadcast(new InitNewPackSubscriptionEvent(auth_user(), $school, $pack, $data));
+
     }
 
     public function __moneyFormat($amount)
@@ -77,6 +148,8 @@ class SubscribePage extends Component
         $cummul = (($this->amount) * $months);
 
         $total = ($cummul - ($cummul * $this->reduction) / 100);
+
+        $this->facture = $total;
 
         $this->total = self::__moneyFormat($total);
 

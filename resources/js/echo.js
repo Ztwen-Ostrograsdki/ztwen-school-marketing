@@ -52,6 +52,21 @@ e.private("App.Models.User." + window.ClientUser.id)
     .listen("IHaveNewNotificationEvent", (data) => {
         Livewire.dispatch("LiveIHaveNewNotificationEvent", ev);
     })
+    .listen("YourPackSubscriptionHasBeenApprovedEvent", (ev) => {
+        Livewire.dispatch("LiveYourPackSubscriptionHasBeenApprovedEvent", ev);
+    })
+    .listen("NewPackSubscriptionCreatedEvent", (ev) => {
+        Livewire.dispatch("LiveNewPackSubscriptionCreatedEvent", ev);
+    })
+    .listen("YourPackSubscriptionExpiredvent", (ev) => {
+        Livewire.dispatch("LiveYourPackSubscriptionExpiredvent", ev);
+    })
+    .listen("PackSubscriptionWasUpdatedEvent", (ev) => {
+        Livewire.dispatch("LivePackSubscriptionWasUpdatedEvent", ev);
+    })
+    .listen("NewPaymentRegistredEvent", (ev) => {
+        Livewire.dispatch("LiveNewPaymentRegistredEvent", ev);
+    })
 
     .listen("NotificationsDeletedSuccessfullyEvent", (data) => {
         Livewire.dispatch("LiveNotificationsDeletedSuccessfullyEvent");
@@ -68,6 +83,18 @@ e.private("admin")
     .listen("NewAssistanceRequestCreatedEvent", (ev) => {
         Livewire.dispatch("LiveNewAssistanceRequestCreatedEvent", ev);
     })
+    .listen("YourPackSubscriptionHasBeenApprovedEvent", (ev) => {
+        Livewire.dispatch("LiveYourPackSubscriptionHasBeenApprovedEvent", ev);
+    })
+    .listen("NewPackSubscriptionCreatedEvent", (ev) => {
+        Livewire.dispatch("LiveNewPackSubscriptionCreatedEvent", ev);
+    })
+    .listen("YourPackSubscriptionExpiredvent", (ev) => {
+        Livewire.dispatch("LiveYourPackSubscriptionExpiredvent", ev);
+    })
+    .listen("PackSubscriptionWasUpdatedEvent", (ev) => {
+        Livewire.dispatch("LivePackSubscriptionWasUpdatedEvent", ev);
+    })
     .listen("AssistantRequestApprovedEvent", (ev) => {
         Livewire.dispatch("LiveAssistantRequestApprovedEvent", ev);
     })
@@ -79,6 +106,9 @@ e.private("admin")
     })
     .listen("SchoolInfoUpdatedEvent", (info) => {
         Livewire.dispatch("LiveSchoolInfoUpdatedEvent", info);
+    })
+    .listen("NewPaymentRegistredEvent", (ev) => {
+        Livewire.dispatch("LiveNewPaymentRegistredEvent", ev);
     })
     .listen("NewSchoolInfoAddedEvent", (info) => {
         Livewire.dispatch("LiveNewSchoolInfoAddedEvent", info);

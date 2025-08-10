@@ -508,6 +508,17 @@ if(!function_exists('auth_user_id')){
     }
 
 }
+
+if(!function_exists('auth_user_full_name')){
+
+    function auth_user_full_name($reverse = false)
+    {
+
+        return Auth::user() ? findUser(Auth::user()->id)->getFullName($reverse) : null;
+
+    }
+
+}
 if(!function_exists('user_profil_photo')){
 
     function user_profil_photo($user = null)

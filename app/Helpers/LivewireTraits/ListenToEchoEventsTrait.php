@@ -78,8 +78,39 @@ trait ListenToEchoEventsTrait{
     {
         $this->counter = getRandom();
     }
+    
+    
+    
+    //Subscriptions  CRUD events
+    #[On("LiveYourPackSubscriptionHasBeenApprovedEvent")]
+    public function subscriptionApproved($data = null)
+    {
+        $this->counter = getRandom();
+    }
 
+    #[On("LiveNewPackSubscriptionCreatedEvent")]
+    public function subscriptionCreated($data = null)
+    {
+        $this->counter = getRandom();
+    }
 
+    #[On("LiveYourPackSubscriptionExpiredvent")]
+    public function subscriptionExpired($data = null)
+    {
+        $this->counter = getRandom();
+    }
+
+    #[On("LivePackSubscriptionWasUpdatedEvent")]
+    public function subscriptionUpdated($data = null)
+    {
+        $this->counter = getRandom();
+    }
+    
+    #[On("LiveNewPaymentRegistredEvent")]
+    public function newPayment($data = null)
+    {
+        $this->counter = getRandom();
+    }
 
     
     // School CRUD events

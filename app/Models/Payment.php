@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Events\NewPaymentRegistredEvent;
+use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Models\Pack;
 use App\Models\School;
 use App\Models\User;
+use App\Notifications\RealTimeNotification;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class Payment extends Model
@@ -38,6 +42,22 @@ class Payment extends Model
         static::creating(function ($payment){
 
             $payment->uuid = Str::uuid();
+
+        });
+
+        static::created(function ($payment){
+
+            Notification::sendNow([$payment->subscription->user], new RealTimeNotification("Votre abonnement ref:{$payment->subscription->ref_key} du pack {$payment->pack->name} a été approuvé!"));
+
+            $message = "Votre abonnement ref:{$payment->subscription->ref_key} du pack {$payment->pack->name} a été approuvé! Cet abonnement avec une durée de {$payment->subscription->months} mois, expire le " . __formatDateTime($payment->subscription->will_closed_at);
+
+            $greating = $payment->user->greatingMessage($payment->user->getUserNamePrefix(true, false)) . ", ";
+
+            $lien = $payment->user->to_subscribes_route();
+
+            JobToSendSimpleMailMessageTo::dispatch($payment->email, $greating, $message, "DEMANDE ABONNEMENT APPROUVEE", null, $lien);
+
+            NewPaymentRegistredEvent::dispatch($payment);
 
         });
     }

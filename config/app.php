@@ -84,6 +84,9 @@ return [
 
     ],
 
+    'mtn_phone_number' => "01-61-100-804",
+    'celtiis_phone_number' => "01-43-289-301",
+
     'my_token'=> "883hxxeduusedk787iixcdegshe_jehde002dee99782deeffgKMngXYategdeWzdehhde71jjxef_dqx345xedxusedk787ikgxcdegsffejehde220dee9=validate",
 
 

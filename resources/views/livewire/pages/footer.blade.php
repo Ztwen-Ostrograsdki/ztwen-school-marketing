@@ -25,6 +25,11 @@
                 </p>
                 
                 <p class="m-0 p-0">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{auth_user()->to_subscribes_route()}}">
+                        Mes abonnements
+                    </a>
+                </p>
+                <p class="m-0 p-0">
                     <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{ auth_user()->to_my_assistants_list_route() }}">
                         Mes Assistants
                     </a>

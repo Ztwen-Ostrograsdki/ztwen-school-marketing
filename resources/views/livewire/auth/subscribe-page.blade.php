@@ -33,17 +33,18 @@
                     <div class="w-full p-0 m-0">
                         <div wire:loading.remove wire:target='subscribe' class="text-center">
                             <h5 class="letter-spacing-1 flex flex-col gap-y-2 text-gray-200">
-                                <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl  uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
+                                <p class="py-2 relative inline-block text-xl uppercase font-bold letter-spacing-2 text-sky-500 "> 
                                     <span class="">
                                         Validation de la souscription au
-                                        <a href="#" class="text-sky-400 underline hover:text-sky-600"> 
+                                        <a href="#" class="text-amber-400 hover:text-sky-600"> 
                                             {{ $pack_slug }}
                                         </a>
                                     </span>
-                                    <span class="absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
                                 </p>
-                            
                             </h5>
+                            <p class="font-semibold letter-spacing-1 text-xs text-amber-500 py-2.5 border-y border-y-amber-500">
+                                Valider l'abonnement de votre école pour bénéficier des privilèges liés au pack <span><span class="fab fa-shopify"></span> {{$pack->name}} </span>
+                            </p>
                         </div>
                         <div wire:loading wire:target='subscribe' class="text-center w-full mx-auto my-3">
                             <h5 class="w-full bg-success-400 text-gray-900 border rounded-xl p-3 letter-spacing-2 border-r-gray-800 border-gray-900">
@@ -60,23 +61,39 @@
                                     <div >
                                         <div class="grid gap-4 sm:grid-cols-6 sm:gap-6 ">
                                             <div class="sm:col-span-3">
-                                                <label for="name" class="block mb-2 font-thin text-white">Demandeur</label>
-                                                <input type="text" name="name" id="name" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Renseigner le nom complet de votre école" >
+                                                <label for="receiver_name" class="block mb-2 font-thin text-white">Demandeur</label>
+                                                <input wire:model.blur='receiver_name' type="text" name="receiver_name" id="receiver_name" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Renseigner le nom complet de votre école" >
+                                                @error('receiver_name')
+                                                    <p class="text-xs text-red-600 mt-2">{{ $message }}</p>
+                                                @enderror
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="email" class="block mb-2 font-thin text-gray-900 dark:text-white">Email de reception</label>
-                                                <input type="text" name="email" id="email" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Votre addresse mail de réception" >
+                                                <input wire:model.blur='email' type="email" name="email" id="email" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Votre addresse mail de réception" >
+                                                @error('email')
+                                                    <p class="text-xs text-red-600 mt-2">{{ $message }}</p>
+                                                @enderror
                                             </div>
                                             <div class="sm:col-span-3">
-                                                <label for="school" class="block mb-2 font-thin text-gray-900 dark:text-white">Ecole concernée</label>
-                                                <select wire:model='school' id="school" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-transparent text-xs sm:text-sm  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option class="bg-indigo-950"> {{$school}} </option>
-                                                    
+                                                <label for="school_id" class="block mb-2 font-thin text-gray-900 dark:text-white">Ecole concernée</label>
+                                                <select wire:model.live='school_id' id="school_id" class=" border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-transparent text-xs sm:text-sm text-white">
+                                                    <option class="bg-indigo-950" value="">Sélectionner l'école concernée</option>
+                                                    @foreach ($schools as $school)
+                                                        <option value="{{$school->id}}" class="bg-indigo-950">
+                                                            {{$school->name}}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
+                                                @error('school_id')
+                                                    <p class="text-xs text-red-600 mt-2">{{ $message }}</p>
+                                                @enderror
                                             </div>
                                             <div class="sm:col-span-3">
-                                                <label for="contacts" class="block mb-2 font-thin text-gray-900 dark:text-white">Contacts joignables</label>
-                                                <input type="contacts" name="contacts" id="contacts" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Renseigner les contacts joignables" >
+                                                <label for="receiver_contact" class="block mb-2 font-thin text-gray-900 dark:text-white">Contacts joignables</label>
+                                                <input wire:model.blur='receiver_contact' type="text" name="receiver_contact" id="receiver_contact" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Renseigner les contacts joignables" >
+                                                @error('receiver_contact')
+                                                    <p class="text-xs text-red-600 mt-2">{{ $message }}</p>
+                                                @enderror
                                             </div>
 
                                             <div class="relative sm:col-span-3">
@@ -100,6 +117,7 @@
                                             <div class="sm:col-span-3">
                                                 <label for="months" class="block mb-2 font-thin text-gray-900 dark:text-white">Nombre de mois</label>
                                                 <input wire:model.live='months' type="number" name="months" id="months" class=" border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent text-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nombre de mois" >
+
                                             </div>
                                             
                                             <div class="relative sm:col-span-3">
@@ -111,17 +129,17 @@
                                                     <span class="">FCFA</span>
                                                 </div>
                                             </div>
-
-                                            
-                                            
                                         </div>
-                                        
                                     </div>
                                 </div>
-                                <div class="flex w-full mx-auto justify-center items-center">
-                                    <a type="button" wire:click='subscribe' wire:loading.class='opacity-50' wire:target='subscribe' class="cursor-pointer py-3 px-4 col-span-3 flex w-full justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-black from-blue-800 to-indigo-700 bg-linear-90 via-zinc-300 mx-auto hover:bg-gradient-to-r hover:from-indigo-500 hover:via-blue-800 hover:text-white hover:to-indigo-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                <div class="flex w-full gap-x-1.5 mx-auto justify-center items-center">
+                                    <a class="w-1/2 bg-orange-300 text-black hover:bg-orange-500 text-center py-3 rounded-lg" href="{{route('packs.page')}}">
+                                        <span class="arrow-left mr-3"></span>
+                                        <span>Retour</span>
+                                    </a>
+                                    <a type="button" wire:click='subscribe' wire:loading.class='opacity-50' wire:target='subscribe' class="cursor-pointer w-1/2 py-3 px-4 col-span-3 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-whte bg-blue-600 hover:bg-blue-900 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         <span>
-                                            <span wire:loading.remove wire:target='subscribe'>Lancer la création</span>
+                                            <span wire:loading.remove wire:target='subscribe'>Lancer la demande</span>
                                             <span wire:loading wire:target='subscribe'>
                                                 <span class="fas animate-spin fa-rotate"></span>
                                                 Création en cours...

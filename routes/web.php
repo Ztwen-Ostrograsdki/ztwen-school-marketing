@@ -8,10 +8,12 @@ use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\RegisterPage;
 use App\Livewire\Auth\ResetPasswordPage;
 use App\Livewire\Auth\SubscribePage;
+use App\Livewire\Master\AbonnementsListing;
 use App\Livewire\Master\AssistantsListing;
 use App\Livewire\Master\Dashboard;
 use App\Livewire\Master\PackProfil as AdminPackProfil;
 use App\Livewire\Master\PacksListing;
+use App\Livewire\Master\PackSubscriptionsListing;
 use App\Livewire\Master\SchoolProfil;
 use App\Livewire\Master\SchoolsListing;
 use App\Livewire\Master\SpatieRoleProfilPage;
@@ -27,6 +29,7 @@ use App\Livewire\User\MyAssistantsListing;
 use App\Livewire\User\MyNotifications;
 use App\Livewire\User\MyProfil;
 use App\Livewire\User\MyReceivedsAssistantRequestsPage;
+use App\Livewire\User\MySubscribes;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -52,6 +55,10 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('gestion/packs/liste-des-packs', PacksListing::class)->name('admin.packs.list');
 
+    Route::get('gestion/souscriptions/liste-des-demandes', PackSubscriptionsListing::class)->name('admin.packs.subscriptions.list');
+
+    Route::get('gestion/abonnements/liste', AbonnementsListing::class)->name('admin.packs.abonnements.list');
+
     Route::get('gestion/packs/k={token}/creation-de-pack', PackModuleManager::class)->name('create.pack');
 
     Route::get('gestion/packs/k={token}/edition-de-pack/s={pack_slug}/u={pack_uuid}', PackModuleManager::class)->name('pack.update');
@@ -73,6 +80,8 @@ Route::middleware(['auth'])->group(function(){
     
     
     Route::get('profil/k={id}/u={uuid}/mes-notifications', MyNotifications::class)->name('my.notifications');
+
+    Route::get('profil/k={id}/u={uuid}/mes-abonnements', MySubscribes::class)->name('my.subscribes');
 
     Route::get('profil/k={id}/u={uuid}/mes-assistants', MyAssistantsListing::class)->name('my.assistants');
 

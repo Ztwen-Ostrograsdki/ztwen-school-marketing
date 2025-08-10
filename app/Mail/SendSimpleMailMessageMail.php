@@ -26,17 +26,7 @@ class SendSimpleMailMessageMail extends Mailable implements ShouldQueue
         public $html,
     )
     {
-        $this->email = $email;
-
-        $this->full_name = $full_name;
-
-        $this->message = $message;
-
-        $this->objet = $objet;
-
-        $this->html = $html;
-
-        $this->file_to_attach_path = $file_to_attach_path;
+        
     }
 
     /**

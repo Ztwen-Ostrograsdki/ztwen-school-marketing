@@ -27,13 +27,12 @@ trait PackActionsTraits{
 		InitProcessToRefreshPackDataFromConfigEvent::dispatch(auth_user(), $pack);
     }
 
-
 	public function unHidePack($pack_id)
     {
         SpatieManager::ensureThatUserCan();
 
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
-                    <p> Voulez-vous vraiment rencre cet pack visible sur la plateforme ? </p>
+                    <p> Voulez-vous vraiment rendre cet pack visible sur la plateforme ? </p>
                 </h6>";
 
         $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Elle se sera plus visible par vos visiteurs! </p>";

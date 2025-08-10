@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 
 class MailToSendAssistanceRequestToUser extends Mailable implements ShouldQueue
 {
-     use Queueable, SerializesModels;
+    use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
@@ -22,11 +22,7 @@ class MailToSendAssistanceRequestToUser extends Mailable implements ShouldQueue
         public $html,
     )
     {
-        $this->user = $user;
-
-        $this->html = $html;
-
-        $this->key = $key;
+        
     }
 
     public function build()

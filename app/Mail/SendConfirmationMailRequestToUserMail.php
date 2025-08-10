@@ -22,11 +22,7 @@ class SendConfirmationMailRequestToUserMail extends Mailable implements ShouldQu
         public $html,
     )
     {
-        $this->user = $user;
-
-        $this->html = $html;
-
-        $this->key = $key;
+        
     }
 
     public function build()

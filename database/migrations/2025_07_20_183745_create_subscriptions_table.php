@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('unique_price', 15, 2)->nullable()->default(null);
             $table->unsignedBigInteger('months')->nullable()->default(1);
             $table->string('free_days')->nullable()->default(null);
+            $table->string('ref_key');
             $table->text('observation')->nullable()->default(null);
             $table->datetime('validate_at')->nullable()->default(null);
             $table->datetime('will_closed_at')->nullable()->default(null);
