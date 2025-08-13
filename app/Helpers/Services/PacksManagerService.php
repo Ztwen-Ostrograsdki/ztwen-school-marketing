@@ -26,7 +26,7 @@ class PacksManagerService{
 			],
 			'Pro' => [
 				"Publications des images",
-				"Publications des ststistiques de votre école au examens",
+				"Publications des statistiques de votre école aux examens",
 				"Possibilité d'enroler des assistants pour la gestion adéquate de votre école",
 				"Publications des infos|Communiqués|Offres",
 				"Publicité de votre école sur la plateforme",
@@ -35,7 +35,7 @@ class PacksManagerService{
 			],
 			'Premium' => [
 				"Publications des images",
-				"Publications des ststistiques de votre école au examens",
+				"Publications des statistiques de votre école aux examens",
 				"Possibilité d'enroler des assistants pour la gestion adéquate de votre école",
 				"Publications des infos|Communiqués|Offres",
 				"Publicité de votre école sur la plateforme",
@@ -47,7 +47,7 @@ class PacksManagerService{
 			],
 			'Premium-Gold' => [
 				"Publications des images",
-				"Publications des ststistiques de votre école au examens",
+				"Publications des statistiques de votre école aux examens",
 				"Possibilité d'enroler des assistants pour la gestion adéquate de votre école",
 				"Publications des infos|Communiqués|Offres",
 				"Publicité de votre école sur la plateforme",
@@ -99,7 +99,6 @@ class PacksManagerService{
 
 			],
 			'Premium-Gold' => [
-
 				'max_images' => 50,
 				'max_assistants' => 10,
 				'max_stats' => 15,
@@ -114,5 +113,15 @@ class PacksManagerService{
 	}
 
 
+	public static function getIASIAccessLevel($pack = null)
+	{
+		$data = [
+			'Basic' => 'ii',
+			'Pro' => 'iasi',
+			'Premium' => 'iasi',
+			'Premium-Gold' => 'iasi',
+		];
 
+		return $pack ? ($data[$pack] ? $data[$pack] : []) : $data;
+	}
 }

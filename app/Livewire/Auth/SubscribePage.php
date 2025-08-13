@@ -33,7 +33,7 @@ class SubscribePage extends Component
 
     public $reduction_as_money;
 
-    public $pack;
+    public $pack, $user;
 
     public function mount($token, $pack_uuid, $pack_slug)
     {
@@ -45,7 +45,9 @@ class SubscribePage extends Component
 
                 if($pack){
 
-                    $user = findUser(auth_user_id());
+                    $this->user = findUser(auth_user_id());
+
+                    $user = $this->user;
 
                     $this->email = $user->email;
 
@@ -134,7 +136,20 @@ class SubscribePage extends Component
             'discount' => $this->reduction
         ];
 
-        broadcast(new InitNewPackSubscriptionEvent(auth_user(), $school, $pack, $data));
+        $dispatched = InitNewPackSubscriptionEvent::dispatch(auth_user(), $school, $pack, $data);
+
+        if($dispatched){
+
+            $this->toast("Votre demande a été lancé avec succès!", "success");
+
+            $this->reset();
+
+            return redirect()->to($this->user->to_subscribes_route());
+
+            
+        }
+
+
 
     }
 

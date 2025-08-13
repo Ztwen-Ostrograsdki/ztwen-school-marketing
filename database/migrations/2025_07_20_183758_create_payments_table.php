@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('observation')->nullable()->default(null);
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
-            $table->unsignedBigInteger('subscription_id')->nullable()->default(null);
+            $table->foreignId('subscription_id')->constrained('subscriptions')->cascadeOnDelete();
             $table->unsignedBigInteger('pack_id')->nullable()->default(null);
             $table->foreign('pack_id')->references('id')->on('packs')->nullOnDelete();
             $table->date('payed_at')->nullable()->default(null);

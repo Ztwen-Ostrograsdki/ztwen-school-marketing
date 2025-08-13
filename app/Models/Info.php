@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\School;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Observers\ObserveInfo;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -22,8 +23,10 @@ class Info extends Model
         'is_active',
         'user_id',
         'school_id',
+        'subscription_id',
         'target',
         'type',
+        'subscription_id'
     ];
 
     public static function booted()
@@ -35,6 +38,11 @@ class Info extends Model
             $info->slug = Str::slug($info->title) . '-' . generateRandomNumber();
 
         });
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
     }
 
     public function user()

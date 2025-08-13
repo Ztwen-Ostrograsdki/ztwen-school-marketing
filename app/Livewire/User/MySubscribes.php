@@ -23,7 +23,26 @@ class MySubscribes extends Component
     {
         if(auth_user()){
 
-            $this->subscriptions = findUser(auth_user_id())->subscriptions()->orderBy('created_at', 'desc')->get();
+            $search = '%' . $this->search . '%';
+
+            $this->subscriptions = Subscription::where('user_id', auth_user_id())->where(function($query) use ($search){
+
+                $query->whereNull('validate_at')->orWhere(function($q) use ($search){
+
+                    if(!($search && strlen($search) > 3)){
+
+                        $q->where('is_active', true)->whereNotNull('validate_at')->where('will_closed_at', '>', now());
+
+                    }
+                    else{
+
+                        $q->where('is_active', true)->whereNotNull('validate_at')->where('will_closed_at', '>', now())->where('ref_key', 'like', $search);
+                    }
+
+                });
+
+            })->orderBy('created_at', 'desc')->get();
+            
         }
     }
 
@@ -45,5 +64,35 @@ class MySubscribes extends Component
 
             }
         }
+    }
+
+    public function updatedSearch($search)
+    {
+        $search = '%' . $this->search . '%';
+
+        $this->subscriptions = Subscription::where('user_id', auth_user_id())->where(function($query) use ($search){
+
+            $query->whereNull('validate_at')->orWhere(function($q) use ($search){
+
+                if(!($search && strlen($search) > 3)){
+
+                    $q->where('is_active', true)->whereNotNull('validate_at')->where('will_closed_at', '>', now());
+
+                }
+                else{
+
+                    $q->where('is_active', true)->whereNotNull('validate_at')->where('will_closed_at', '>', now())->where('ref_key', 'like', $search);
+                }
+
+            });
+
+        })->orderBy('created_at', 'desc')->get();
+            
+    }
+
+
+    public function displaySubscriptionDetails($subscription_id)
+    {
+            
     }
 }

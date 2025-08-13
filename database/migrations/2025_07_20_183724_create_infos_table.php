@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->string('title')->nullable()->default("Une Info");
+            $table->foreignId('subscription_id')->constrained('subscriptions')->cascadeOnDelete();
             $table->text('content')->nullable()->default(null);
             $table->boolean('is_active')->default(true);
             $table->string('target')->nullable()->default(null);

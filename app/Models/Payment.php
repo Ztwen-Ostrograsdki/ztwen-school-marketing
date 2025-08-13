@@ -79,6 +79,6 @@ class Payment extends Model
 
     public function subscription()
     {
-        return Subscription::where('id', $this->subscription_id)->first();
+        return  $this->belongsTo(Subscription::class);
     }
 }

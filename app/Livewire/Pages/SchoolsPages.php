@@ -21,7 +21,6 @@ class SchoolsPages extends Component
     public function render()
     {
         $schools = School::whereNotNull('name')->get();
-
         
         return view('livewire.pages.schools-pages', compact('schools'));
     }

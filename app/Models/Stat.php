@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\School;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Observers\ObserveStat;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -17,6 +18,7 @@ class Stat extends Model
         'title',
         'user_id',
         'school_id',
+        'subscription_id',
         'year',
         'is_active',
     ];
@@ -50,6 +52,11 @@ class Stat extends Model
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
     }
 
     

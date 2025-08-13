@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\School;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Observers\ObserveAssistanceRequest;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -16,13 +17,15 @@ class AssistantRequest extends Model
         'director_id',
         'school_id',
         'assistant_id',
+        'subscription_id',
         'status',
         'approved_at',
         'uuid',
         'privileges',
         'delay',
         'is_active',
-        'token'
+        'token',
+        'subscription_id'
     ];
 
     protected $casts = [
@@ -41,7 +44,10 @@ class AssistantRequest extends Model
 
     }
 
-
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
 
     public function director()
     {

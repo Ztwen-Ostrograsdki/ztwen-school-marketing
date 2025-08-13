@@ -3,6 +3,7 @@ namespace App\Livewire\Traits;
 
 use App\Helpers\Robots\SpatieManager;
 use App\Models\Info;
+use App\Models\SchoolImage;
 use App\Models\Stat;
 use App\Notifications\RealTimeNotification;
 use Illuminate\Support\Facades\Notification;
@@ -414,26 +415,29 @@ trait SchoolActionsTraits {
 
             $school = $this->school;
 
-            $images = (array)$school->images;
+            $images = $school->images;
 
             if(!empty($images)){
 
                 if(Storage::disk('public')->exists($school->folder)){
 
-                    if(Storage::disk('public')->deleteDirectory($school->folder)){
+                    $deleted = $school->images()->delete();
 
-                        $updated = $school->update(['images' => null]);
+                    if($deleted){
 
-                        if($updated) $this->toast( "La galerie a été rafraîchie avec succès!", 'success');
+                        $school->refreshImagesFolder();
+
+                        $this->toast( "La galerie a été rafraîchie avec succès!", 'success');
 
                         $this->counter = getRand();
-                    }
+
+                    } 
                     else{
 
                         return $this->toast( "Une erreure s'est produite, les images n'ont pas pu être supprimées!", 'error');
-                    }
 
-                    
+
+                    }  
                 }
                 else{
 
@@ -448,7 +452,7 @@ trait SchoolActionsTraits {
     }
 
 
-    public function removeImageFromImagesOf($image_path)
+    public function removeImageFromImagesOf($image_id)
     {
         SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['school-images-manager'], true);
 
@@ -458,7 +462,7 @@ trait SchoolActionsTraits {
 
         $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action est irréversible! </p>";
 
-        $options = ['event' => 'confirmImageDeletion', 'confirmButtonText' => 'Validé', 'cancelButtonText' => 'Annulé', 'data' => ['image_path' => $image_path]];
+        $options = ['event' => 'confirmImageDeletion', 'confirmButtonText' => 'Validé', 'cancelButtonText' => 'Annulé', 'data' => ['image_id' => $image_id]];
 
         $this->confirm($html, $noback, $options);
 
@@ -467,37 +471,29 @@ trait SchoolActionsTraits {
     #[On('confirmImageDeletion')]
     public function confirmImageRemoving($data)
     {
-        $image_path = $data['image_path'];
+        $image_id = $data['image_id'];
 
-        if($image_path){
+        if($image_id){
 
             $school = $this->school;
 
-            $images = (array)$school->images;
+            $image = SchoolImage::where('id', $image_id)->first();
 
-            if(in_array($image_path, $images)){
+            if($image){
 
-                $image_key = array_keys($images, $image_path)[0];
+                $image_path = $image->path;
 
                 if(Storage::disk('public')->exists($image_path)){
 
-                    if(Storage::disk('public')->delete($image_path)){
+                    $deleted = $image->delete();
 
-                        unset($images[$image_key]);
+                    $school->refreshImagesFolder();
 
-                        $images = array_values($images); 
+                    if($deleted) $this->toast( "L'image a été retirée avec succès!", 'success');
 
-                        $updated = $school->update(['images' => $images]);
+                    else $this->toast( "Erreur : La suppression de l'image a échoué!", 'error');
 
-                        if($updated) $this->toast( "L'image a été retirée avec succès!", 'success');
-
-                        $this->counter = getRand();
-                    }
-                    else{
-
-                        return $this->toast( "Une erreure s'est produite, l'image n'a pas pu être supprimée!", 'error');
-                    }
-
+                    $this->counter = getRand();
                     
                 }
                 else{
@@ -507,7 +503,7 @@ trait SchoolActionsTraits {
 
             }
             else{
-                return $this->toast( "Une erreure s'est produite!", 'error');
+                return $this->toast( "Erreur stockage: Le fichier est introuvable!", 'error');
             }
         }
     }

@@ -6,6 +6,7 @@ use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\Robots\ModelsRobots;
 use App\Helpers\Robots\RobotsBeninHelpers;
 use App\Models\School;
+use App\Models\SchoolImage;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -29,11 +30,11 @@ class CreateSchool extends Component
 
     public $department;
 
-    public $country;
+    public $country = "Bénin";
 
     public $contacts;
 
-    public $is_public = "true";
+    public $is_public = true;
 
     public $is_true = true;
 
@@ -57,7 +58,7 @@ class CreateSchool extends Component
 
     public $quotes;
 
-    public $max_images = 5;
+    public $max_images = 2;
 
     public $school, $user_uuid, $school_id, $school_slug, $olds_images = [];
 
@@ -204,7 +205,7 @@ class CreateSchool extends Component
                     'level' => 'required|string',
                     'capacity' => 'required|integer',
                     'system' => 'required|string',
-                    'images' => 'required|array|max:5', 
+                    'images' => 'required|array|max:2', 
                     'images.*' => 'image|max:2048', 
                 ]
             );
@@ -279,7 +280,7 @@ class CreateSchool extends Component
                     'level' => $this->level,
                     'capacity' => $this->capacity,
                     'system' => $this->system,
-                    'images' => $images_treated,
+                    'profil_images' => $images_treated,
                     'user_id' => auth_user_id(),
                     'folder' => $root_folder,
                 ];
@@ -529,9 +530,10 @@ class CreateSchool extends Component
 
     public function updatedIsPublic($value)
     {
-        if($value == 'true') $this->is_public = true;
+        if($value) $this->is_public = true;
 
-        elseif($value == 'false') $this->is_public = false;
+        else $this->is_public = false;
+
     }
     
     public function getIsPublicValue()

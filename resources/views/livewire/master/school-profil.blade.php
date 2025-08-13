@@ -82,16 +82,18 @@
                                 Mon profil
                             </span>
                         </a>
-                        <button wire:click='openAddAssistantModal' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
-                            <span wire:loading.remove wire:target='openAddAssistantModal'>
-                                <span class="fas fa-user-plus mr-1"></span>
-                                Ajouter un assistant
-                            </span>
-                            <span wire:loading wire:target='openAddAssistantModal'>
-                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                <span>Un instant, chargement...</span>
-                            </span>
-                        </button>
+                        @if($school->subscribing())
+                            <button wire:click='openAddAssistantModal' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
+                                <span wire:loading.remove wire:target='openAddAssistantModal'>
+                                    <span class="fas fa-user-plus mr-1"></span>
+                                    Ajouter un assistant
+                                </span>
+                                <span wire:loading wire:target='openAddAssistantModal'>
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>Un instant, chargement...</span>
+                                </span>
+                            </button>
+                        @endif
                         @endif
                         @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['stats-manager']))
                         <button title="Enregistrer une statistique" wire:click="manageSchoolStat" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
@@ -220,6 +222,7 @@
                                     <span>En cours...</span>
                                 </span>
                             </button>
+                            @if($school->hasImages())
                             <button title="Supprimer toutes les images..." wire:click="removeAllImages" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                                 <span wire:loading.remove wire:target="removeAllImages">
                                     <span class="fas fa-trash"></span>
@@ -230,35 +233,40 @@
                                     <span>En cours...</span>
                                 </span>
                             </button>
+                            @endif
                         @endif
                     @endauth
                </div>
             </h5>
             <div class="grid grid-cols-3 my-4 gap-1 card">
+
+                
                 @foreach ($school->images as $school_image)
-                    <div class="border border-purple-500">
-                        <div class="aspect-square bg-gray-100 relative group card">
-                            <img class="w-full h-full object-cover border shadow-sm" src="{{url('storage', $school_image)}}" alt="Image N° {{$loop->iteration}} de l'école">
-                            <div  @click="currentImage = '{{ url('storage', $school_image) }}'; schoolName = 'image N° {{$loop->iteration}} de {{ $school_name }}'; simple_name = '{{ $simple_name }}'; show = true" class="absolute cursor-pointer inset-0 bg-black/75 bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
-                                <div class="flex space-x-4 cursor-pointer text-sky-600 text-center letter-spacing-1 font-semibold text-xs">
-                                    <span class="text-center">Cliquer pour agrandir cette image</span>
+                    @if($school_image->subscription->is_active)
+                        <div class="border border-purple-500">
+                            <div class="aspect-square bg-gray-100 relative group card">
+                                <img class="w-full h-full object-cover border shadow-sm" src="{{url('storage', $school_image->path)}}" alt="Image N° {{$loop->iteration}} de l'école">
+                                <div  @click="currentImage = '{{ url('storage', $school_image->path) }}'; schoolName = 'image N° {{$loop->iteration}} de {{ $school_name }}'; simple_name = '{{ $simple_name }}'; show = true" class="absolute cursor-pointer inset-0 bg-black/75 bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                    <div class="flex space-x-4 cursor-pointer text-sky-600 text-center letter-spacing-1 font-semibold text-xs">
+                                        <span class="text-center">Cliquer pour agrandir cette image</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        @auth
-                            @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['school-images-manager']))
-                                <div class="mt-1">
-                                    <span wire:click="removeImageFromImagesOf('{{$school_image}}')" title="Supprimer cette image de la liste des images de l'école {{$school_name}}" class="py-2 hover:bg-red-500 text-center text-sm bg-red-300 text-red-800 cursor-pointer inline-block w-full font-semibold">
-                                        <span wire:loading.remove wire:target="removeImageFromImagesOf('{{$school_image}}')">Retirer cette image</span>
-                                        <span wire:loading wire:target="removeImageFromImagesOf('{{$school_image}}')">
-                                            <span>Suppression en cours...</span>
-                                            <span class="fas fa-rotate animate-spin"></span>
+                            @auth
+                                @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['school-images-manager']))
+                                    <div class="mt-1">
+                                        <span wire:click="removeImageFromImagesOf('{{$school_image->id}}')" title="Supprimer cette image de la liste des images de l'école {{$school_name}}" class="py-2 hover:bg-red-500 text-center text-sm bg-red-300 text-red-800 cursor-pointer inline-block w-full font-semibold">
+                                            <span wire:loading.remove wire:target="removeImageFromImagesOf('{{$school_image->id}}')">Retirer cette image</span>
+                                            <span wire:loading wire:target="removeImageFromImagesOf('{{$school_image->id}}')">
+                                                <span>Suppression en cours...</span>
+                                                <span class="fas fa-rotate animate-spin"></span>
+                                            </span>
                                         </span>
-                                    </span>
-                                </div>
-                            @endif
-                        @endauth
-                    </div>
+                                    </div>
+                                @endif
+                            @endauth
+                        </div>
+                    @endif
                 @endforeach
             </div>
         </div>

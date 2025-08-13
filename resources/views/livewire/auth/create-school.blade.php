@@ -116,8 +116,8 @@
                                                 <label for="is_public" class="block mb-2 font-thin text-gray-900 dark:text-white">Une école </label>
                                                 <select wire:model.live='is_public' id="is_public" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-transparent text-xs sm:text-sm  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                     <option disabled class="bg-indigo-950"  value="{{null}}">Privée ? Public ?</option>
-                                                   <option class="bg-indigo-950" value="true">Public</option> 
-                                                   <option class="bg-indigo-950" value="false">Privée</option> 
+                                                   <option class="bg-indigo-950" value="{{true}}">Public</option> 
+                                                   <option class="bg-indigo-950" value="{{false}}">Privée</option> 
                                                 </select>
                                                 
                                             </div>
@@ -223,7 +223,7 @@
                                             
                                             <div class="sm:col-span-3">
                                                 <label for="capacity" class="block mb-2 font-thin text-gray-900 dark:text-white">Capacité (nombre d'apprenants/étudiants)</label>
-                                                <input wire:model.blur='capacity' type="number" name="capacity" id="capacity" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Préciser une quantité" >
+                                                <input wire:model.blur='capacity' type="number" step="100" name="capacity" id="capacity" class=" border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Préciser une quantité" >
                                                 @error('capacity')
                                                     <p class="mt-2 ml-2 text-xs text-red-500 letter-spacing-2 ">
                                                     {{ $message }}

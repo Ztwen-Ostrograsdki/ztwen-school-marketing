@@ -31,7 +31,7 @@ trait PackSusbscriptionActionsTraits {
     }
 
     #[On('confirmSubscription')]
-    public function oncConfirmSubscription($data)
+    public function onConfirmSubscription($data)
     {
         if($data){
 
@@ -43,23 +43,58 @@ trait PackSusbscriptionActionsTraits {
 
                 if($subscription){
 
-                    $name = $subscription->ref_key;
-
-                    $message = "La souscription " . $name . " a été approuvée avec succès!";
-                    
-					$done = $subscription->__subcriptionApprobationManager(auth_user());
-
-                    if($done){
-
-                        Notification::sendNow([auth_user()], new RealTimeNotification($message));
-
-                        return;
-                    }
+					$subscription->__subcriptionApprobationManager(auth_user());
 
                 }
             }
+            else{
 
-            return $this->toast("la validation de la demande a échoué", 'error');
+                return $this->toast("la validation de la demande a échoué", 'error');
+            }
+
+            
+        }
+    }
+    
+    
+    public function markAsExpired($subscription_id)
+    {
+        SpatieManager::ensureThatUserCan();
+
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment faire expirer cet abonnement ? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cela signifira que cet abonnement sera inactif et les privilèges dissouts! </p>";
+
+        $options = ['event' => 'subscriptionExpired', 'confirmButtonText' => 'Expirer', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_id' => $subscription_id]];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+    #[On('subscriptionExpired')]
+    public function onsubscriptionExpired($data)
+    {
+        if($data){
+
+            $subscription_id = $data['subscription_id'];
+
+            if($subscription_id){
+
+                $subscription = Subscription::find($subscription_id);
+
+                if($subscription){
+
+					// $subscription->__subcriptionApprobationManager(auth_user());
+
+                }
+            }
+            else{
+
+                return $this->toast("Le processus de marquage expiration de l'abonnement a échoué", 'error');
+            }
+
+            
         }
     }
 
@@ -76,15 +111,15 @@ trait PackSusbscriptionActionsTraits {
 
         $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action est irréversible! </p>";
 
-        $options = ['event' => 'confirmPackDeletion', 'confirmButtonText' => 'Supprimer', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_id' => $subscription_id]];
+        $options = ['event' => 'confirmPackSubscriptionDeletion', 'confirmButtonText' => 'Supprimer', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_id' => $subscription_id]];
 
         $this->confirm($html, $noback, $options);
     }
 
 
 
-    #[On('confirmPackDeletion')]
-    public function onDeletePack($data)
+    #[On('confirmPackSubscriptionDeletion')]
+    public function onDeletePackSubscription($data)
     {
         if($data){
 
@@ -144,7 +179,23 @@ trait PackSusbscriptionActionsTraits {
 
     public function approvedAllRequests()
     {
-        
+
+    }
+
+    public function exiredAllDelayedsSubscriptions()
+    {
+
+    }
+
+    public function nofifySubscribersThatExpiredDateIsSoClose()
+    {
+
+    }
+    
+    
+    public function nofifySubscriberThatExpiredDateIsSoClose()
+    {
+
     }
 
 

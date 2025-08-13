@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::create('stats', function (Blueprint $table) {
+        Schema::create('school_images', function (Blueprint $table) {
             $table->id();
+            $table->string('path');
+            $table->uuid('uuid')->unique();
+            $table->string('title')->nullable()->default(null);
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
-            $table->unsignedBigInteger('user_id')->nullable()->default(null);
-            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('subscription_id')->constrained('subscriptions')->cascadeOnDelete();
-             $table->decimal('stat_value', 10, 2)->default(0);
-            $table->string('exam')->nullable()->default(null);
-            $table->string('title')->default('EXAMEN 20XX');
-            $table->string('year')->default('20XX');
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stats');
+        Schema::dropIfExists('school_images');
     }
 };

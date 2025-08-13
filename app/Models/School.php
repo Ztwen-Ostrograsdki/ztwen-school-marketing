@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Helpers\Services\PacksManagerService;
 use App\Models\Pack;
 use App\Models\Payment;
+use App\Models\SchoolImage;
 use App\Models\Stat;
 use App\Models\Subscription;
 use App\Models\User;
@@ -32,7 +34,7 @@ class School extends Model
         'capacity',
         'quotes',
         'objectives',
-        'images',
+        'profil_images',
         'observation',
         'likes',
         'folder',
@@ -47,7 +49,7 @@ class School extends Model
 
     protected $casts = [
         'objectives' => 'array',
-        'images' => 'array',
+        'profil_images' => 'array',
         'is_active' => 'boolean',
         'is_public' => 'boolean',
     ];
@@ -91,14 +93,19 @@ class School extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function subscription()
+    public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
     }
 
+    public function subscribing()
+    {
+        return $this->subscriptions()->where('is_active', true)->where('will_closed_at', '>', now())->first() !== null;
+    }
+
     public function current_subscription()
     {
-        return $this->subscriptions()->where('is_active', true)->first();
+        return $this->subscriptions()->where('is_active', true)->where('will_closed_at', '>', now())->first();
     }
 
     public function current_payment()
@@ -111,9 +118,20 @@ class School extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function hasProfilImages()
+    {
+        return !empty($this->profil_images);
+    }
+    
     public function hasImages()
     {
-        return !empty($this->images);
+        return count($this->images) > 0;
+    }
+
+
+    public function images()
+    {
+        return $this->hasMany(SchoolImage::class);
     }
 
     public function getSchoolType() : string
@@ -128,16 +146,27 @@ class School extends Model
 
         if($is_dir){
 
-            $images = (array)$this->images;
+            $models_images = $this->images;
 
-            $images_from_storage = Storage::disk('public')->files($this->folder);
+            // $images = $this->images()->pluck('path')->toArray();
 
-            foreach($images_from_storage as $file){
+            // $images_from_storage = Storage::disk('public')->files($this->folder);
 
-                if(!in_array($file, $images)){
+            // foreach($images_from_storage as $file){
 
-                    Storage::disk('public')->delete($file);
+            //     if(!in_array($file, $images)){
 
+            //         Storage::disk('public')->delete($file);
+
+            //     }
+
+            // }
+
+            foreach($models_images as $img){
+
+                if(!Storage::disk('public')->exists($img->path)){
+
+                    $img->delete();
                 }
 
             }
@@ -241,6 +270,42 @@ class School extends Model
 
             return [];
         }
+    }
+
+
+    public function getIASIAccessLevel()
+    {
+        if($this->subscribing()){
+
+            $current_subs = $this->current_subscription();
+
+            if($current_subs){
+
+                return PacksManagerService::getIASIAccessLevel($current_subs->pack->name);
+            }
+
+        }
+
+        return null;
+    }
+
+
+    public function hasIASIAccess($level = null)
+    {
+        if($this->getIASIAccessLevel()){
+
+            if($level):
+
+                return $this->getIASIAccessLevel() == $level;
+
+            else :
+
+                return $this->getIASIAccessLevel() == 'iasi';
+                
+            endif;
+
+        }
+        return false;
     }
 
 

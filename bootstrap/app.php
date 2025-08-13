@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AdminOrMasterMiddleware;
 use App\Http\Middleware\SelfUserMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -19,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'self_user' => SelfUserMiddleware::class,
             'user.self' => SelfUserMiddleware::class,
             // 'user.not.blocked' => NotBlockedUserMiddleware::class,
-            // 'admin.or.master' => IsAdminMiddleware::class,
+            'admin.or.master' => AdminOrMasterMiddleware::class,
             // 'only.admins' => OnlyAdminsMiddleware::class,
             // 'self.or.admins' => AdminsOrSelfUserMiddleware::class,
         ]);

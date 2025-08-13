@@ -43,6 +43,14 @@ class JobToSendEmailToUserForAssistanceRequest implements ShouldQueue
     public function handle(): void
     {
 
+        if(!$this->school->current_subscription()){
+
+            Notification::sendNow([$this->sender], new RealTimeNotification("Vous n'avez aucun abonnement actif actuellement, Veuillez en activez un avant d'enroler un assistant!"));
+
+            return;
+
+        }
+
         DB::beginTransaction();
         
         try {
@@ -137,6 +145,7 @@ class JobToSendEmailToUserForAssistanceRequest implements ShouldQueue
             'delay' => $delay,
             'director_id' => $this->sender->id,
             'school_id' => $this->school->id,
+            'subscription_id' => $this->school->current_subscription()->id,
             'privileges' => $this->privileges
         ];
 

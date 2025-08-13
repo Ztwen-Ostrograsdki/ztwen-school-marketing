@@ -21,16 +21,16 @@
                 <span class="relative">{{ config('app.name') }}</span>
             </span>
             </h1>
-            <p style="letter-spacing: 2px;" class="mx-auto mb-8 max-w-2xl text-lg font-semibold letter-spacing-2">
-            Grâce à nous, votre école est connue, ...vos prestations, vos résulats, vos performances annuels, nous en faisons la promotion!
+            <p style="letter-spacing: 2px;" class="mx-auto mb-8 max-w-2xl text-lg font-semibold letter-spacing-2 text-lime-500">
+            Grâce à nous, votre école est connue, ...vos prestations, vos résulats, vos performances annuelles, nous faisons votre promotion!
             </p>
 
             <!-- CTA Button -->
             <div class="flex justify-center items-center mt-8" data-aos="fade-up" data-aos-delay="400">
                 <a href="{{route('packs.page')}}" rel="noopener noreferrer"
-                    class="relative flex items-center justify-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white text-lg font-semibold rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200">
-                    <span class="absolute inset-0 rounded-full bg-purple-600 opacity-50 animate-ping"></span>
-                    <span class="relative z-10 pr-2">S'abonner maitenant</span>
+                    class="relative flex items-center justify-center px-6 py-3 bg-lime-600 hover:bg-lime-700 text-white text-lg font-thin rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 border border-white letter-spacing-2">
+                    <span class="absolute inset-0 rounded-full bg-lime-600 opacity-50 animate-ping"></span>
+                    <span class="relative z-10 pr-2">S'abonner maintenant</span>
                 </a>
             </div>
 

@@ -4,6 +4,7 @@ namespace App\Livewire\Modals;
 
 use Akhaled\LivewireSweetalert\Toast;
 use App\Models\School;
+use App\Models\SchoolImage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -50,12 +51,18 @@ class SchoolImagesManager extends Component
 
         if($school){
 
-            $this->max_images = 7;
+            if($school->current_subscription()){
 
-            $this->school = $school;
+                $this->school = $school;
 
-            $this->dispatch('OpenModalEvent', $this->modal_name);
+                $this->dispatch('OpenModalEvent', $this->modal_name);
+            }
+            else{
 
+                $this->toast("Vous ne pouvez pas ajouter des images car vous n'avez pas d'abonnement actif", 'info');
+            }
+
+            
         }
 
     }
@@ -84,26 +91,9 @@ class SchoolImagesManager extends Component
 
             if($images_treated && !$this->error_message){
 
-                $done = $this->school->update(['images' => $images_treated]);
-
-                if(!$done){
-
-                    $this->school->refreshImagesFolder();
-
-                    return $this->toast("Une erreure s'est produite lors de la mise à jour des données!", 'error');
-
-                }
-                else{
-
-                    $this->hideModal();
-
-                    $this->toast("La mise à jour de votre  école a été lancée", 'success');
-
-                }
 
             }
             else{
-
 
                 $this->toast("La requête n'a pas pu être traitée", 'error');
 
@@ -112,6 +102,29 @@ class SchoolImagesManager extends Component
             }
 
             DB::commit();
+
+
+            DB::afterCommit(function() use ($images_treated){
+
+                if(!$images_treated){
+
+                    $this->school->refreshImagesFolder();
+
+                    return $this->toast("Une erreure s'est produite lors de la mise à jour des données!", 'error');
+
+                }
+                else{
+
+                    $this->reset();
+
+                    $this->hideModal();
+
+                    $this->toast("La mise à jour de votre  école a été lancée", 'success');
+
+                }
+
+
+            });
             
         } catch (\Throwable $th) {
 
@@ -164,7 +177,7 @@ class SchoolImagesManager extends Component
 
             if($save){
 
-                $images_paths[] = $root_folder . '/' . $file_name . '.' . $extension;
+                $images_paths[$image->getClientOriginalName()] = $root_folder . '/' . $file_name . '.' . $extension;
             }
             else{
 
@@ -175,8 +188,27 @@ class SchoolImagesManager extends Component
         }
 
         if(count($images_paths) == count($images)){
+            
+            if($this->school->current_subscription()){
 
-            return $images_paths;
+                foreach($images_paths as $name => $img_p){
+
+                    SchoolImage::create([
+                        'subscription_id' => $this->school->current_subscription()->id,
+                        'user_id' => auth_user_id(),
+                        'school_id' => $this->school->id,
+                        'path' => $img_p,
+                        'title' => $name,
+                        'is_active' => true,
+                    ]);
+                }
+
+                return $images_paths;
+            }
+            else{
+
+                $this->error_message = "Une erreure est survenue lors du stockage des images, Vous n'avez aucun abonnement actif";
+            }
 
         }
 

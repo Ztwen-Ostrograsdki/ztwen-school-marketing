@@ -253,12 +253,12 @@
                                             x-transition:enter="transition ease-out duration-500"
                                             x-transition:enter-start="opacity-0 scale-90"
                                             x-transition:enter-end="opacity-100 scale-100">
-                                            <img src="{{ url('storage', $image) }}" class="object-cover w-full h-32" alt="Image ">
+                                            <img src="{{ url('storage', $image->path) }}" class="object-cover w-full h-32" alt="Image ">
                                             @if($school->user_id == auth_user_id() || auth_user()->isMaster() || auth_user()->hasSchoolRoles($school->id, ['schools-manager']))
-                                            <span wire:click="removeImage('{{$image}}', '{{$school->id}}')"
+                                            <span wire:click="removeImage('{{$image->id}}', '{{$school->id}}')"
                                                 class="absolute inset-0 bg-red-600 bg-opacity-50 text-white text-xs font-semibold opacity-0 group-hover:opacity-70 transition duration-300 flex items-center justify-center cursor-pointer">
-                                                <span wire:loading.remove wire:target="removeImage('{{$image}}', '{{$school->id}}')">✖ Retirer cette image</span>
-                                                <span wire:loading wire:target="removeImage('{{$image}}', '{{$school->id}}')">
+                                                <span wire:loading.remove wire:target="removeImage('{{$image->id}}', '{{$school->id}}')">✖ Retirer cette image</span>
+                                                <span wire:loading wire:target="removeImage('{{$image->id}}', '{{$school->id}}')">
                                                     <span  class="fas fa-rotate animate-spin"></span>
                                                     <span>Suppression ...</span>
                                                 </span>

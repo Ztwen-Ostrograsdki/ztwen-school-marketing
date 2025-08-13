@@ -36,6 +36,8 @@ class NewAssistantModal extends Component
     #[Validate('required|numeric|exists:schools,id')]
     public $school_id;
 
+    public $school;
+
     public $receiver;
 
     public function render()
@@ -65,8 +67,28 @@ class NewAssistantModal extends Component
         $this->dispatch('HideModalEvent', $this->modal_name);
     }
 
+    public function updatedSchoolId($school_id)
+    {
+        if($school_id){
+
+            $school = School::whereId($school_id)->first();
+
+            if($school){
+
+                $this->school = $school;
+            }
+        }
+    }
+
     public function addAssistant()
     {
+        if(!$this->school->current_subscription()){
+
+            return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
+
+            return;
+        }
+
         $this->validate();
 
         if($this->assistant){

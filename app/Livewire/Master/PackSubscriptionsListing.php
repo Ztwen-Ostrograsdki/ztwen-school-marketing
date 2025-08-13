@@ -22,12 +22,45 @@ class PackSubscriptionsListing extends Component
 
     public function mount()
     {
-        $this->subscriptions = Subscription::where('validate_at', null)->orderBy('created_at', 'desc')->get();
+        $search = '%' . $this->search . '%';
+
+        $this->subscriptions = Subscription::where(function($query) use ($search){
+
+            if(!($search && strlen($search) > 3)){
+
+                $query->whereNull('validate_at');
+
+            }
+            else{
+
+                $query->whereNull('validate_at')->where('ref_key', 'like', $search);
+            }
+
+        })->orderBy('created_at', 'desc')->get();
     }
 
     public function render()
     {
         return view('livewire.master.pack-subscriptions-listing');
+    }
+
+    public function updatedSearch($search)
+    {
+        $search = '%' . $this->search . '%';
+
+        $this->subscriptions = Subscription::where(function($query) use ($search){
+
+            if(!($search && strlen($search) > 3)){
+
+                $query->whereNull('validate_at');
+
+            }
+            else{
+
+                $query->whereNull('validate_at')->where('ref_key', 'like', $search);
+            }
+
+        })->orderBy('created_at', 'desc')->get();
     }
 
 

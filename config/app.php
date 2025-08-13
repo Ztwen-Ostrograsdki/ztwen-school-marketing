@@ -89,6 +89,8 @@ return [
 
     'my_token'=> "883hxxeduusedk787iixcdegshe_jehde002dee99782deeffgKMngXYategdeWzdehhde71jjxef_dqx345xedxusedk787ikgxcdegsffejehde220dee9=validate",
 
+    "subcriptions_task_report" => "Tâche de suppression de l'abonnement une fois le delai expiré",
+
 
 
     /*

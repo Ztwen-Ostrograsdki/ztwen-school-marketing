@@ -89,7 +89,7 @@
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="text-center my-0">
-                                                <a class="hover:underline hover:underline-offset-2" href="{{$souscription->pack->to_admin_pack_profil_route()}}" class="text-center">
+                                                <a class="" href="{{$souscription->to_details_route()}}" class="text-center">
                                                     <div class="text-center">
                                                         {{ $souscription->pack->name }}
                                                     </div>
@@ -141,8 +141,8 @@
                                                     <span>
                                                         {{ __formatDateTime($souscription->will_closed_at) }}
                                                     </span>
-                                                    <span class="text-green-400">
-                                                        {{ __formatDateTime($souscription->created_at) }}
+                                                    <span class="text-green-400 text-center font-semibold letter-spacing-1">
+                                                        {{ __formatDateDiff($souscription->will_closed_at) }}
                                                     </span>
                                                 @else
                                                     <span class="text-red-200 font-semibold letter-spacing-1">Pas encore validé</span>
@@ -157,6 +157,16 @@
                                         
                                         <td class="px-6 py-2 whitespace-nowrap text-right  font-medium">
                                             <div class="flex gap-x-1.5">
+                                                <button wire:click='displaySubscriptionDetails({{$souscription->id}})' class="block text-white cursor-pointer bg-blue-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-700 focus:ring-blue-800" type="button">
+                                                    <span wire:loading.remove wire:target='displaySubscriptionDetails({{$souscription->id}})'>
+                                                        <span class="fas fa-eye mr-1"></span>
+                                                        Afficher les détails
+                                                    </span>
+                                                    <span wire:loading wire:target='displaySubscriptionDetails({{$souscription->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
                                                 @if(!$souscription->validate_at)
                                                     <button wire:click='notifyAdminsThatPaymentHasBeenDone({{$souscription->id}})' class="block text-white cursor-pointer bg-green-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-green-800" type="button">
                                                         <span wire:loading.remove wire:target='notifyAdminsThatPaymentHasBeenDone({{$souscription->id}})'>
@@ -177,7 +187,7 @@
                         </table>
                         @else
                         <h6 class="text-center py-2 letter-spacing-1 font-semibold text-red-600 uppercase border border-red-500 bg-black/40 my-2">
-                            Aucune donnée trouvée
+                            Vous n'avez aucun abonnement actif présentement
                             @if($search && strlen($search) > 3)
                                 pour le terme 
                                 <span class="font-semibold letter-spacing-1 ml-2 underline underline-offset-4 text-yellow-500"> {{ $search }} </span>

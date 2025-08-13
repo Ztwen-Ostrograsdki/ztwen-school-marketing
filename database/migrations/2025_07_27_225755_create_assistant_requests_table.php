@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('director_id')->references('id')->on('users')->cascadeOnDelete();
             $table->json('privileges')->nullable()->default(null);
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
+            $table->foreignId('subscription_id')->constrained('subscriptions')->cascadeOnDelete();
             $table->string('token');
             $table->string('status')->default('En attente');
             $table->datetime('delay');

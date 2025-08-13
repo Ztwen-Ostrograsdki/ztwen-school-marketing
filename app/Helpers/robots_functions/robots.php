@@ -769,6 +769,34 @@ if(!function_exists('__formatDate')){
         return $formatted;
     }
 
+
+
+}
+if(!function_exists('__formatDateDiff')){
+
+    function __formatDateDiff($date, $start = null)
+    {
+        Carbon::setLocale('fr');
+
+        if(!$start) $date1 = Carbon::today();
+
+        else $date1 = Carbon::parse($start);
+
+        $target = Carbon::parse($date);
+
+        $joursRestants = $date1->diffInDays($target, false);
+
+        if($joursRestants >= 1) :
+
+            return floor($date1->diffInDays($target, true)) . " jours restants";
+
+        else :
+
+            return $date1->diff($target)->format('%d jours, %h h, %i min');
+            
+        endif;
+    }
+
 }
 
 if(!function_exists('__formatDateTime')){

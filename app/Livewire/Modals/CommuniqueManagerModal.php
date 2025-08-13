@@ -38,6 +38,13 @@ class CommuniqueManagerModal extends Component
 
                 $this->school = $school;
 
+                if(!$this->school->current_subscription()){
+
+                    return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
+
+                    return;
+                }
+
                 if($communique_id){
 
                     $communique_model = Info::whereId($communique_id)->firstOrFail();
@@ -69,6 +76,12 @@ class CommuniqueManagerModal extends Component
 
     public function insert()
     {
+        if(!$this->school->current_subscription()){
+
+            return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
+
+            return;
+        }
 
         $this->validate(
             [
@@ -137,6 +150,7 @@ class CommuniqueManagerModal extends Component
                     'target' => $this->target,
                     'content' => $this->content,
                     'type' => $this->type,
+                    'subscription_id' => $this->school->current_subscription()->id
                 ];
 
                 $done = Info::create($data);

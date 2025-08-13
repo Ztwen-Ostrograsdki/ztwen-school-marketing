@@ -6,12 +6,17 @@ use App\Events\NewPackSubscriptionCreatedEvent;
 use App\Events\PackSubscriptionWasUpdatedEvent;
 use App\Helpers\Robots\ModelsRobots;
 use App\Helpers\Services\EmailTemplateBuilder;
+use App\Jobs\JobToDelayedSubscription;
 use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Jobs\JobToSendSubcriptionDetailsToTheSubcriber;
 use App\Mail\MailToSendSubscriptionRefCodeToUser;
+use App\Models\AssistantRequest;
+use App\Models\Info;
 use App\Models\Pack;
 use App\Models\Payment;
 use App\Models\School;
+use App\Models\SchoolImage;
+use App\Models\Stat;
 use App\Models\User;
 use App\Notifications\RealTimeNotification;
 use App\Observers\ObserveSubscription;
@@ -60,6 +65,9 @@ class Subscription extends Model
 
     protected $casts = [
         'privileges' => 'array',
+        'will_closed_at' => 'datetime',
+        'validate_at' => 'datetime',
+
     ];
 
     public static function booted()
@@ -87,6 +95,26 @@ class Subscription extends Model
         return $this->belongsTo(School::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(SchoolImage::class);
+    }
+
+    public function infos()
+    {
+        return $this->hasMany(Info::class);
+    }
+
+    public function stats()
+    {
+        return $this->hasMany(Stat::class);
+    }
+
+    public function assistants()
+    {
+        return $this->hasMany(AssistantRequest::class);
+    }
+
     public function pack()
     {
         return $this->belongsTo(Pack::class);
@@ -94,7 +122,12 @@ class Subscription extends Model
 
     public function payment()
     {
-        return Payment::where('id', $this->payment_id)->first();
+        return $this->hasOne(Payment::class);
+    }
+
+    public function to_details_route()
+    {
+        return route('subscription.details', ['subscription_uuid' => $this->uuid, 'subscription_id' => $this->id]);
     }
 
 
@@ -136,18 +169,34 @@ class Subscription extends Model
 
             DB::commit();
 
-            DB::afterCommit(function() use ($payment, $subscriber){
+            DB::afterCommit(function() use ($payment, $subscriber, $admin_validator){
 
-                $message = "Votre demande d'abonnement ref:{$this->subscription->ref_key} du pack {$this->pack->name} a été approuvé et activé avec succès. Votre abonnement est à présent actif!";
+                $message = "Votre demande d'abonnement ref:{$this->ref_key} du pack {$this->pack->name} a été approuvé et activé avec succès. Votre abonnement est à présent actif!";
 
-                Notification::sendNow([$this->subscription->user], new RealTimeNotification($message));
+                Notification::sendNow([$this->user], new RealTimeNotification($message));
 
                 $lien = $subscriber->to_subscribes_route();
 
                 $greating = $subscriber->greatingMessage($subscriber->getUserNamePrefix(true, false)) . ", ";
 
-                JobToSendSimpleMailMessageTo::dispatch($subscriber->email, $greating, $message, "SOUSCRIPTION VALIDEE - ABONNEMENT ACTIVE" . $this->ref_key, null, $lien);
+                JobToSendSimpleMailMessageTo::dispatch($subscriber->email, $greating, $message, "SOUSCRIPTION " . $this->ref_key . " VALIDEE - ABONNEMENT ACTIVE ", null, $lien);
 
+                $message_to_admins = "L'abonnement ref:{$this->ref_key} du pack {$this->pack->name} fait par {$this->user->getFullName()} a été validé avec succès!";
+
+                if($admin_validator){
+
+                    Notification::sendNow([auth_user()], new RealTimeNotification($message_to_admins));
+
+                }
+                else{
+
+                    $admins = ModelsRobots::getAllAdmins();
+
+                    if(!empty($admins)){
+
+                        Notification::sendNow($admins, new RealTimeNotification($message_to_admins));
+                    }
+                }
                 return $payment;
 
             });
@@ -159,7 +208,7 @@ class Subscription extends Model
 
             if($admin_validator) : 
 
-                Notification::sendNow([$admin_validator], new RealTimeNotification("La validation de l'abonnement ref:{$this->subscription->ref_key} du pack {$this->pack->name} fait par {$this->user->getFullName()} a échoué!"));
+                Notification::sendNow([$admin_validator], new RealTimeNotification("La validation de l'abonnement ref:{$this->ref_key} du pack {$this->pack->name} fait par {$this->user->getFullName()} a échoué! : " . $th->getMessage()));
 
                 return false;
 
@@ -168,13 +217,19 @@ class Subscription extends Model
 
                 if(!empty($admins)){
 
-                    Notification::sendNow($admins, new RealTimeNotification("La validation de l'abonnement ref:{$this->subscription->ref_key} du pack {$this->pack->name} fait par {$this->user->getFullName()} a échoué!"));
+                    Notification::sendNow($admins, new RealTimeNotification("La validation de l'abonnement ref:{$this->ref_key} du pack {$this->pack->name} fait par {$this->user->getFullName()} a échoué! : " . $th->getMessage()));
                 }
 
                 return false;
 
             endif;
         }
+    }
+
+
+    public function joinSchoolDataToACurrentSubscription()
+    {
+        
     }
 
 
@@ -188,7 +243,7 @@ class Subscription extends Model
 
             $greating = $user->greatingMessage($user->getUserNamePrefix(true, false)) . ", ";
 
-            $message = "Vous avez lancé une demande d'abonnement pour le pack " . $this->pack->name . " pour votre école " . $this->school->name . " depuis le " . __formatDateTime($this->createdçat) . ". Afin de voir votre abonnement validé et actif, nous vous demandons de procéder au payement par dépôt électronique comme prévu! Un autre mail vous sera envoyé avec des détails du payement à effectuer!";
+            $message = "Vous avez lancé une demande d'abonnement pour le pack " . $this->pack->name . " pour votre école " . $this->school->name . " depuis le " . __formatDateTime($this->created_at) . ". Afin de voir votre abonnement validé et actif, nous vous demandons de procéder au payement par dépôt électronique comme prévu! Un autre mail vous sera envoyé avec des détails du payement à effectuer!";
 
             JobToSendSimpleMailMessageTo::dispatch($user->email, $greating, $message, "DEMANDE DE VALIDATION DE LA SOUSCRIPTION " . $this->ref_key, null, $lien);
 
@@ -197,6 +252,35 @@ class Subscription extends Model
             Notification::sendNow([$this->subscriber], new RealTimeNotification($message));
 
         }
+    }
+
+
+    public function __rememberDaysRemainingToSubscriber(?User $admin_validator = null)
+    {
+        if($this->will_closed_at && $this->will_closed_at > now() && $this->is_active){
+
+            $user = $this->subscriber;
+
+            $lien = $user->to_subscribes_route();
+
+            $greating = $user->greatingMessage($user->getUserNamePrefix(true, false)) . ", ";
+
+            $message = "Nous voulons vous repeler que votre abonnement actif " . $this->ref_key . " pour votre école " . $this->school->name . " actif depuis le " . __formatDateTime($this->payement->created_at) . " expire le " . __formatDateTime($this->will_closed_at) . ", soit  " . __formatDateDiff($this->will_closed_at) . " exactement.";
+
+            JobToSendSimpleMailMessageTo::dispatch($user->email, $greating, $message, "RAPPEL NOMBRE DE JOURS RESTANTS DE L'ABONNEMENT " . $this->ref_key, null, $lien);
+
+            Notification::sendNow([$this->subscriber], new RealTimeNotification($message));
+
+        }
+        else{
+
+
+        }
+    }
+
+    public function __markAsExpired(?User $admin_validator = null)
+    {
+        JobToDelayedSubscription::dispatch($this, $admin_validator);
     }
 
     public function __sendSubcriptionDetailsToSubscriber()
@@ -234,4 +318,73 @@ class Subscription extends Model
 
         }
     }
+
+
+    public function hasPlannedDelayedTask($report = null) : bool
+    {
+        if(!$report){
+            return JobTaskPlannedOnModel::where('model_id', $this->id)
+                                    ->where('model_class', get_class($this))
+                                    ->first() !== null;
+        }
+        else{
+            return JobTaskPlannedOnModel::where('model_id', $this->id)
+                                    ->where('model_class', get_class($this))
+                                    ->where('report', $report)
+                                    ->first() !== null;
+        }
+
+    }
+
+
+    public function deletePlannedTask($report = null)
+    {
+        if($report) :
+            return 
+            JobTaskPlannedOnModel::where('model_id', $this->id)
+                                    ->where('model_class', get_class($this))
+                                    ->where('report', $report)
+                                    ->delete();
+        else :
+            return 
+            JobTaskPlannedOnModel::where('model_id', $this->id)
+                                    ->where('model_class', get_class($this))
+                                    ->delete();
+        endif;
+    }
+
+    public function definePlannedTask($report, $job_id = null, $batch_id = null, $payload = null, $status = null)
+    {
+        if(!$report) $report = config('app.subcriptions_task_report');
+
+        DB::beginTransaction();
+
+        try {
+
+            if($this->hasPlannedDelayedTask($report)){
+            
+                self::deletePlannedTask($report);
+            }
+
+            JobTaskPlannedOnModel::create([
+                'job_id' => $job_id,
+                'batch_id' => $batch_id,
+                'model_id' => $this->id,
+                'model_class' => get_class($this),
+                'payload' => $payload,
+                'status' => $status,
+                'report' => $report
+            ]);
+            
+            DB::commit();
+
+        
+        } catch (\Throwable $th) {
+
+            DB::rollBack();
+            
+        }
+    }
+
+    
 }

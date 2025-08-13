@@ -54,13 +54,20 @@ class AssistantManagerModal extends Component
 
             if($assistant_request){
 
+                $this->school = $assistant_request->school;
+
+                if(!$this->school->current_subscription()){
+
+                    return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
+
+                    return;
+                }
+
                 $this->assistant_request = $assistant_request;
 
                 $this->assistant = $assistant_request->assistant;
 
                 $this->director = $assistant_request->director;
-
-                $this->school = $assistant_request->school;
 
                 $this->privileges = $assistant_request->privileges;
 
@@ -103,6 +110,14 @@ class AssistantManagerModal extends Component
 
     public function insert()
     {
+        if(!$this->school->current_subscription()){
+
+            return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
+
+            return;
+        }
+
+        
         DB::beginTransaction();
         
         try {

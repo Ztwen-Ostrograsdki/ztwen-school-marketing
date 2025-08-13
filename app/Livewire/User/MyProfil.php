@@ -7,6 +7,7 @@ use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Helpers\Robots\SpatieManager;
 use App\Models\School;
+use App\Models\SchoolImage;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
@@ -23,6 +24,8 @@ class MyProfil extends Component
     public $user_email;
 
     public $user;
+
+    public $counter = 2;
 
     public function mount($id, $uuid)
     {
@@ -65,7 +68,7 @@ class MyProfil extends Component
     }
 
 
-    public function removeImage($image_path, int $school_id)
+    public function removeImage($image_id, int $school_id)
     {
         SpatieManager::ensureThatAssistantCan(auth_user_id(), $school_id, ['schools-images-manager'], true);
 
@@ -75,7 +78,7 @@ class MyProfil extends Component
 
         $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action est irréversible! </p>";
 
-        $options = ['event' => 'confirmImageDeletion', 'confirmButtonText' => 'Validé', 'cancelButtonText' => 'Annulé', 'data' => ['image_path' => $image_path, 'school_id' => $school_id]];
+        $options = ['event' => 'confirmImageDeletion', 'confirmButtonText' => 'Validé', 'cancelButtonText' => 'Annulé', 'data' => ['image_id' => $image_id, 'school_id' => $school_id]];
 
         $this->confirm($html, $noback, $options);
 
@@ -84,41 +87,29 @@ class MyProfil extends Component
     #[On('confirmImageDeletion')]
     public function confirmImageRemoving($data)
     {
+        $image_id = $data['image_id'];
 
-        $image_path = $data['image_path'];
+        if($image_id){
 
-        $school_id = $data['school_id'];
+            $image = SchoolImage::where('id', $image_id)->first();
 
-        SpatieManager::ensureThatAssistantCan(auth_user_id(), $school_id, ['schools-images-manager'], true);
+            if($image){
 
-        $school = School::where('id', $school_id)->firstOrFail();
+                $school = $image->school;
 
-        if($school && $image_path){
-
-            $images = (array)$school->images;
-
-            if(in_array($image_path, $images)){
-
-                $image_key = array_keys($images, $image_path)[0];
+                $image_path = $image->path;
 
                 if(Storage::disk('public')->exists($image_path)){
 
-                    if(Storage::disk('public')->delete($image_path)){
+                    $deleted = $image->delete();
 
-                        unset($images[$image_key]);
+                    $school->refreshImagesFolder();
 
-                        $images = array_values($images); 
+                    if($deleted) $this->toast( "L'image a été retirée avec succès!", 'success');
 
-                        $updated = $school->update(['images' => $images]);
+                    else $this->toast( "Erreur : La suppression de l'image a échoué!", 'error');
 
-                        if($updated) $this->toast( "L'image a été retirée avec succès!", 'success');
-
-                    }
-                    else{
-
-                        return $this->toast( "Une erreure s'est produite, l'image n'a pas pu être supprimée!", 'error');
-                    }
-
+                    $this->counter = getRand();
                     
                 }
                 else{
@@ -128,7 +119,7 @@ class MyProfil extends Component
 
             }
             else{
-                return $this->toast( "Une erreure s'est produite!", 'error');
+                return $this->toast( "Erreur stockage: Le fichier est introuvable!", 'error');
             }
         }
     }

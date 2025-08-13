@@ -40,6 +40,8 @@ class SchoolProfil extends Component
 
             if($school){
 
+                $school->refreshImagesFolder();
+
                 $this->school = $school;
 
                 $this->school_name = $school->name;

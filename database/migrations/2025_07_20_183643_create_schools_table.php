@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('quotes')->nullable()->default(null);
             $table->string('capacity')->nullable()->default(null);
             $table->json('objectives')->nullable()->default(null);
-            $table->json('images')->nullable()->default(null);
+            $table->json('profil_images')->nullable()->default(null);
             $table->text('observation')->nullable()->default(null);
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
