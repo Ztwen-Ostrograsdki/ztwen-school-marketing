@@ -1,6 +1,7 @@
 <?php
+namespace App\Livewire\User;
 
-namespace App\Livewire\Page;
+
 
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
@@ -19,11 +20,11 @@ class SubscriptionDetailsPage extends Component
 
     public $school;
 
-    public function mount($subscription_uuid, $subscription_id)
+    public function mount($subscription_uuid, $subscription_key)
     {
-        if($subscription_uuid && $subscription_id){
+        if($subscription_uuid && $subscription_key){
 
-            $subscription = Subscription::where('uuid', $subscription_uuid)->whereId($subscription_id)->firstOrFail();
+            $subscription = Subscription::where('uuid', $subscription_uuid)->where('ref_key', $subscription_key)->firstOrFail();
 
             if($subscription){
 
@@ -58,6 +59,6 @@ class SubscriptionDetailsPage extends Component
 
     public function render()
     {
-        return view('livewire.page.subscription-details-page');
+        return view('livewire.user.subscription-details-page');
     }
 }

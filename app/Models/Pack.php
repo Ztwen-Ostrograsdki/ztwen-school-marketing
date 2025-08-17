@@ -115,9 +115,23 @@ class Pack extends Model
         return [];
     }
     
-    public function schools()
+    public function schools() : ?array
     {
-        return [];
+        $schools = [];
+
+        $subscriptions = $this->subscriptions()->whereNotNull('subscriptions.validate_at')->orderBy('subscriptions.validate_at', 'desc')->get();
+
+        foreach($subscriptions as $subscription):
+
+            if($subscription->validate_at && $subscription->payment){
+
+                $schools[] = $subscription->school;
+
+            }
+
+        endforeach;
+
+        return $schools;
     }
 
     public function payments()

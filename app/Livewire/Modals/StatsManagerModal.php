@@ -46,6 +46,12 @@ class StatsManagerModal extends Component
 
                     return;
                 }
+                elseif($this->school->current_subscription()  &&!$school->current_subscription()->statisable){
+
+                    return $this->toast("Vous avez déjà épuisé le nombre de statistiques que vous pouvez publier avec votre abonnement actif actuellement!", 'info');
+
+                    return;
+                }
 
                 $this->year = date('Y');
 

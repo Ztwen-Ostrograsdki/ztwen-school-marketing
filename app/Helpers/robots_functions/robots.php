@@ -774,15 +774,15 @@ if(!function_exists('__formatDate')){
 }
 if(!function_exists('__formatDateDiff')){
 
-    function __formatDateDiff($date, $start = null)
+    function __formatDateDiff($from, $to = null)
     {
         Carbon::setLocale('fr');
 
-        if(!$start) $date1 = Carbon::today();
+        if(!$to) $date1 = Carbon::today();
 
-        else $date1 = Carbon::parse($start);
+        else $date1 = Carbon::parse($to);
 
-        $target = Carbon::parse($date);
+        $target = Carbon::parse($from);
 
         $joursRestants = $date1->diffInDays($target, false);
 

@@ -44,6 +44,12 @@ class CommuniqueManagerModal extends Component
 
                     return;
                 }
+                elseif($this->school->current_subscription()  &&!$school->current_subscription()->infosable){
+
+                    return $this->toast("Vous avez déjà épuisé le nombre d'infos que vous pouvez publier avec votre abonnement actif actuellement!", 'info');
+
+                    return;
+                }
 
                 if($communique_id){
 

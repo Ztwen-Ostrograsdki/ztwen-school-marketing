@@ -121,8 +121,13 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
-                                            <div class="text-amber-600 font-semibold letter-spacing-1">
-                                                {{ $souscription->ref_key }}
+                                            <div class="text-amber-600 font-semibold letter-spacing-1 flex flex-col gap-y-1">
+                                                <span>
+                                                    {{ $souscription->ref_key }}
+                                                </span>
+                                                <span>
+                                                    Du {{ __formatDateTime($souscription->created_at) }}
+                                                </span>
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">

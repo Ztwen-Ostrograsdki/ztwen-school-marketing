@@ -19,7 +19,6 @@ use App\Livewire\Master\SchoolsListing;
 use App\Livewire\Master\SpatieRoleProfilPage;
 use App\Livewire\Master\SpatieRolesPage;
 use App\Livewire\Master\UsersListing;
-use App\Livewire\Page\SubscriptionDetailsPage;
 use App\Livewire\Pages\AboutUs;
 use App\Livewire\Pages\Home;
 use App\Livewire\Pages\SchoolsPages;
@@ -31,6 +30,7 @@ use App\Livewire\User\MyNotifications;
 use App\Livewire\User\MyProfil;
 use App\Livewire\User\MyReceivedsAssistantRequestsPage;
 use App\Livewire\User\MySubscribes;
+use App\Livewire\User\SubscriptionDetailsPage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -88,7 +88,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('profil/k={id}/u={uuid}/mes-abonnements', MySubscribes::class)->name('my.subscribes')->middleware(['user.self']);
 
-    Route::get('abonnement/details/u={subscription_uuid}/ID={subscription_id}', SubscriptionDetailsPage::class)->name('subscription.details');
+    Route::get('abonnement/details/u={subscription_uuid}/k={subscription_key}', SubscriptionDetailsPage::class)->name('subscription.details');
 
     Route::get('profil/k={id}/u={uuid}/mes-assistants', MyAssistantsListing::class)->name('my.assistants')->middleware(['user.self']);
 

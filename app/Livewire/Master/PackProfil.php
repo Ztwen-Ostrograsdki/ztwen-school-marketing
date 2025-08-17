@@ -6,6 +6,7 @@ use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Livewire\Traits\PackActionsTraits;
+use App\Livewire\Traits\PackSusbscriptionActionsTraits;
 use App\Models\Pack;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -13,7 +14,7 @@ use Livewire\Component;
 #[Title("Page de gestion d'un pack")]
 class PackProfil extends Component
 {
-    use Toast, Confirm, ListenToEchoEventsTrait, PackActionsTraits;
+    use Toast, Confirm, ListenToEchoEventsTrait, PackActionsTraits, PackSusbscriptionActionsTraits;
 
     public $counter = 3;
 

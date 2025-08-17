@@ -88,6 +88,12 @@ class NewAssistantModal extends Component
 
             return;
         }
+        elseif($this->school->current_subscription() && !$this->school->current_subscription()->assistable){
+
+            return $this->toast("Vous avez déjà épuisé le nombre d'assistants que vous pouvez avoir avec votre abonnement actif actuellement!", 'info');
+
+            return;
+        }
 
         $this->validate();
 

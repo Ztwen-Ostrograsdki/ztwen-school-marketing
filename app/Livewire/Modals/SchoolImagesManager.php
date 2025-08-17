@@ -53,6 +53,13 @@ class SchoolImagesManager extends Component
 
             if($school->current_subscription()){
 
+                if(!$school->current_subscription()->imageable){
+
+                    return $this->toast("Vous avez déjà épuisé le nombre d'images que vous pouvez publier avec votre abonnement actif actuellement!", 'info');
+
+                    return;
+                }
+
                 $this->school = $school;
 
                 $this->dispatch('OpenModalEvent', $this->modal_name);

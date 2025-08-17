@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Notifications\RealTimeNotification;
 use App\Observers\ObserveSubscription;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -127,7 +128,151 @@ class Subscription extends Model
 
     public function to_details_route()
     {
-        return route('subscription.details', ['subscription_uuid' => $this->uuid, 'subscription_id' => $this->id]);
+        return route('subscription.details', ['subscription_uuid' => $this->uuid, 'subscription_key' => $this->ref_key]);
+    }
+
+    protected function remainingAssistants() : Attribute
+    {
+        $max_assistants = $this->max_assistants;
+
+        $assistants_enrolleds = count($this->assistants);
+
+        return Attribute::get(fn() => $max_assistants - $assistants_enrolleds);
+    }
+
+    public function assistable() : Attribute
+    {
+        return Attribute::get(fn() => $this->remainingAssistants > 0);
+    }
+
+    protected function remainingInfos() : Attribute
+    {
+        $max_infos = $this->max_infos;
+
+        $infos_publisheds = count($this->infos);
+
+        return Attribute::get(fn() => $max_infos - $infos_publisheds);
+    }
+
+    protected function infosable() : Attribute
+    {
+        return Attribute::get(fn() => $this->remainingInfos > 0);
+    }
+
+
+    protected function remainingStats() : Attribute
+    {
+        $max_stats = $this->max_stats;
+
+        $stats_publisheds = count($this->stats);
+
+        return Attribute::get(fn() => $max_stats - $stats_publisheds);
+    }
+
+    protected function statisable() : Attribute
+    {
+        return Attribute::get(fn() => $this->remainingStats > 0);
+    }
+
+
+    protected function remainingImages() : Attribute
+    {
+        $max_images = $this->max_images;
+
+        $images_publisheds = count($this->images);
+
+        return Attribute::get(fn() => $max_images - $images_publisheds);
+    }
+
+    protected function imageable() : Attribute
+    {
+        return Attribute::get(fn() => $this->remainingImages > 0);
+    }
+
+    protected function remainingDaysColor() : Attribute
+    {
+        return Attribute::get(fn() => self::getRemainingTextCss());
+    }
+
+    public function getRemainingTextCss()
+    {
+        Carbon::setLocale('fr');
+
+        $from = $this->will_closed_at;
+
+        $to = Carbon::today();
+
+        $target = Carbon::parse($from);
+
+        $joursRestants = $to->diffInDays($target, false);
+
+        if($joursRestants >= 30) $css = "text-green-500";
+
+        elseif(self::numberIsBetween($joursRestants, 20, 30)) $css = "text-yellow-300";
+        
+        elseif(self::numberIsBetween($joursRestants, 15, 20)) $css = "text-orange-500";
+
+        elseif(self::numberIsBetween($joursRestants, 7, 15)) $css = "text-orange-300";
+
+        elseif(self::numberIsBetween($joursRestants, 3, 7)) $css = "text-red-300";
+        
+        elseif(self::numberIsBetween($joursRestants, 1, 3)) $css = "text-red-400";
+
+        elseif($joursRestants == 1) $css = "text-red-500";
+
+        elseif($joursRestants < 0) $css = "text-fuchsia-600 animate-pulse";
+
+        return $css;
+            
+    }
+
+
+    public function numberIsBetween($number, $start, $end, $strict = false) : bool
+    {
+        return $number < $end && $number >= $start;
+    }
+
+    protected function remainingsDays() : Attribute
+    {
+        Carbon::setLocale('fr');
+
+        $from = $this->will_closed_at;
+
+        $to = Carbon::today();
+
+        $target = Carbon::parse($from);
+
+        $joursRestants = floor($to->diffInDays($target, false));
+
+        return Attribute::get(fn() => $joursRestants);
+    }
+
+
+
+    public function getMaxRemainings() : array
+    {
+        $max_assistants = $this->max_assistants;
+
+        $max_infos = $this->max_infos;
+
+        $max_stats = $this->max_stats;
+
+        $max_images = $this->max_images;
+
+        $images_uploadeds = count($this->images);
+
+        $stats_publisheds = count($this->stats);
+
+        $infos_publisheds = count($this->infos);
+
+        $assistants_enrolleds = count($this->assistants);
+
+        return [
+            'max_assistants' => $max_assistants - $assistants_enrolleds,
+            'max_infos' => $max_infos - $infos_publisheds,
+            'max_stats' => $max_stats - $stats_publisheds,
+            'max_images' => $max_images - $images_uploadeds,
+        ];
     }
 
 

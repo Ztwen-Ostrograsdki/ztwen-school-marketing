@@ -114,7 +114,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y text-xs md:text-sm text-gray-200 divide-gray-200">
-                                @foreach($subscriptions as $souscription)
+                                @foreach($subscriptions as $subscription)
                                     <tr class="hover:bg-gray-50 transition-colors duration-150" >
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="">
@@ -122,74 +122,79 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
-                                            <div class="text-amber-600 font-semibold letter-spacing-1">
-                                                {{ $souscription->ref_key }}
+                                            <div class="text-amber-600 font-semibold letter-spacing-1 flex flex-col gap-y-1">
+                                                <span>
+                                                    {{ $subscription->ref_key }}
+                                                </span>
+                                                <span class="text-xs text-gray-400">
+                                                    Du {{ __formatDateTime($subscription->created_at) }}
+                                                </span>
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="flex items-center gap-x-1.5">
                                                 <div class="h-14 w-14 flex-shrink-0">
-                                                    <img @click="currentImage = '{{ user_profil_photo($souscription->user) }}'; userName = '{{ $souscription->user->getFullName() }}'; email = '{{ $souscription->user->email }}'; show = true" class="h-14 w-14 rounded-full object-cover border-sky-500 border" src="{{ user_profil_photo($souscription->user) }}" alt="">
+                                                    <img @click="currentImage = '{{ user_profil_photo($subscription->user) }}'; userName = '{{ $subscription->user->getFullName() }}'; email = '{{ $subscription->user->email }}'; show = true" class="h-14 w-14 rounded-full object-cover border-sky-500 border" src="{{ user_profil_photo($subscription->user) }}" alt="">
                                                 </div>
-                                                <a class="hover:underline block hover:underline-offset-2" href="{{$souscription->user->to_profil_route()}}" class="ml-4">
+                                                <a class="hover:underline block hover:underline-offset-2" href="{{$subscription->user->to_profil_route()}}" class="ml-4">
                                                     <div class="">
-                                                        {{ $souscription->user->getFullName() }}
-                                                        @if($souscription->user->blocked)
-                                                        <span title="Le compte de {{$souscription->user->getFullName() }} a été bloqué depuis le {{__formatDateTime($souscription->user->blocked_at)}}" class="fas fa-lock text-red-500 font-semibold mx-1 ml-1.5"></span>
+                                                        {{ $subscription->user->getFullName() }}
+                                                        @if($subscription->user->blocked)
+                                                        <span title="Le compte de {{$subscription->user->getFullName() }} a été bloqué depuis le {{__formatDateTime($subscription->user->blocked_at)}}" class="fas fa-lock text-red-500 font-semibold mx-1 ml-1.5"></span>
                                                         @endif
                                                     </div>
                                                     <div class=" text-amber-500">
-                                                        {{ $souscription->user->email }}
+                                                        {{ $subscription->user->email }}
                                                     </div>
                                                     <div class=" text-green-500">
                                                         <span class="fas fa-phone mr-0.5"></span>
-                                                        {{ $souscription->user->contacts }}
+                                                        {{ $subscription->user->contacts }}
                                                     </div>
                                                 </a>
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="text-center">
-                                                <a class="hover:underline hover:underline-offset-2" href="{{$souscription->pack->to_admin_pack_profil_route()}}" class="">
+                                                <a class="hover:underline hover:underline-offset-2" href="{{$subscription->pack->to_admin_pack_profil_route()}}" class="">
                                                     <div class="text-center">
-                                                        {{ $souscription->pack->name }}
+                                                        {{ $subscription->pack->name }}
                                                     </div>
                                                 </a>
                                             </div>
                                             <div class="text-xs mt-2 mb-1 font-semibold flex flex-col items-center text-center">
-                                                @if($souscription->promoting)
+                                                @if($subscription->promoting)
                                                     <small class="text-green-800 border p-1 bg-green-300 rounded-md">En promo</small>
                                                     <small class="text-yellow-500 mt-1.5">
-                                                        Reduction : {{ $souscription->discount }} %
+                                                        Reduction : {{ $subscription->discount }} %
                                                     </small>
                                                 @endif
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="">
-                                                {{ __moneyFormat($souscription->unique_price) }}
+                                                {{ __moneyFormat($subscription->unique_price) }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="flex flex-col gap-y-1 items-center text-center">
-                                                {{ __moneyFormat($souscription->amount) }}
-                                                <small class="text-orange-400"> {{ __zero($souscription->months) }} mois</small>
+                                                {{ __moneyFormat($subscription->amount) }}
+                                                <small class="text-orange-400"> {{ __zero($subscription->months) }} mois</small>
                                             </div>
                                             
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="flex flex-wrap gap-2">
-                                                <a href="{{ $souscription->school->to_profil_route() }}" class="p-1 border bg-gray-500 text-white hover:bg-gray-700 rounded-md">{{ $souscription->school->name }}</a>
+                                                <a href="{{ $subscription->school->to_profil_route() }}" class="p-1 border bg-gray-500 text-white hover:bg-gray-700 rounded-md">{{ $subscription->school->name }}</a>
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="flex flex-col gap-y-1.5">
-                                                @if($souscription->validate_at && $souscription->will_closed_at)
+                                                @if($subscription->validate_at && $subscription->will_closed_at)
                                                     <span>
-                                                        {{ __formatDateTime($souscription->will_closed_at) }}
+                                                        {{ __formatDateTime($subscription->will_closed_at) }}
                                                     </span>
                                                     <span class="text-green-400 text-center font-semibold letter-spacing-1">
-                                                        {{ __formatDateDiff($souscription->will_closed_at) }}
+                                                        {{ __formatDateDiff($subscription->will_closed_at) }}
                                                     </span>
                                                 @else
                                                     <span class="text-red-200 font-semibold letter-spacing-1">Pas encore validé</span>
@@ -197,40 +202,40 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap text-center">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if($souscription->validate_at) bg-green-100 text-green-800 @else bg-red-200 text-red-600 @endif">
-                                             {{ $souscription->validate_at ? "Payé" : "Non payé" }}
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if($subscription->validate_at) bg-green-100 text-green-800 @else bg-red-200 text-red-600 @endif">
+                                             {{ $subscription->validate_at ? "Payé" : "Non payé" }}
                                             </span>
                                         </td>
                                         
                                         <td class="px-6 py-2 whitespace-nowrap text-right  font-medium">
                                             <div class="flex gap-x-1.5">
-                                                <button wire:click='deleteSubscriptionRequest({{$souscription->id}})' class="block hidden text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
-                                                    <span wire:loading.remove wire:target='deleteSubscriptionRequest({{$souscription->id}})'>
+                                                <button wire:click='deleteSubscriptionRequest({{$subscription->id}})' class="block hidden text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                    <span wire:loading.remove wire:target='deleteSubscriptionRequest({{$subscription->id}})'>
                                                         <span class="fas fa-trash mr-1"></span>
                                                         Suppr.
                                                     </span>
-                                                    <span wire:loading wire:target='deleteSubscriptionRequest({{$souscription->id}})'>
+                                                    <span wire:loading wire:target='deleteSubscriptionRequest({{$subscription->id}})'>
                                                         <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                                         <span>En cours...</span>
                                                     </span>
                                                 </button>
                                                 
-                                                <button wire:click='nofifySubscriberThatExpiredDateIsSoClose({{$souscription->id}})' class="block text-white cursor-pointer bg-orange-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-700 focus:ring-orange-800" type="button">
-                                                    <span wire:loading.remove wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$souscription->id}})'>
+                                                <button wire:click='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})' class="block text-white cursor-pointer bg-orange-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-700 focus:ring-orange-800" type="button">
+                                                    <span wire:loading.remove wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})'>
                                                         <span class="fas fa-calendar mr-1"></span>
                                                         Notifier date d'expiration
                                                     </span>
-                                                    <span wire:loading wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$souscription->id}})'>
+                                                    <span wire:loading wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})'>
                                                         <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                                         <span>En cours...</span>
                                                     </span>
                                                 </button>
-                                                <button wire:click='markAsExpired({{$souscription->id}})' class="block text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
-                                                    <span wire:loading.remove wire:target='markAsExpired({{$souscription->id}})'>
+                                                <button wire:click='markAsExpired({{$subscription->id}})' class="block text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                    <span wire:loading.remove wire:target='markAsExpired({{$subscription->id}})'>
                                                         <span class="fas fa-hourglass-end mr-1"></span>
-                                                        Marquer comme exipiré
+                                                        Plannifier expiration
                                                     </span>
-                                                    <span wire:loading wire:target='markAsExpired({{$souscription->id}})'>
+                                                    <span wire:loading wire:target='markAsExpired({{$subscription->id}})'>
                                                         <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                                         <span>En cours...</span>
                                                     </span>

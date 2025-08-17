@@ -27,16 +27,30 @@ class ListenToPlannedTaskToDelaySubscription
         
         foreach($subscriptions as $subscription){
 
-            if($subscription->will_closed_at->isPast()){
+            if($subscription->hasPlannedDelayedTask()){
 
-                $jobs[] = new JobToDelayedSubscription($subscription, $event->admin_validator);
+                $message = "L'abonnement ref:{$subscription->ref_key} du pack {$subscription->pack->name} a déjà une tâche de désactivation plannifiée!";
 
+                Notification::sendNow([$event->admin_validator], new RealTimeNotification($message));
+
+                return ;
             }
             else{
 
-                $jobs[] = (new JobToDelayedSubscription($subscription, $event->admin_validator))->delay(Carbon::parse($subscription->will_closed_at)->addHour());
+                if($subscription->will_closed_at->isPast()){
 
-                $subscription->definePlannedTask();
+                    $jobs[] = new JobToDelayedSubscription($subscription, $event->admin_validator);
+
+                }
+                else{
+
+                    $jobs[] = (new JobToDelayedSubscription($subscription, $event->admin_validator))->delay(Carbon::parse($subscription->will_closed_at)->addHour());
+
+                    //PLANNED TASK 
+                    $subscription->definePlannedTask(config('app.subcriptions_task_report'));
+                }
+
+
             }
 
         }

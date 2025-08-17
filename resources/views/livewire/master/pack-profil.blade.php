@@ -1,4 +1,4 @@
-<div class="p-6 w-full mx-auto z-bg-secondary-light-opac shadow-2 shadow-sky-500 mt-10">
+<div class="p-6 w-full mx-auto z-bg-secondary-light-opac shadow-2 shadow-sky-500 mt-10" x-data="{ show: false, currentImage: '', userName: '', email: '' }">
     <style>
       tr{
 			border: thin solid white !important;
@@ -32,7 +32,7 @@
                 </span>
                 
                 <span class="text-yellow-500">
-                    {{ numberZeroFormattor(count($pack->privileges)) }} privilèges accordés à ce pack
+                    {{ __zero(count($pack->privileges)) }} privilèges accordés à ce pack
                 </span>
             </h2>
             <div class="flex justify-between gap-x-2 w-full mt-2 lg:text-base md:text-lg sm:text-xs xs:text-xs">
@@ -92,68 +92,196 @@
                 <table class="min-w-full divide-y text-xs sm:text-sm letter-spacing-1 divide-gray-200 ">
                     <thead class="bg-black/50 text-sky-500 ">
                         <tr>
-                            <th scope="col" class="px-6 py-4 uppercase tracking-wider text-left">
+                            <th scope="col" class="px-2 py-4 uppercase tracking-wider text-left">
                                 #N°
                             </th>
-                            <th scope="col" class="px-6 py-4 uppercase tracking-wider">
-                                Ecole
+                            <th scope="col" class="px-2 py-4 uppercase tracking-wider">
+                                Abonné
                             </th>
-                            <th scope="col" class="px-6 py-4 uppercase tracking-wider">
-                                abonnés au pack {{ ($pack->name) }} depuis
+                            <th scope="col" class="px-2 py-4 uppercase tracking-wider">
+                                Dates
                             </th>
-                            <th scope="col" class="px-6 py-4 uppercase tracking-wider">
+                            <th scope="col" class="px-2 py-4 uppercase tracking-wider">
+                                Détails payement
+                            </th>
+                            <th scope="col" class="px-2 py-4 uppercase tracking-wider">
+                                Détails
+                            </th>
+                            <th scope="col" class="px-2 py-4 uppercase tracking-wider">
+                                Détails Rest.
+                            </th>
+                            <th scope="col" class="px-2 py-4 uppercase tracking-wider">
                                 Actions
                             </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y text-gray-200 divide-gray-200">
-                        @foreach ($pack->users() as $user)
+                        @foreach ($pack->schools() as $school)
+                            @php
+                                $user = $school->user;
+
+                                $subscription = $school->current_subscription();
+                            @endphp
                         <tr wire:key='list-des-utilisateurs-abonnes-{{getRand(2999, 8888888)}}-de-ce-role' class="hover:bg-gray-50 transition-colors duration-150">
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-2 py-2 whitespace-nowrap">
                                 <div class="">{{ numberZeroFormattor($loop->iteration) }}</div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                <div class="h-10 w-10 flex-shrink-0">
-                                    <img class="h-10 w-10 rounded-full object-cover border-sky-500 border" src="{{ user_profil_photo($user) }}" alt="Photo de profil de {{ $user->getFullName() }}">
-                                </div>
-                                <div class="ml-4">
-                                    <span class="flex gap-x-2 items-center">
-                                        <a title="Charger le profil de {{$user->getFullName()}}" class="" href="{{ $user->to_profil_route() }}">
-                                            {{$user->getFullName()}} 
-                                        </a>
-                                    </span>
-                                    <div class="text-sm text-gray-500">
-                                        {{ $user->email }}
+                            <td class="px-2 py-2 whitespace-nowrap">
+                                <div class="flex items-center hover:underline hover:underline-offset-2">
+                                    <div @click="currentImage = '{{ user_profil_photo($user) }}'; userName = '{{ $user->getFullName() }}'; email = '{{ $user->email }}'; show = true" class="h-14 w-14 flex-shrink-0">
+                                        <img class="h-14 w-14 rounded-full object-cover border-sky-500 border" src="{{ user_profil_photo($user) }}" alt="Photo de profil de {{ $user->getFullName() }}">
+                                    </div>
+                                    <div class="ml-4">
+                                        <span class="flex gap-x-2 items-center">
+                                            <a title="Voir les détails de l'abonnement {{$subscription->ref_key}}" class="" href="{{ $subscription->to_details_route() }}">
+                                                {{$user->getFullName()}} 
+                                            </a>
+                                        </span>
+                                        <div class="text-sm text-gray-500">
+                                            <span class="fas fa-envelope mr-0.5"></span>
+                                            {{ $user->email }}
+                                        </div>
+                                        <div class="text-sm text-indigo-600">
+                                            <span class="fas fa-phone mr-0.5"></span>
+                                            {{ $user->contacts }}
+                                        </div>
                                     </div>
                                 </div>
+                                <div>
+                                    <a href="{{$school->to_profil_route()}}" class="inline-block p-2 rounded-md bg-sky-700/60 my-1.5 hover:underline hover:underline-offset-2 hover:text-rose-300">
+                                        <span>Ecole : </span>
+                                        <span>
+                                            {{ $school->name }}
+                                        </span>
+                                    </a>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @php
-                                    $user_role = $user->userRoles()->where('role_id', $pack->id)->first();
-                                @endphp
-                                {{ $user_role ? __formatDateTime($user_role->created_at) : 'Date non renseignée' }}
-
-                                @if($user_role)
-                                <span class="text-yellow-600 text-xs ml-3">
-                                    ( {{ $user_role->created_at->diffForHumans() }} ) 
-                                </span>
+                            <td class="px-2 py-2 whitespace-nowrap text-right text-sm font-medium">
+                                @if($school->current_subscription())
+                                <div class="text-sm font-thin letter-spacing-1 text-gray-400 flex flex-col gap-y-1">
+                                    <span>
+                                        Souscrit le {{__formatDate($subscription->created_at) }}
+                                    </span>
+                                    <span>
+                                        Validé le {{ __formatDate($subscription->validate_at) }}
+                                    </span>
+                                    <span class="{{ $subscription->remainingDaysColor }}">
+                                        Expire le {{__formatDate($subscription->will_closed_at) }}
+                                        <span>Soit dans {{ str_replace('restants', '', __formatDateDiff($subscription->will_closed_at)) }}</span>
+                                    </span>
+                                </div>
+                                @else
+                                    <span> Déjà expiré</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <span wire:click="removeUserFromRole({{$user->id}})" class="flex hover:bg-red-700 text-gray-300 border rounded-md bg-red-600 gap-x-3 w-full justify-center items-center">
-                                    <span class=" px-2 py-1" title="Retirer lz rôle {{ $pack->name }} à {{$user->getFullName()}}">
-                                        <span wire:target="removeUserFromRole({{$user->id}})" wire:loading.remove>
-                                            <span class="fas fa-trash"></span>
-                                            <span class="hidden lg:inline">Retirer le rôle</span>
+                            <td class="px-2 py-2 whitespace-nowrap">
+                                @if ($subscription->validate_at && $subscription->payment)
+                                    <div class="flex justify-center items-center ">
+                                        <span class="flex flex-wrap gap-1 font-thin justify-start">
+                                            <span>
+                                                <span>Status : </span>
+                                                <span>
+                                                    <span class="text-green-500">           {{ $subscription->payment_status }}
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            <span>
+                                                <span>Prix unitaire : </span>
+                                                <span class="text-amber-500">
+                                                    {{ __moneyFormat($subscription->unique_price) }}
+                                                </span>
+                                            </span>
+                                            <span>
+                                                <span>Nombre de mois : </span>
+                                                <span class="text-amber-500">
+                                                    {{ __zero($subscription->months) }}
+                                                </span>
+                                            </span>
+                                            <span>
+                                                <span>Reduction : </span>
+                                                <span class="text-amber-500">
+                                                    {{ $subscription->discount }} %
+                                                </span>
+                                            </span>
+                                            <span>
+                                                <span>Montant total : </span>
+                                                <span class="text-amber-500">
+                                                    {{ __moneyFormat($subscription->amount) }}
+                                                </span>
+                                            </span>
+                                            <span>
+                                                <span>Montant payé : </span>
+                                                <span class="text-amber-500">
+                                                    {{ __moneyFormat($subscription->payment->amount) }}
+                                                </span>
+                                            </span>
                                         </span>
-                                        <span wire:target="removeUserFromRole({{$user->id}})" wire:loading>
-                                            <span>Traitement en cours...</span>
-                                            <span class="fas fa-rotate animate-spin"></span>
-                                        </span>
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="px-2 py-2 whitespace-nowrap">
+                                <div class="flex flex-col gap-y-1">
+                                    <span class="flex justify-between">
+                                        <span>Max Img : </span>
+                                        <span> {{ $subscription->max_images }} </span>
                                     </span>
-                                </span>
+                                    <span class="flex justify-between">
+                                        <span>Max Stats : </span>
+                                        <span> {{ $subscription->max_stats }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
+                                        <span>Max Infos : </span>
+                                        <span> {{ $subscription->max_infos }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
+                                        <span>Max Assist. : </span>
+                                        <span> {{ $subscription->max_assistants }} </span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-2 py-2 whitespace-nowrap">
+                                <div class="flex flex-col gap-y-1 text-red-400">
+                                    <span class="flex justify-between">
+                                        <span>Img : </span>
+                                        <span> {{ $subscription->remainingImages }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
+                                        <span>Stats : </span>
+                                        <span> {{ $subscription->remainingStats }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
+                                        <span>Infos : </span>
+                                        <span> {{ $subscription->remainingInfos }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
+                                        <span>Assist. : </span>
+                                        <span> {{ $subscription->remainingAssistants }} </span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-2 py-2 whitespace-nowrap text-center">
+                                <div class="flex flex-col gap-y-1.5">
+                                    <button wire:click='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})' class="block text-white cursor-pointer bg-orange-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-700 focus:ring-orange-800" type="button">
+                                        <span wire:loading.remove wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})'>
+                                            <span class="fas fa-calendar mr-1"></span>
+                                            Notifier date d'expiration
+                                        </span>
+                                        <span wire:loading wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})'>
+                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                            <span>En cours...</span>
+                                        </span>
+                                    </button>
+                                    <button wire:click='markAsExpired({{$subscription->id}})' class="block text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                        <span wire:loading.remove wire:target='markAsExpired({{$subscription->id}})'>
+                                            <span class="fas fa-hourglass-end mr-1"></span>
+                                            Plannifier expiration
+                                        </span>
+                                        <span wire:loading wire:target='markAsExpired({{$subscription->id}})'>
+                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                            <span>En cours...</span>
+                                        </span>
+                                    </button>
+                                </div>  
                             </td>
                         </tr>
                         @endforeach
@@ -181,9 +309,8 @@
                     
                     <thead class="bg-gray-900 text-gray-300 font-semibold">
                         <tr>
-                            <th class="px-3 py-4 text-center">#N°</th>
-                            <th class="px-3 py-4 text-left">Privilèges</th>
-                            <th class="px-3 py-4 text-center">Actions</th>
+                            <th class="px-3 py-2 text-center">#N°</th>
+                            <th class="px-3 py-2 text-left">Privilèges</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100" id="payments-tbody">
@@ -192,10 +319,8 @@
                                 <td class="px-2 py-2 text-gray-400 text-center">
                                     {{ numberZeroFormattor($loop->iteration) }}
                                 </td>
-                                <td class="px-2 py-2 text-gray-300 font-medium">
+                                <td class="px-2 py-2 text-gray-400 font-thin letter-spacing-1">
                                     {{ __translatePermissionName($permission) }}
-                                <td class="px-2 py-2 text-center text-gray-400 font-semibold">
-                                    
                                 </td>
                             </tr>
                         @endforeach
@@ -212,6 +337,24 @@
         </div>
     @endif
   </div>
+  <div 
+        x-show="show"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-75"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-75"
+        class="fixed inset-0 bg-black/85 flex flex-col items-center justify-center z-50"
+        style="display: none;"
+        @click="show = false"
+    >
+        <h5 class="mx-auto flex flex-col gap-y-1 text-lg w-auto text-center py-3 font-semibold letter-spacing-1 bg-gray-950 my-3" >
+            <span class=" text-sky-500 uppercase" x-text="userName"></span>
+            <span class=" text-yellow-500" x-text="email"></span>
+        </h5>
+        <img :src="currentImage" alt="Zoom" class="w-screen md:max-w-xl max-h-[90vh] rounded shadow-xl border-2 border-white" @click.stop>
+    </div>
 </div>
 
 

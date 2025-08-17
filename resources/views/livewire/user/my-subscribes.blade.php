@@ -199,24 +199,5 @@
             </div>
         </div>
     </div>
-    <div 
-        x-show="show"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 scale-75"
-        x-transition:enter-end="opacity-100 scale-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 scale-100"
-        x-transition:leave-end="opacity-0 scale-75"
-        class="fixed inset-0 bg-black/85 flex flex-col items-center justify-center z-50"
-        style="display: none;"
-        @click="show = false"
-    >
-        <h5 class="mx-auto flex flex-col gap-y-1 text-lg w-auto text-center py-3 font-semibold letter-spacing-1 bg-gray-950 my-3" >
-            <span class=" text-sky-500 uppercase" x-text="userName"></span>
-            <span class=" text-yellow-500" x-text="email"></span>
-        </h5>
-        <img :src="currentImage" alt="Zoom" class="w-screen md:max-w-xl max-h-[90vh] rounded shadow-xl border-2 border-white" @click.stop>
-    </div>
-    
 </div>
 

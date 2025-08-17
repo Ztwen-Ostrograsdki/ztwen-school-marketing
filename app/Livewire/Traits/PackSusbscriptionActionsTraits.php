@@ -4,6 +4,7 @@ namespace App\Livewire\Traits;
 
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
+use App\Events\PlannedTaskToDelayedSubscriptionEvent;
 use App\Helpers\Robots\SpatieManager;
 use App\Models\Subscription;
 use App\Notifications\RealTimeNotification;
@@ -61,15 +62,49 @@ trait PackSusbscriptionActionsTraits {
     {
         SpatieManager::ensureThatUserCan();
 
-        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
-                    <p> Voulez-vous vraiment faire expirer cet abonnement ? </p>
+        if($subscription_id){
+
+            $subscription = Subscription::find($subscription_id);
+
+            if($subscription && $subscription->remainingsDays > 0){
+
+                $expired_date = __formatDateTime($subscription->will_closed_at);
+
+                $remainingsDays = $subscription->remainingsDays;
+
+                $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment plannifier la tâche d'expiration de cet abonnement ? </p>
                 </h6>";
 
-        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cela signifira que cet abonnement sera inactif et les privilèges dissouts! </p>";
+                $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cet abonnement expire le {$expired_date} soit dans 
+                {$remainingsDays} jours. Cela signifira que cet abonnement sera inactif et les privilèges dissouts une fois la tâche exécutée! </p>";
 
-        $options = ['event' => 'subscriptionExpired', 'confirmButtonText' => 'Expirer', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_id' => $subscription_id]];
+                $options = ['event' => 'subscriptionExpired', 'confirmButtonText' => 'Plannifier', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_id' => $subscription_id]];
 
-        $this->confirm($html, $noback, $options);
+                $this->confirm($html, $noback, $options);
+
+            }
+            elseif($subscription && $subscription->remainingsDays < 0){
+
+                $expired_date = __formatDateTime($subscription->will_closed_at);
+
+                $remainingsDays = $subscription->remainingsDays;
+
+                $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment expirer cet abonnement ? </p>
+                </h6>";
+
+                $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cet abonnement a déjà expiré depuis le {$expired_date} soit depuis 
+                {$remainingsDays} jours.</p>";
+
+                $options = ['event' => 'subscriptionExpired', 'confirmButtonText' => 'Expirer', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_id' => $subscription_id]];
+
+                $this->confirm($html, $noback, $options);
+
+            }
+        }
+
+       
     }
 
     #[On('subscriptionExpired')]
@@ -85,13 +120,20 @@ trait PackSusbscriptionActionsTraits {
 
                 if($subscription){
 
-					// $subscription->__subcriptionApprobationManager(auth_user());
+                    if(!$subscription->hasPlannedDelayedTask()){
 
+                        PlannedTaskToDelayedSubscriptionEvent::dispatch(auth_user(), [$subscription_id]);
+                    }
+                    else{
+
+                        $this->toast("L'abonnement " . $subscription->ref_key . " a déjà une tâche plannifiée en cours.");
+
+                    }
                 }
             }
             else{
 
-                return $this->toast("Le processus de marquage expiration de l'abonnement a échoué", 'error');
+                return $this->toast("Le processus de plannification  d'expiration de l'abonnement a échoué", 'error');
             }
 
             
@@ -193,9 +235,22 @@ trait PackSusbscriptionActionsTraits {
     }
     
     
-    public function nofifySubscriberThatExpiredDateIsSoClose()
+    public function nofifySubscriberThatExpiredDateIsSoClose($subscription_id)
     {
+        SpatieManager::ensureThatUserCan();
 
+        if($subscription_id){
+
+            $subscription = Subscription::find($subscription_id);
+
+            if($subscription){
+
+                $subscription->__rememberDaysRemainingToSubscriber(auth_user());
+
+                return $this->toast("Un rappel a été envoyé à " . $subscription->subscriber->getFullName() . " pour lui rappeler la date d'expiration de son abonnement en cours!", 'success');
+
+            }
+        }
     }
 
 
