@@ -12,6 +12,11 @@ trait SpatieManager{
 		return self::getUserDashboard($user_id);
 	}
 
+	public static function ensureThatUserHasNotSchool(User $user)
+	{
+		return count($user->schools) < 1;
+	}
+
 
 	public static function getUserDashboard($user_id = null)
 	{

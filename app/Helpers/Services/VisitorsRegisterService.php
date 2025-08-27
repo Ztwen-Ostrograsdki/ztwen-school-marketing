@@ -32,32 +32,32 @@ trait VisitorsRegisterService{
             $ip = Request::ip();
 
             // Évite les doublons dans une courte période
-        //     if (!Visitor::where('ip_address', $ip)->whereDate('visited_at', now()->toDateString())->exists()) {
+            if (!Visitor::where('ip_address', $ip)->whereDate('visited_at', now()->toDateString())->exists()) {
 
 
-        //         if(__isConnectedToInternet()){
+                if(__isConnectedToInternet()){
 
-		// 			$location = Http::get("http://ip-api.com/json/{$ip}")->json(); // API gratuite
+					$location = Http::get("http://ip-api.com/json/{$ip}")->json(); // API gratuite
 
-		// 			$country = $location['country'] ?? "BENIN";
+					$country = $location['country'] ?? "BENIN";
 
-		// 			$city =  $location['city'] ?? null;
-		// 		}
-		// 		else{
+					$city =  $location['city'] ?? null;
+				}
+				else{
 
-		// 			$country = "BENIN";
+					$country = "BENIN";
 
-		// 			$city =  null;
-		// 		}
+					$city =  null;
+				}
 
-        //         Visitor::create([
-        //             'ip_address' => $ip,
-        //             'user_agent' => Request::header('User-Agent'),
-        //             'country' => $country,
-        //             'city' => $city,
-        //             'device_type' => self::getDeviceType(),
-        //         ]);
-        //     }
+                Visitor::create([
+                    'ip_address' => $ip,
+                    'user_agent' => Request::header('User-Agent'),
+                    'country' => $country,
+                    'city' => $city,
+                    'device_type' => self::getDeviceType(),
+                ]);
+            }
         }
     }
 

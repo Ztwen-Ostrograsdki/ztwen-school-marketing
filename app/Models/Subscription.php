@@ -16,6 +16,7 @@ use App\Models\Pack;
 use App\Models\Payment;
 use App\Models\School;
 use App\Models\SchoolImage;
+use App\Models\SchoolVideo;
 use App\Models\Stat;
 use App\Models\User;
 use App\Notifications\RealTimeNotification;
@@ -41,8 +42,10 @@ class Subscription extends Model
         'observation',
         'validate_at',
         'will_closed_at',
+        'locked_at',
         'privileges',
         'max_images',
+        'max_videos',
         'max_stats',
         'max_infos',
         'max_assistants',
@@ -68,6 +71,7 @@ class Subscription extends Model
         'privileges' => 'array',
         'will_closed_at' => 'datetime',
         'validate_at' => 'datetime',
+        'locked_at' => 'datetime',
 
     ];
 
@@ -106,6 +110,11 @@ class Subscription extends Model
         return $this->hasMany(Info::class);
     }
 
+    public function videos()
+    {
+        return $this->hasMany(SchoolVideo::class);
+    }
+
     public function stats()
     {
         return $this->hasMany(Stat::class);
@@ -129,6 +138,20 @@ class Subscription extends Model
     public function to_details_route()
     {
         return route('subscription.details', ['subscription_uuid' => $this->uuid, 'subscription_key' => $this->ref_key]);
+    }
+
+    protected function remainingVideos() : Attribute
+    {
+        $max_videos = $this->max_videos;
+
+        $videos_publisheds = count($this->videos);
+
+        return Attribute::get(fn() => $max_videos - $videos_publisheds);
+    }
+
+    protected function videosable() : Attribute
+    {
+        return Attribute::get(fn() => $this->remainingVideos > 0);
     }
 
     protected function remainingAssistants() : Attribute

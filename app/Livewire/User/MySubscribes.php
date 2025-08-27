@@ -93,6 +93,8 @@ class MySubscribes extends Component
 
     public function displaySubscriptionDetails($subscription_id)
     {
-            
+        $subscription = Subscription::where('id', $subscription_id)->firstOrFail();
+
+        return redirect($subscription->to_details_route());
     }
 }

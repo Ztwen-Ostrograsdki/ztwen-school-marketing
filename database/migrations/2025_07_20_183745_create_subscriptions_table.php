@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('ref_key');
             $table->text('observation')->nullable()->default(null);
             $table->datetime('validate_at')->nullable()->default(null);
+            $table->datetime('locked_at')->nullable()->default(null);
             $table->datetime('will_closed_at')->nullable()->default(null);
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->unsignedBigInteger('max_images')->nullable()->default(3);
             $table->unsignedBigInteger('max_assistants')->nullable()->default(1);
             $table->unsignedBigInteger('max_stats')->nullable()->default(3);
+            $table->unsignedBigInteger('max_videos')->nullable()->default(0);
             $table->unsignedBigInteger('max_infos')->nullable()->default(3);
             $table->boolean('on_page')->default(false);
             $table->boolean('seen_by')->default(false);

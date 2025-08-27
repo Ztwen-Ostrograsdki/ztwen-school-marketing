@@ -2,9 +2,8 @@
 
 namespace App\Livewire\Pages;
 
+use App\Models\NewsLetterSubscriber;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -26,6 +25,21 @@ class Footer extends Component
 
     public function subscribeTo()
     {
+        $this->resetErrorBag();
+
+        $this->validate();
+
+        $news_letter_created = NewsLetterSubscriber::create(['email' => $this->subscriber_mail, 'is_active' => true]);
+
+        if($news_letter_created){
+
+            $this->toast("Votre soubscription à la newsletter a été envoyée!", 'success');
+
+            $this->resetErrorBag();
+
+            $this->reset();
+
+        }
 
     }
 }

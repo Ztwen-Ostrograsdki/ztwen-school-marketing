@@ -9,6 +9,7 @@ use App\Helpers\TraitsManagers\UserTrait;
 use App\Models\UserRole;
 use App\Observers\ObserveUser;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -169,9 +170,21 @@ class User extends Authenticatable
         return $this->hasMany(School::class);
     }
 
+    public function school() 
+    {
+        if(count($this->schools) > 0){
+
+            return $this->schools()->first();
+
+        }
+
+        return null;
+
+    }
+
     public function current_subscription()
     {
-        return $this->subscriptions()->where('is_active', true)->first();
+        return $this->subscriptions()->where('is_active', true)->where('will_closed_at', '>', now())->first();
     }
 
     public function current_payment()

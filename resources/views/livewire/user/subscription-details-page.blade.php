@@ -1,6 +1,14 @@
 <div class="w-full max-w-[100rem] py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" >
     <div class="mt-10">
-        <div>
+        <div class="flex flex-col">
+            @if(url()->previous() !== url()->current())
+            <a class="bg-black/60 hover:bg-black/40 text-white hover:underline underline-offset-2 rounded-sm p-2 mb-3 uppercase font-semibold letter-spacing-1" href="{{url()->previous() ?? auth_user()->to_profil_route()}}">
+                <span class="fas fa-hand-point-left"></span>
+                <span>
+                    Retour
+                </span>
+            </a>
+            @endif
             <h6 class="text-center py-2 letter-spacing-1 font-semibold text-green-400  border border-yellow-500 bg-black/60 my-2 letter-spacing-2 flex flex-col gap-y-1">
                 <span class="uppercase">Abonnement : #{{ $subscription->ref_key }}</span>
                 <span>

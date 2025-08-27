@@ -1,4 +1,4 @@
-<div class="w-full max-w-[85rem] py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" x-data="{ show: false, currentImage: '', userName: '', email: '' }">
+<div class="w-full py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" x-data="{ show: false, currentImage: '', userName: '', email: '' }">
     
     <div class="mt-10">
         <div>
@@ -120,7 +120,7 @@
                         </span> utilisateurs sélectionnés
                     </h6>
                 @endif
-                <div class="container max-w-6xl">
+                <div class="container w-full">
                     <div class="overflow-hidden">
                 <!-- Table Header -->
                         <div class="relative py-2">
@@ -158,11 +158,11 @@
                             <thead class="bg-black/50 text-sky-500 ">
                                 <tr>
                                     @if(__isMaster() && !$display_select_cases)
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-left">
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider text-left">
                                         #N°
                                     </th>
                                     @else
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider">
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider">
                                         <button
                                             wire:click="toggleSelectAll"
                                             class="bg-zinc-600 text-white px-4 py-2 rounded-lg hover:bg-zinc-700 hover:text-gray-500 transition"
@@ -177,26 +177,26 @@
                                         </button>
                                     </th>
                                     @endif
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-left">
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider text-left">
                                         Utilisateurs
                                     </th>
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-left">
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider text-left">
                                         Contacts
                                     </th>
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider">
-                                        Address
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider">
+                                        Addresse
                                     </th>
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider">
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider">
                                         Roles
                                     </th>
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider">
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider">
                                         Ecoles
                                     </th>
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider">
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider">
                                         Abonnements
                                     </th>
                                     @if(__isMaster() && !$display_select_cases)
-                                        <th scope="col" class="px-6 py-4 uppercase tracking-wider">
+                                        <th scope="col" class="px-2 py-4 uppercase tracking-wider">
                                             Actions
                                         </th>
                                     @endif
@@ -206,7 +206,7 @@
                                 @foreach($users as $user)
                                     <tr class="hover:bg-gray-50 transition-colors duration-150" @if(in_array($user->id, $selected_users)) style="background: #19191a !important; text-color: gray; opacity: 0.5;" @endif>
                                         @if($display_select_cases && !$user->isMaster())
-                                        <td class="px-6 py-2 whitespace-nowrap text-right  font-medium">
+                                        <td class="px-2 py-2 whitespace-nowrap text-right  font-medium">
                                             <span wire:click="pushOrRetrieveFromSelectedUsers({{$user->id}})" class="w-full mx-auto text-center font-bold inline-block cursor-pointer">
                                                 <span wire:loading.remove wire:target="pushOrRetrieveFromSelectedUsers({{$user->id}})">
                                                     @if(in_array($user->id, $selected_users))
@@ -221,13 +221,13 @@
                                             </span>
                                         </td>
                                         @else
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-2 py-2 whitespace-nowrap">
                                             <div class="">
                                                 {{ __zero($loop->iteration) }}
                                             </div>
                                         </td>
                                         @endif
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-2 py-2 whitespace-nowrap">
                                             <div class="flex items-center gap-x-1.5">
                                                 <div class="h-10 w-10 flex-shrink-0">
                                                     <img @click="currentImage = '{{ user_profil_photo($user) }}'; userName = '{{ $user->getFullName() }}'; email = '{{ $user->email }}'; show = true" class="h-10 w-10 rounded-full object-cover border-sky-500 border" src="{{ user_profil_photo($user) }}" alt="">
@@ -252,24 +252,24 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-2 py-2 whitespace-nowrap">
                                             <div class="">
                                                 {{ $user->contacts }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-2 py-2 whitespace-nowrap">
                                             <div class="">
                                                 {{ $user->address }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-2 py-2 whitespace-nowrap">
                                             <div class="flex flex-wrap gap-2">
                                                 @foreach ($user->roles as $role)
                                                     <small class="p-1 border bg-gray-500 text-white hover:bg-gray-700 rounded-md">{{ __translateRoleName($role->name) }}</small>
                                                 @endforeach
                                             </div>
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-2 py-2 whitespace-nowrap">
                                             @if(count($user->schools))
                                             <div class="flex flex-wrap gap-2">
                                                 @foreach ($user->schools as $school)
@@ -282,13 +282,26 @@
                                             </span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap text-center">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                            </span>
+                                        <td class="px-2 py-2 whitespace-nowrap text-center">
+                                            @if($user->schools)
+                                                @if($user->current_subscription())
+                                                    <a href="{{ $user->current_subscription()->to_details_route() }}" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-green-100 text-green-800 flex-col hover:underline hover:underline-offset-2">
+                                                      Actif ({{ $user->current_subscription()->ref_key }} )
+                                                      <span>Jusqu'au {{__formatDate($user->current_subscription()->will_closed_at) }}</span>
+                                                    </a>
+                                                @else
+                                                    <span class="px-2 flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-600 text-center items-center justify-center mx-auto">
+                                                        Aucun abonnement actif
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="px-2 flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-600 text-center items-center justify-center mx-auto">
+                                                    Aucune donnée
+                                                </span>
+                                            @endif
                                         </td>
                                         @if(!$display_select_cases)
-                                        <td class="px-6 py-2 whitespace-nowrap text-right  font-medium">
+                                        <td class="px-2 py-2 whitespace-nowrap text-right  font-medium">
                                             <div class="flex gap-x-1.5">
                                                 @if(!$user->confirmeds())
                                                 <button wire:click='confirmUserEmail({{$user->id}})' class="block text-white cursor-pointer bg-green-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-600 focus:ring-green-800" type="button">

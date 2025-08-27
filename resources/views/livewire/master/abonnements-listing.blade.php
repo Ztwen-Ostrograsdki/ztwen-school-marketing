@@ -209,17 +209,29 @@
                                         
                                         <td class="px-6 py-2 whitespace-nowrap text-right  font-medium">
                                             <div class="flex gap-x-1.5">
-                                                <button wire:click='deleteSubscriptionRequest({{$subscription->id}})' class="block hidden text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
-                                                    <span wire:loading.remove wire:target='deleteSubscriptionRequest({{$subscription->id}})'>
-                                                        <span class="fas fa-trash mr-1"></span>
-                                                        Suppr.
+                                                @if($subscription->is_active)
+                                                <button wire:click='blockSubscriptionRequest({{$subscription->id}})' class="block  text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                    <span wire:loading.remove wire:target='blockSubscriptionRequest({{$subscription->id}})'>
+                                                        <span class="fas fa-lock mr-1"></span>
+                                                        Suspendre
                                                     </span>
-                                                    <span wire:loading wire:target='deleteSubscriptionRequest({{$subscription->id}})'>
+                                                    <span wire:loading wire:target='blockSubscriptionRequest({{$subscription->id}})'>
                                                         <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                                         <span>En cours...</span>
                                                     </span>
                                                 </button>
-                                                
+                                                @else
+                                                <button title="Cet abonnement a été suspendu depuis {{ $locked_at ?? __formatDateTime($subscription->locked_at) }} voulez-vous le réactiver" wire:click='activateSubscriptionRequest({{$subscription->id}})' class="block  text-white cursor-pointer bg-green-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
+                                                    <span wire:loading.remove wire:target='activateSubscriptionRequest({{$subscription->id}})'>
+                                                        <span class="fas fa-unlock mr-1"></span>
+                                                        Activer
+                                                    </span>
+                                                    <span wire:loading wire:target='activateSubscriptionRequest({{$subscription->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
+                                                @endif
                                                 <button wire:click='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})' class="block text-white cursor-pointer bg-orange-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-700 focus:ring-orange-800" type="button">
                                                     <span wire:loading.remove wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})'>
                                                         <span class="fas fa-calendar mr-1"></span>
@@ -230,7 +242,7 @@
                                                         <span>En cours...</span>
                                                     </span>
                                                 </button>
-                                                <button wire:click='markAsExpired({{$subscription->id}})' class="block text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                <button wire:click='markAsExpired({{$subscription->id}})' class="block text-white cursor-pointer bg-indigo-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-800 focus:ring-indigo-800" type="button">
                                                     <span wire:loading.remove wire:target='markAsExpired({{$subscription->id}})'>
                                                         <span class="fas fa-hourglass-end mr-1"></span>
                                                         Plannifier expiration

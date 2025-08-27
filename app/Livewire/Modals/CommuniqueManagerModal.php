@@ -67,8 +67,6 @@ class CommuniqueManagerModal extends Component
 
                         $this->type = $communique_model->type;
                     }
-
-
                 }
                 $this->dispatch('OpenModalEvent', $this->modal_name);
             }

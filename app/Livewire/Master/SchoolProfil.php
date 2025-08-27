@@ -104,10 +104,10 @@ class SchoolProfil extends Component
         $stats_years = Stat::where('school_id', $this->school->id)->orderBy('year', 'desc')->pluck('year')->toArray();
 
         $school_infos = $this->school->getSchoolInfos();
-        
 
+        $school_offers = $this->school->getSchoolInfos("Offres d'emploi");
 
-        return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos'));
+        return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos', 'school_offers'));
     }
 
     public function updatedSelectedStatYear($selected)

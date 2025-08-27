@@ -4,6 +4,8 @@ namespace App\Livewire\Pages;
 
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
+use App\Models\Pack;
+use App\Models\School;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
@@ -22,7 +24,11 @@ class NavBar extends Component
 
         $subscriptions = Subscription::whereNotNull('validate_at')->count();
 
-        return view('livewire.pages.nav-bar', compact('subscription_demandes', 'subscriptions'));
+        $schools = School::all()->count();
+
+        $packs = Pack::all()->count();
+
+        return view('livewire.pages.nav-bar', compact('subscription_demandes', 'subscriptions', 'schools', 'packs'));
     }
 
     public function openAddAssistantModal()

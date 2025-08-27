@@ -112,6 +112,9 @@ e.private("admin")
     })
     .listen("NewSchoolInfoAddedEvent", (info) => {
         Livewire.dispatch("LiveNewSchoolInfoAddedEvent", info);
+    })
+    .listen("NewVisitorHasBeenRegistredEvent", (info) => {
+        Livewire.dispatch("LiveNewVisitorHasBeenRegistredEvent", info);
     });
 
 // USERS EMAIL VERIFIED LISTENED EVENT

@@ -21,6 +21,9 @@
 
         <button data-modal-target="assistant-manager-modal" data-modal-toggle="assistant-manager-modal" class="hidden" type="button"></button>
         @livewire('modals.assistant-manager-modal')
+        
+        <button data-modal-target="school-image-editor-modal" data-modal-toggle="school-image-editor-modal" class="hidden" type="button"></button>
+        @livewire('modals.school-image-edition-modal')
 
 
         <button data-modal-target="logout-modal" data-modal-toggle="logout-modal" class="hidden" type="button"></button>

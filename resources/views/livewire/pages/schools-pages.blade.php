@@ -1,4 +1,4 @@
-<div class="w-full max-w-6xl py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" x-data="{ show: false, currentImage: '', schoolName: '', simple_name: '' }">
+<div class="w-full max-w-6xl py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" x-data="{ show: false, currentImage: '', schoolName: '', simple_name: '', title: '' }">
     <div class="card mx-auto mt-10">
         <h5 class="text-amber-500 bg-black/75 py-4 px-2 rounded-lg letter-spacing-1 font-bold text-xl flex items-center justify-between gap-y-1">
             <span># Liste des écoles</span>
@@ -11,14 +11,16 @@
             <div class="font-semibold letter-spacing-1 text-gray-300 text-xs md:text-lg flex flex-col mx-auto p-5 text-left gap-y-3">
                 @foreach ($schools as $school)
                     <div class="shadow-sm shadow-amber-400 bg-black/75 p-3 rounded-md">
-                        <h5 class="text-amber-600 py-2 flex justify-between"> 
-                            <span class="text-indigo-500">
-                                <span>Ecole </span>
-                                <span>#{{ $loop->iteration }}</span>
-                            </span>
-                            <a class="hover:text-pink-300" href="{{$school->to_profil_route()}}">
-                                <span class="">{{ $school->name }}</span>
-                                (<span class="text-sky-500">{{ $school->simple_name }}</span>)
+                        <h5 class="text-amber-600 py-2 "> 
+                            <a class="hover:text-pink-300 hover:underline hover:underline-offset-2 flex justify-between" href="{{$school->to_profil_route()}}">
+                                <span class="text-indigo-500 hover:text-pink-300">
+                                    <span>Ecole </span>
+                                    <span>#{{ $loop->iteration }}</span>
+                                </span>
+                                <span>
+                                    <span class="">{{ $school->name }}</span>
+                                    (<span class="text-sky-500">{{ $school->simple_name }}</span>)
+                                </span>
                             </a>
                         </h5>
                         <div class="w-full ">
@@ -59,15 +61,28 @@
                                     # L'école en images
                                 </h6>
                                 <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-2">
-                                    @foreach ($school->images as $key => $image)
-                                        <div class="aspect-square bg-gray-100 relative group card">
-                                            <img class="w-full h-full object-cover border shadow-sm" src="{{url('storage', $image)}}" alt="Image N° {{$loop->iteration}} de l'école">
-                                            <div  @click="currentImage = '{{ url('storage', $image) }}'; schoolName = 'image N° {{$loop->iteration}} de {{ $school->name }}'; simple_name = '{{ $school->simple_name }}'; show = true" class="absolute cursor-pointer inset-0 bg-black/75 bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
-                                                <div class="flex space-x-4 cursor-pointer text-sky-600 text-center letter-spacing-1 font-semibold text-xs">
-                                                    <span class="text-center">Cliquer pour agrandir cette image</span>
+                                    @foreach ($school->images()->orderBy('created_at', 'desc')->get() as $image)
+                                        @if($image->subscription?->is_active)
+                                            <div class="aspect-square bg-gray-100 relative group card">
+                                                <img class="w-full h-full object-cover border shadow-sm" src="{{url('storage', $image->path)}}" alt="Image N° {{$loop->iteration}} de l'école">
+                                                <div  class="absolute top-2 left-1 right-1 items-center cursor-pointer bg-black/90 text-white inline-flex p-3 text-center  justify-center bg-opacity-70 opacity-80  group-hover:text-sky-400 group-hover:opacity-100 group-hover:bg-opacity-100 transition-all duration-200">
+                                                    <div class="flex space-x-4 cursor-pointer text-center letter-spacing-2 text-xs">
+                                                        <span class="text-center"> 
+                                                            @if($image->title)
+                                                                {{ $image->title }} 
+                                                            @else
+                                                                Image N° {{ $loop->iteration }}
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div  @click="currentImage = '{{ url('storage', $image->path) }}'; schoolName = 'image N° {{$loop->iteration}} de {{ $school->name }}'; simple_name = '{{ $school->simple_name }}' ; title = '{{ $image->title ? $image->title : "Aucun titre renseigné" }}'; show = true" class="absolute cursor-pointer inset-0 bg-black/75 bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                                    <div class="flex space-x-4 cursor-pointer text-sky-600 text-center letter-spacing-1 font-semibold text-xs">
+                                                        <span class="text-center">Cliquer pour agrandir cette image</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endforeach
                                 </div>
                             </div>
@@ -79,17 +94,19 @@
                                 </h6>
                                 <div class="flex flex-col gap-y-3 my-2 items-center justify-center">
                                     @foreach ($school->getSchoolStatOfYear() as $school_stat)
-                                        <div class="w-full flex items-center justify-center flex-col gap-y-2 rounded-xl p-3 from-green-800 to-blue-900 via-sky-900 bg-gradient-to-r py-8">
-                                            <div>
-                                                <h4 class="text-center text-lg md:text-3xl animate-pulse mb-3">
-                                                    {{ $school_stat->exam }} {{ $school_stat->year }}
-                                                </h4>
-                                                <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
-                                                    <span class="fas"> {{ $school_stat->stat_value }} </span>
-                                                    <span class="fas fa-percent"></span>
-                                                </h3>
+                                        @if($school_stat->subscription?->is_active)
+                                            <div class="w-full flex items-center justify-center flex-col gap-y-2 rounded-xl p-3 from-green-800 to-blue-900 via-sky-900 bg-gradient-to-r py-8">
+                                                <div>
+                                                    <h4 class="text-center text-lg md:text-3xl animate-pulse mb-3">
+                                                        {{ $school_stat->exam }} {{ $school_stat->year }}
+                                                    </h4>
+                                                    <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
+                                                        <span class="fas"> {{ $school_stat->stat_value }} </span>
+                                                        <span class="fas fa-percent"></span>
+                                                    </h3>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endforeach
                                 </div>
                             </div>
@@ -116,8 +133,9 @@
         <h5 class="mx-auto flex flex-col gap-y-1 text-sm text-center py-3 font-semibold letter-spacing-1 my-3 px-3" >
             <span class=" text-sky-500 uppercase" x-text="schoolName"></span>
             <span class=" text-yellow-500" x-text="simple_name"></span>
+            <span class=" text-amber-500 underline underline-offset-2" x-text="title"></span>
         </h5>
-        <img :src="currentImage" alt="Zoom" class="w-screen md:max-w-xl max-h-[90vh] rounded shadow-xl border-2 border-white" @click.stop>
+        <img :src="currentImage" alt="Zoom" class="w-screen md:max-w-xl max-h-[90vh] shadow-md shadow-gray-600 border border-white" @click.stop>
         
     </div>
 </div>

@@ -5,12 +5,15 @@ namespace App\Models;
 use App\Helpers\Services\PacksManagerService;
 use App\Models\Pack;
 use App\Models\Payment;
+use App\Models\SchoolFollower;
 use App\Models\SchoolImage;
+use App\Models\SchoolVideo;
 use App\Models\Stat;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Observers\ObserveSchool;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -93,9 +96,24 @@ class School extends Model
         return $this->belongsTo(User::class);
     }
     
+    public function followers()
+    {
+        return $this->hasMany(SchoolFollower::class);
+    }
+    
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    public function assistant_requests()
+    {
+        return $this->hasMany(AssistantRequest::class);
+    }
+
+    protected function assistants() : Attribute
+    {
+        return Attribute::get(fn() => $this->assistant_requests()->whereNotNull('approved_at')->where('is_active', true)->get());
     }
 
     public function subscribing()
@@ -121,6 +139,16 @@ class School extends Model
     public function hasProfilImages()
     {
         return !empty($this->profil_images);
+    }
+
+    public function hasVideos()
+    {
+        return count($this->videos) > 0;
+    }
+
+    public function videos()
+    {
+        return $this->hasMany(SchoolVideo::class);
     }
     
     public function hasImages()
@@ -183,8 +211,8 @@ class School extends Model
     public function hasStats($year = null)
     {
         return $year ? 
-                    !empty($this->stats()->where('stats.is_active', true)->where('stats.year', $year)->get()) : 
-                    !empty($this->stats);
+                    count($this->stats()->where('stats.is_active', true)->where('stats.year', $year)->get()) > 0 : 
+                    count($this->stats) > 0;
     }
 
 
@@ -197,20 +225,20 @@ class School extends Model
     {
         if($target && $type){
 
-            return !empty($this->infos()->where('infos.is_active', true)->where('infos.type', $type)->where('infos.target', $target)->get());
+            return count($this->infos()->where('infos.is_active', true)->where('infos.type', $type)->where('infos.target', $target)->get()) > 0;
         }
         elseif($target){
 
-            !empty($this->infos()->where('infos.is_active', true)->where('infos.target', $target)->get());
+            count($this->infos()->where('infos.is_active', true)->where('infos.target', $target)->get()) > 0;
 
         }
         elseif($type){
 
-            !empty($this->infos()->where('infos.is_active', true)->where('infos.type', $type)->get());
+            count($this->infos()->where('infos.is_active', true)->where('infos.type', $type)->get()) > 0;
 
         }
 
-        return !empty($this->infos()->where('infos.is_active', true)->get());
+        return count($this->infos()->where('infos.is_active', true)->get()) > 0;
         
     }
 
@@ -232,9 +260,6 @@ class School extends Model
 
                         return $info->type;
                     });
-                
-        
-        
     }
 
     public function getSchoolStatOfYear($year = null)
@@ -261,8 +286,10 @@ class School extends Model
 
                         return $stat->year;
                     });
-                
-                    return $stats[array_key_first($stats->toArray())];
+
+                if(count($stats) > 0) return $stats[array_key_first($stats->toArray())];
+
+                else return [];
 
             }
         }
@@ -309,4 +336,8 @@ class School extends Model
     }
 
 
+    protected function posts() : Attribute
+    {
+        return Attribute::get(fn() => randomNumber(200, 210));
+    }
 }

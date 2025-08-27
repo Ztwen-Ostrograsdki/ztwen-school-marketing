@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('discount')->nullable()->default(null);
             $table->json('privileges')->default(null)->nullable();
             $table->unsignedBigInteger('max_images')->nullable()->default(3);
+            $table->unsignedBigInteger('max_videos')->nullable()->default(0);
             $table->unsignedBigInteger('max_assistants')->nullable()->default(1);
             $table->unsignedBigInteger('max_stats')->nullable()->default(3);
             $table->unsignedBigInteger('max_infos')->nullable()->default(3);

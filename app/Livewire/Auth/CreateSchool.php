@@ -5,14 +5,15 @@ namespace App\Livewire\Auth;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\Robots\ModelsRobots;
 use App\Helpers\Robots\RobotsBeninHelpers;
+use App\Helpers\Robots\SpatieManager;
 use App\Models\School;
 use App\Models\SchoolImage;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
+use Illuminate\Support\Str;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -27,6 +28,8 @@ class CreateSchool extends Component
     public array $images = [];
 
     public $city;
+
+    public $has_not_school = false;
 
     public $department;
 
@@ -75,6 +78,8 @@ class CreateSchool extends Component
             $user = User::where('uuid', $user_uuid)->firstOrFail();
 
             if($user){
+
+                $this->has_not_school = SpatieManager::ensureThatUserHasNotSchool(auth_user());
 
                 $this->user_uuid = $user_uuid;
 
@@ -168,6 +173,9 @@ class CreateSchool extends Component
 
     public function insert()
     {
+
+        if(!$this->has_not_school) return false;
+
         if($this->school){
 
             $this->validate(

@@ -25,16 +25,13 @@
                     </a>
                 @endauth
                 <a href="{{route('schools.page')}}" class="text-sm font-medium @if(request()->route()->named('schools.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
-                    Les écoles
+                    Les écoles à la une
                 </a>
                 <a href="{{route('about.us')}}" class="text-sm font-medium @if(request()->route()->named('about.us')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
                     A propos
                 </a>
                 <a href="{{route('packs.page')}}" class="@if(request()->route()->named('packs.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif text-sm font-medium  px-2 py-2 rounded-lg transition">
                     Services
-                </a>
-                <a href="{{route('schools.page')}}" class="text-sm font-medium @if(request()->route()->named('schools.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
-                    A la une
                 </a>
                 
                 @guest
@@ -185,7 +182,7 @@
                     <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                         <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
                     </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Les écoles</span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Les écoles à la une</span>
                     </a>
                 </li>
                 <li>
@@ -283,38 +280,43 @@
                     <a href="{{route('admin.schools.listing')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('admin.schools.listing')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
                         <span class="fas fa-home"></span>
                         <span class="flex-1 ms-3 whitespace-nowrap">Les écoles</span>
-                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                            {{ __zero($schools) }}
+                        </span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{auth_user()->to_my_notifications_route()}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a href="{{auth_user()->to_my_notifications_route()}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('my.notifications')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
                         <span class="fas fa-message"></span>
                         <span class="flex-1 ms-3 whitespace-nowrap">Notifications</span>
-                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                            {{ __zero(count(auth_user()->unreadNotifications)) }}
+                        </span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('admin.packs.subscriptions.list')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a href="{{route('admin.packs.subscriptions.list')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('admin.packs.subscriptions.list')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
                         <span class="fas fa-question"></span>
                         <span class="flex-1 ms-3 whitespace-nowrap">Demandes d'abonnements</span>
                         <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"> {{ __zero($subscription_demandes) }} </span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('admin.packs.abonnements.list')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a href="{{route('admin.packs.abonnements.list')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('admin.packs.abonnements.list')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
                         <span class="fas fa-user-tag"></span>
                         <span class="flex-1 ms-3 whitespace-nowrap">Abonnements</span>
                         <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">{{ __zero($subscriptions) }}</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('admin.packs.list')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <span class="fab fa-shopify"></span>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Les Packs</span>
+                    <a href="{{route('admin.packs.list')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('admin.packs.list')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
+                        <span class="fab fa-shopify"></span>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Les Packs</span>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">{{ __zero($packs) }}</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('admin.roles')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
                     <span class="fas fa-credit-card"></span>
                     <span class="flex-1 ms-3 whitespace-nowrap">Les Payements</span>
                     </a>

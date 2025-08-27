@@ -33,6 +33,12 @@ trait ListenToEchoEventsTrait{
     {
         $this->counter = getRand();
     }
+    
+    #[On("LiveNewVisitorHasBeenRegistredEvent")]
+    public function newNewsLetterSubscriber($req = null)
+    {
+        $this->counter = getRand();
+    }
 
 
 

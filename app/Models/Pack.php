@@ -23,6 +23,7 @@ class Pack extends Model
         'max_images',
         'max_assistants',
         'max_stats',
+        'max_videos',
         'max_infos',
         'on_page',
         'seen_by',

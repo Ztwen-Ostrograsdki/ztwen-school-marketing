@@ -14,7 +14,7 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title("Liste des utilisateurs de la plateforme")]
+#[Title("Administration - Liste des utilisateurs")]
 class UsersListing extends Component
 {
     use Toast, Confirm, ListenToEchoEventsTrait, UserActionsTraits;

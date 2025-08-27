@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class SchoolImage extends Model
+class SchoolVideo extends Model
 {
     protected $fillable = [
         'uuid',
@@ -25,29 +25,29 @@ class SchoolImage extends Model
 
     public static function booted()
     {
-        static::creating(function ($image){
+        static::creating(function ($video){
             
-            $image->uuid = Str::uuid();
+            $video->uuid = Str::uuid();
 
         });
         
-        static::created(function ($image){
+        static::created(function ($video){
             
-            SchoolDataHasBeenUpdatedEvent::dispatch($image->school);
+            SchoolDataHasBeenUpdatedEvent::dispatch($video->school);
 
         });
 
-        static::updated(function ($image){
+        static::updated(function ($video){
             
-            SchoolDataHasBeenUpdatedEvent::dispatch($image->school);
+            SchoolDataHasBeenUpdatedEvent::dispatch($video->school);
 
         });
         
-        static::deleting(function ($image){
+        static::deleting(function ($video){
             
-            Storage::disk('public')->delete($image->path);
+            Storage::disk('public')->delete($video->path);
 
-            SchoolDataHasBeenUpdatedEvent::dispatch($image->school);
+            SchoolDataHasBeenUpdatedEvent::dispatch($video->school);
 
         });
     }

@@ -8,6 +8,8 @@ use App\Events\PlannedTaskToDelayedSubscriptionEvent;
 use App\Helpers\Robots\SpatieManager;
 use App\Models\Subscription;
 use App\Notifications\RealTimeNotification;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Attributes\On;
 
@@ -143,7 +145,192 @@ trait PackSusbscriptionActionsTraits {
 
 
 
-	public function deleteSubscriptionRequest($subscription_id)
+	public function activateSubscriptionRequest($subscription_id)
+    {
+        SpatieManager::ensureThatUserCan();
+
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment activer cet abonnement ? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action fera que l'abonnement sera de nouveau actif! </p>";
+
+        $options = ['event' => 'confirmPackSubscriptionActivation', 'confirmButtonText' => 'Activer', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_id' => $subscription_id]];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+    #[On('confirmPackSubscriptionActivation')]
+    public function onUnlockPackSubscription($data)
+    {
+        if($data){
+
+            $subscription_id = $data['subscription_id'];
+
+            if($subscription_id){
+
+                $subscription = Subscription::find($subscription_id);
+
+                if($subscription){
+
+					DB::beginTransaction();
+
+                    try {
+
+                        $report = config('app.subcriptions_task_report');
+
+                        $locked_at = Carbon::parse($subscription->locked_at);
+
+                        $will_closed_at = Carbon::parse($subscription->will_closed_at);
+
+                        $hours_passed_since_locked = $locked_at->diffInHours(null, true);
+
+                        if($will_closed_at > now()){
+
+                            //Expired date not yet passed
+
+                            $exipired_at = $will_closed_at->addHours($hours_passed_since_locked);
+
+                            $subscription->update(['is_active' => true, 'will_closed_at' => $exipired_at, 'locked_at' => null]);
+
+
+                        }
+                        else{
+
+                            //Expired date passed
+
+                            $exipired_at = now()->addHours($hours_passed_since_locked)->addDays(3);
+
+                            $subscription->update(['is_active' => true, 'will_closed_at' => $exipired_at, 'locked_at' => null]);
+                            
+                        }
+
+                        $subscription->definePlannedTask($report);
+
+                        DB::commit();
+
+                        DB::afterCommit(function() use ($subscription){
+
+                            $name = $subscription->ref_key;
+
+                            $message = "L'abonnement " . $name . " a été réactivé avec succès!";
+
+                            Notification::sendNow([auth_user()], new RealTimeNotification($message));
+
+                            return;
+
+                        });
+
+
+                    } catch (\Throwable $th) {
+                        
+                        $message = "ERREURE (REACTIVATION ABONNEMENT) : La réactivation de l'abonnement " . $subscription->ref_key . " souscrit par " . $subscription->subscriber->getFullName() . " pour l'école " . $subscription->school->name . " a échoué. DETAILS : " . $th->getMessage();
+
+                        Notification::sendNow([auth_user()], new RealTimeNotification($message));
+                        
+                        DB::rollBack();
+                    }
+
+                }
+                else{
+
+                    return $this->toast("L'activation a échoué", 'error');
+                }
+            }
+            else{
+
+                return $this->toast("L'activation a échoué", 'error');
+
+
+            }
+
+        }
+    }
+    
+    public function blockSubscriptionRequest($subscription_id)
+    {
+        SpatieManager::ensureThatUserCan();
+
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment suspendre cet abonnement ? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action fera que l'abonnement sera inactif et l'école concernée sera considérée commme non abonnée </p>";
+
+        $options = ['event' => 'confirmPackSubscriptionLocked', 'confirmButtonText' => 'Suspendre', 'cancelButtonText' => 'Annuler', 'data' => ['subscription_id' => $subscription_id]];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+
+
+    #[On('confirmPackSubscriptionLocked')]
+    public function onLockPackSubscription($data)
+    {
+        if($data){
+
+            $subscription_id = $data['subscription_id'];
+
+            if($subscription_id){
+
+                $subscription = Subscription::find($subscription_id);
+
+                if($subscription){
+
+                    DB::beginTransaction();
+
+					try {
+
+                        $subscription->update(['is_active' => false, 'locked_at' => now()]);
+
+                        $report = config('app.subcriptions_task_report');
+
+                        if($subscription->hasPlannedDelayedTask($report)){
+
+                            $subscription->deletePlannedTask($report);
+
+                        }
+
+                        DB::commit();
+
+                        DB::afterCommit(function() use ($subscription){
+
+                            $name = $subscription->ref_key;
+
+                            $message = "L'abonnement " . $name . " a été suspendu avec succès!";
+
+                            Notification::sendNow([auth_user()], new RealTimeNotification($message));
+
+                        });
+                        
+
+                    } catch (\Throwable $th) {
+
+                        $message = "ERREURE (SUSPENSION ABONNEMENT) : La suspension de l'abonnement " . $subscription->ref_key . " souscrit par " . $subscription->subscriber->getFullName() . " pour l'école " . $subscription->school->name . " a échoué. DETAILS : " . $th->getMessage();
+
+                        Notification::sendNow([auth_user()], new RealTimeNotification($message));
+                        
+                        DB::rollBack();
+
+                    }
+
+                }
+                else{
+
+                    return $this->toast("La suspension a échoué", 'error');
+                }
+            }
+            else{
+
+                return $this->toast("La suspension a échoué", 'error');
+            }
+
+            
+        }
+    }
+    
+    
+    public function deleteSubscriptionRequest($subscription_id)
     {
         SpatieManager::ensureThatUserCan();
 

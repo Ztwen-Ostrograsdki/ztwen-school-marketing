@@ -17,7 +17,7 @@
                         <div class="relative py-2">
                             <div class="flex md:justify-between">
                                 <div class="text-green-400 font-semibold letter-spacing-1">
-                                    <h2 class=" sm:text-xl font-bold uppercase text-shadow shadow-amber-400">La liste des demandes</h2>
+                                    <h2 class=" sm:text-xl font-bold uppercase text-shadow shadow-amber-400">La liste des demandes | Abonnements actifs</h2>
                                 </div>
                                 <div>
                                     

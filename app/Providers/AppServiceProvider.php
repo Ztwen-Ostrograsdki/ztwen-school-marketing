@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\Services\VisitorsRegisterService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,5 +27,8 @@ class AppServiceProvider extends ServiceProvider
 
             return $user_id == $auth->id;
         });
+
+        // Enregistrement des visiteurs
+        VisitorsRegisterService::visitorRegistorManager();
     }
 }

@@ -62,6 +62,8 @@ class SchoolImagesManager extends Component
 
                 $this->school = $school;
 
+                $this->max_images = $school->current_subscription()->remainingImages;
+
                 $this->dispatch('OpenModalEvent', $this->modal_name);
             }
             else{
@@ -98,7 +100,6 @@ class SchoolImagesManager extends Component
 
             if($images_treated && !$this->error_message){
 
-
             }
             else{
 
@@ -109,7 +110,6 @@ class SchoolImagesManager extends Component
             }
 
             DB::commit();
-
 
             DB::afterCommit(function() use ($images_treated){
 
@@ -205,7 +205,7 @@ class SchoolImagesManager extends Component
                         'user_id' => auth_user_id(),
                         'school_id' => $this->school->id,
                         'path' => $img_p,
-                        'title' => $name,
+                        'title' => null,
                         'is_active' => true,
                     ]);
                 }
@@ -224,7 +224,5 @@ class SchoolImagesManager extends Component
         return false;
             
     }
-
-
     
 }

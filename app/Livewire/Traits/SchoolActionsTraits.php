@@ -3,6 +3,7 @@ namespace App\Livewire\Traits;
 
 use App\Helpers\Robots\SpatieManager;
 use App\Models\Info;
+use App\Models\SchoolFollower;
 use App\Models\SchoolImage;
 use App\Models\Stat;
 use App\Notifications\RealTimeNotification;
@@ -449,6 +450,16 @@ trait SchoolActionsTraits {
                 return $this->toast( "Une erreure s'est produite!", 'error');
             }
         }
+    }
+
+    public function manageImageTitle($image_id)
+    {
+        $this->dispatch('ManageSchoolImageData', $image_id);
+    }
+
+    public function likeAndFollow()
+    {
+        SchoolFollower::create(['school_id' => $this->school->id, 'follower_id' => auth_user_id() ?? null]);
     }
 
 
