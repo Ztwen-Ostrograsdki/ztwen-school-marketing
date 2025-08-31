@@ -127,27 +127,99 @@
     <div class="max-w-3xl mx-auto mt-5 shadow-gray-900 border border-sky-400 bg-black/70 rounded-lg shadow-2xl card">
         <div class="flex justify-between items-center p-2">
             <h3 class="letter-spacing-1 font-bold text-xl p-4 text-amber-400 underline underline-offset-3 w-full border-b-amber-400">
-                <span># Abonnement et pack actifs </span>
+                <span># Mes Abonnements (actifs) </span>
             </h3>
             @auth
                 @if(auth_user()->id == $user->id)
                 <div class="flex gap-x-2 text-sm">
-                    <a href="{{route('packs.page')}}" class="text-black cursor-pointer bg-indigo-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-500 focus:ring-yellow-800" type="button">
+                    <a href="{{$user->to_subscribes_route()}}" class="text-black cursor-pointer bg-indigo-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-indigo-500 focus:ring-yellow-800" type="button">
                         <span class="w-full flex items-center px-1.5">
                             <span class="fas fa-eye mr-1"></span>
                             Parcourir
                         </span>
                     </a>
-                    <a href="#" class="text-black cursor-pointer bg-yellow-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
+                    <button wire:click="upgradeSubscription({{$user->current_subscription->id}})" class="text-black cursor-pointer bg-green-500 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-yellow-800" type="button">
+                        <span wire:loading.remove wire:target="upgradeSubscription({{$user->current_subscription->id}})" class="w-full flex items-center px-1.5">
+                            <span class="fas fa-up-long mr-1"></span>
+                            prolonger
+                        </span>
+                        <span wire:loading wire:target="upgradeSubscription({{$user->current_subscription->id}})" class="w-full flex items-center px-1.5">
+                            <span class="fas fa-arrows-rotate mr-1"></span>
+                            En cours...
+                        </span>
+                    </button>
+                    @if(!$user->current_subscription)
+                    <a href="{{route('packs.page')}}" class="text-black cursor-pointer bg-yellow-300 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
                         <span class="w-full flex items-center px-1.5">
-                            <span class="fas fa-pen mr-1"></span>
-                            Editer
+                            <span class="fas fa-shopify mr-1"></span>
+                            Souscrire
                         </span>
                     </a>
+                    @endif
                 </div>
                 @endif
             @endauth
         </div>
+        @auth
+            @if(auth_user()->id == $user->id)
+            <div class="p-4">
+                @if($user->current_subscription)
+                    <h5 class="letter-spacing-1 font-semibold text-green-800 bg-green-300 rounded-sm p-2">
+                        Vous avez un abonnement actif
+                        <a href="{{ $user->current_subscription->to_details_route() }}" class="underline hover:text-gray-400 underline-offset-2 ml-2"> #{{ $user->current_subscription->ref_key }} </a>
+                    </h5>
+                    <div>
+                        @php
+                            $subscription = $user->current_subscription;
+                        @endphp
+                        <h6 class="py-2 letter-spacing-1 font-semibold text-green-400  border border-yellow-500 bg-black/60 my-2 letter-spacing-2 flex flex-col gap-y-1">
+                            <span class="uppercase text-center">Abonnement : #{{ $subscription->ref_key }}</span>
+                            <span class="text-center">
+                                <span class="text-sm font-thin letter-spacing-1 text-gray-400">
+                                    <span>
+                                        Souscrit le {{__formatDate($subscription->created_at) }}
+                                    </span>
+                                    <span> - </span>
+                                    <span>
+                                        Validé le {{ __formatDate($subscription->validate_at) }}
+                                    </span>
+                                    <span> - </span>
+                                    @if($subscription->remainingsDays > 0)
+                                    <span>
+                                        Expire le {{__formatDate($subscription->will_closed_at) }}
+                                        <span>Soit dans {{ str_replace('restants', '', __formatDateDiff($subscription->will_closed_at)) }}</span>
+                                    </span>
+                                    @else
+                                    <span>
+                                        Expiré depuis le {{__formatDate($subscription->will_closed_at) }}
+                                        <span>Il y a déjà {{ str_replace('restants', '', __formatDateDiff($subscription->will_closed_at)) }}</span>
+                                    </span>
+                                    @endif
+                                </span>
+                            </span>
+                            <div class="font-semibold letter-spacing-1">
+                                <h5 class="p-3 my-2 border-y-2 border-y-amber-500 bg-black/60 text-center uppercase">Les privilèges 
+                                    <span class="text-amber-500"></span> 
+                                </h5>
+                                <div class="flex flex-col gap-1.5 px-2">
+                                    @foreach ($subscription->privileges as $pr)
+                                        <span class="cursor-pointer flex items-center gap-x-2 hover:text-amber-500">
+                                            <span class="fas fa-check-to-slot"></span>
+                                            <span>{{ $pr }}</span>
+                                        </span> 
+                                    @endforeach
+                                </div>
+                            </div>
+                        </h6>
+                    </div>
+                @else
+                    <h5 class="letter-spacing-1 font-semibold text-red-800 bg-red-300 rounded-sm p-2">
+                        Vous n'avez aucun abonnement actif présentement
+                    </h5>
+                @endif
+            </div>
+            @endif
+        @endauth
     </div>
 
     <div class="max-w-3xl card mx-auto mt-5 shadow-gray-900 border border-sky-400 bg-black/70 rounded-lg shadow-2xl">

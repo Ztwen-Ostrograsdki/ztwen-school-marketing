@@ -55,10 +55,10 @@
                                 </span>
                             </h5>
                             
-                            <div>
-                                <h6 class="text-amber-400 uppercase font-semibold letter-spacing-1
+                            <div class="mb-5">
+                                <h6 class="text-amber-400 py-3 uppercase font-semibold letter-spacing-1
                                 ">
-                                    # L'école en images
+                                    # Des images de l'école
                                 </h6>
                                 <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-2">
                                     @foreach ($school->images()->orderBy('created_at', 'desc')->get() as $image)
@@ -86,27 +86,72 @@
                                     @endforeach
                                 </div>
                             </div>
+
+                            @if($school->hasVideos())
+                                <div class="mb-5">
+                                    <h6 class="text-amber-400 py-3 uppercase font-semibold letter-spacing-1
+                                    ">
+                                        # Des vidéos de l'école
+                                    </h6>
+                                    <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-2">
+                                        @foreach ($school->videos()->orderBy('created_at', 'desc')->get() as $video)
+                                            @if($video->subscription?->is_active)
+                                                <div class="aspect-square bg-gray-100 relative group card">
+                                                    <video alt="Vidéo N° {{$loop->iteration}} de l'école" controls class="w-full h-full object-cover border shadow-sm">
+                                                        <source src="{{url('storage', $video->path)}}" type="video/mp4">
+                                                        Votre navigateur ne supporte pas la lecture vidéo.
+                                                    </video>
+                                                    
+                                                    <div  class="absolute top-2 left-1 right-1 items-center cursor-pointer bg-black/90 text-white inline-flex p-3 text-center  justify-center bg-opacity-70 opacity-80  group-hover:text-sky-400 group-hover:opacity-100 group-hover:bg-opacity-100 transition-all duration-200">
+                                                        <div class="flex space-x-4 cursor-pointer text-center letter-spacing-2 text-xs">
+                                                            <span class="text-center"> 
+                                                                @if($video->title)
+                                                                    {{ $video->title }} 
+                                                                @else
+                                                                    Vidéo N° {{ $loop->iteration }}
+                                                                @endif
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                             @if($school->hasStats())
-                            <div class="mx-auto w-full mt-4 shadow-lg rounded-lg">
-                                <h6 class="text-amber-400 uppercase font-semibold letter-spacing-1
+                            <div class="mx-auto w-full mb-5 shadow-lg rounded-lg">
+                                <h6 class="text-amber-400 py-3 uppercase font-semibold letter-spacing-1
                                 ">
                                     # Quelques statistiques de cette école
                                 </h6>
                                 <div class="flex flex-col gap-y-3 my-2 items-center justify-center">
-                                    @foreach ($school->getSchoolStatOfYear() as $school_stat)
-                                        @if($school_stat->subscription?->is_active)
-                                            <div class="w-full flex items-center justify-center flex-col gap-y-2 rounded-xl p-3 from-green-800 to-blue-900 via-sky-900 bg-gradient-to-r py-8">
-                                                <div>
-                                                    <h4 class="text-center text-lg md:text-3xl animate-pulse mb-3">
-                                                        {{ $school_stat->exam }} {{ $school_stat->year }}
-                                                    </h4>
-                                                    <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
-                                                        <span class="fas"> {{ $school_stat->stat_value }} </span>
-                                                        <span class="fas fa-percent"></span>
-                                                    </h3>
-                                                </div>
+                                    @foreach ($school->getStatsByYears() as $yr => $stats)
+                                        <div class="w-full flex flex-col  my-2.5">
+                                            <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
+                                                Les examens de l'année {{ $yr }}
+                                            </h5>
+                                            <div class="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 card my-3">
+                                                @foreach($stats as $stat)
+                                                    @if($stat->subscription?->is_active)
+                                                        <div class="aspect-square shadow-inner shadow-sky-100 from-green-800 to-blue-900 via-sky-900 bg-linear-180 bg-black rounded-lg relative group card p-3 flex items-center justify-center flex-col font-bold letter-spacing-1 cursor-pointer hover:shadow-md hover:shadow-sky-400 gap-y-2 md:gap-y-1">
+                                                            <div>
+                                                                <h4 class="text-center text-sm md:text-lg animate-pulse mb-3">
+                                                                    {{ $stat->exam }} {{ $stat->year }}
+                                                                </h4>
+                                                                <h3 class="text-xl md:text-3xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
+                                                                    <span class="fas"> 
+                                                                        {{ __formatDecimal($stat->stat_value) }} </span>
+                                                                    <span class="fas fa-percent"></span>
+                                                                </h3>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    @endif
+                                                @endforeach
                                             </div>
-                                        @endif
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>

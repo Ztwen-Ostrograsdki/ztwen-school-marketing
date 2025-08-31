@@ -53,7 +53,7 @@
                         <div class="relative py-2">
                             <div class="flex md:justify-between">
                                 <div class="text-green-400 font-semibold letter-spacing-1">
-                                    <h2 class=" sm:text-xl font-bold uppercase text-shadow shadow-amber-400">La liste des demandes</h2>
+                                    <h2 class=" sm:text-xl font-bold uppercase text-shadow shadow-amber-400">La liste des abonnements actifs</h2>
                                 </div>
                                 <div>
                                     
@@ -116,7 +116,7 @@
                             <tbody class="divide-y text-xs md:text-sm text-gray-200 divide-gray-200">
                                 @foreach($subscriptions as $subscription)
                                     <tr class="hover:bg-gray-50 transition-colors duration-150" >
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-6 py-2 whitespace-nowrap" @if($subscription->has_upgrade_request) rowspan="2" @endif>
                                             <div class="">
                                                 {{ __zero($loop->iteration) }}
                                             </div>
@@ -254,6 +254,122 @@
                                                 </button>
                                             </div>  
                                         </td>
+                                        @if($subscription->has_upgrade_request)
+                                            <tr class="w-full font-semibold letter-spacing-2 ">
+                                                <td colspan="6" class="px-6 py-2 whitespace-nowrap text-center bg-gray-900">
+                                                    <span class="flex justify-center gap-x-1.5">
+                                                        <span class="text-amber-200">{{ $subscription->has_upgrade_request->user->getFullName() }} a lancé une demande de réabonnement pour cette souscription</span>
+                                                        <span class="text-amber-600 underline underline-offset-2"> #{{$subscription->ref_key}} </span>
+                                                    </span>
+                                                    <div class="flex justify-center flex-col gap-1.5">
+                                                        @if ($subscription->has_upgrade_request)
+                                                            <div class="flex justify-center p-2 items-center ">
+                                                                <span class="flex flex-wrap gap-5 font-thin justify-center">
+                                                                    <span>
+                                                                        <span>Status : </span>
+                                                                        <span>
+                                                                            <span class="text-green-500">           {{ $subscription->has_upgrade_request->payment_status }}
+                                                                            </span>
+                                                                        </span>
+                                                                    </span>
+                                                                    <span>
+                                                                        <span>Prix unitaire : </span>
+                                                                        <span class="text-amber-500">
+                                                                            {{ __moneyFormat($subscription->has_upgrade_request->unique_price) }}
+                                                                        </span>
+                                                                    </span>
+                                                                    <span>
+                                                                        <span>Nombre de mois : </span>
+                                                                        <span class="text-amber-500">
+                                                                            {{ __zero($subscription->has_upgrade_request->months) }}
+                                                                        </span>
+                                                                    </span>
+                                                                    <span>
+                                                                        <span>Reduction : </span>
+                                                                        <span class="text-amber-500">
+                                                                            {{ $subscription->has_upgrade_request->discount }} %
+                                                                        </span>
+                                                                    </span>
+                                                                    <span>
+                                                                        <span>Montant total : </span>
+                                                                        <span class="text-amber-500">
+                                                                            {{ __moneyFormat($subscription->has_upgrade_request->amount) }}
+                                                                        </span>
+                                                                    </span>
+                                                                    <span>
+                                                                        <span>Montant payé : </span>
+                                                                        <span class="text-amber-500">
+                                                                            {{ __moneyFormat($subscription->has_upgrade_request->payment?->amount) }}
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                            <span class="mb-1.5">
+                                                                <span class="text-sm font-semibold letter-spacing-1 text-gray-800 bg-green-400 p-2 rounded-md flex gap-x-3.5 justify-center items-center w-full">
+                                                                    <span>
+                                                                        Souscrit le {{__formatDate($subscription->has_upgrade_request->created_at) }}
+                                                                    </span>
+                                                                    <span> - </span>
+                                                                    <span>
+                                                                        @if($subscription->has_upgrade_request->validate_at)
+                                                                            Validé le {{ __formatDate($subscription->has_upgrade_request->validate_at) }}
+                                                                        @else
+                                                                            <span class="bg-amber-500 p-1 px-3 rounded-md">En attente, pas encore traitée!</span>
+                                                                        @endif
+                                                                    </span>
+                                                                </span>
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-2 whitespace-nowrap bg-gray-900">
+                                                    <div class="">
+                                                        {{ __formatDateTime($subscription->has_upgrade_request->created_at) }}
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-2 whitespace-nowrap text-center bg-gray-900">
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if($subscription->has_upgrade_request->validate_at) bg-green-100 text-green-800 @else bg-red-200 text-red-600 @endif">
+                                                    {{ $subscription->has_upgrade_request->validate_at ? "Payé" : "Non payé" }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-2 whitespace-nowrap text-center bg-gray-900">
+                                                    <div class="flex gap-x-1.5">
+                                                        <button wire:click='deleteSubscriptionUpgradeRequest({{$subscription->has_upgrade_request->id}})' class="block text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                            <span wire:loading.remove wire:target='deleteSubscriptionUpgradeRequest({{$subscription->has_upgrade_request->id}})'>
+                                                                <span class="fas fa-trash mr-1"></span>
+                                                                Suppr.
+                                                            </span>
+                                                            <span wire:loading wire:target='deleteSubscriptionUpgradeRequest({{$subscription->has_upgrade_request->id}})'>
+                                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                                <span>En cours...</span>
+                                                            </span>
+                                                        </button>
+                                                        @if(!$subscription->has_upgrade_request->validate_at)
+                                                        <button wire:click='approvedSouscriptionUpgradeRequest({{$subscription->has_upgrade_request->id}})' class="block text-white cursor-pointer bg-green-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-green-800" type="button">
+                                                            <span wire:loading.remove wire:target='approvedSouscriptionUpgradeRequest({{$subscription->has_upgrade_request->id}})'>
+                                                                <span class="fas fa-check mr-1"></span>
+                                                                Approuver
+                                                            </span>
+                                                            <span wire:loading wire:target='approvedSouscriptionUpgradeRequest({{$subscription->has_upgrade_request->id}})'>
+                                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                                <span>En cours...</span>
+                                                            </span>
+                                                        </button>
+                                                        <button wire:click='nofifySubscriberToPaidSubscriptionUpgradeRequestForValidation({{$subscription->has_upgrade_request->id}})' class="block text-white cursor-pointer bg-blue-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-700 focus:ring-blue-800" type="button">
+                                                            <span wire:loading.remove wire:target='nofifySubscriberToPaidSubscriptionUpgradeRequestForValidation({{$subscription->has_upgrade_request->id}})'>
+                                                                <span class="fas fa-credit-card mr-1"></span>
+                                                                Reclamer payement
+                                                            </span>
+                                                            <span wire:loading wire:target='nofifySubscriberToPaidSubscriptionUpgradeRequestForValidation({{$subscription->has_upgrade_request->id}})'>
+                                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                                <span>En cours...</span>
+                                                            </span>
+                                                        </button>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

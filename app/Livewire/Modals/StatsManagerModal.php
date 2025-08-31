@@ -97,7 +97,7 @@ class StatsManagerModal extends Component
             [
                 'exam' => 'required|string',
                 'year' => 'required|numeric',
-                'stat_value' => 'required|numeric|min:0',
+                'stat_value' => 'required|numeric|min:0|max:100',
             ]
         );
 

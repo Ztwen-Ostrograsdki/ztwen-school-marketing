@@ -48,6 +48,7 @@
                     <a href="{{$school->user->to_profil_route()}}" class="text-sm md:text-lg font-bold text-amber-600 truncate hover:text-gray-400">
                         {{ $school->user?->getFullName() }}
                     </a>
+                    @if($school->current_subscription?->is_active)
                     <p class="text-sm text-gray-400 truncate">
                         {{ $school->user?->email }}
                     </p>
@@ -57,16 +58,17 @@
                     <p class="text-gray-400 truncate">
                         {{ $school->user?->contacts }}
                     </p>
+                    @endif
                     <div class="flex space-x-4 mt-2">
                         <span class="text-sm font-medium text-gray-400">
-                            {{ $school->posts }}
+                            {{ $school->posts_counter }}
                         <span class="font-normal text-gray-400">posts</span></span>
                         <span class="text-sm font-medium text-gray-400">
                             @auth
                                 @if(auth_user_id( ) == $school->user->id)
                                     {{ __zero(count($school->followers)) }}
                                 @else
-
+                                12.8k
                                 @endif
                             @else
                             12.8k 
@@ -145,6 +147,8 @@
                         <span class="fas fa-message mr-1"></span>
                         Message
                     </button>
+
+                    @if($school->user_id !== auth_user_id())
                     <button wire:click="likeAndFollow" class="bg-rose-400 cursor-pointer hover:bg-rose-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                         <span wire:loading.remove wire:target="likeAndFollow">
                                 <span class="fas fa-thumbs-up mr-1"></span>
@@ -155,6 +159,7 @@
                                 <span>En cours...</span>
                             </span>
                     </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -175,6 +180,16 @@
                             #L'école en images
                         </span>
                     </a>
+
+                    @if($school->current_subscription?->max_videos > 0)
+                    <a href="#school_videos" class="block text-black cursor-pointer bg-yellow-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
+                        <span>
+                            <span class="fas fa-images mr-1"></span>
+                            #Des vidéos
+                        </span>
+                    </a>
+                    @endif
+
                     <a href="#school_stats" class="block text-black cursor-pointer bg-amber-700 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-amber-700 focus:ring-amber-800" type="button">
                         <span>
                             <span class="fas fa-chart-simple mr-1"></span>
@@ -209,10 +224,11 @@
                         Située au {{ $school->geographic_position }} du {{ $school->country }} dans le département de {{ $school->department }}, plus précisement dans la ville de {{ $school->city }}, l'école (<span class="lowercase">{{ $school->getSchoolType() }}</span>) <span class="text-yellow-400 font-bold">{{ $school_name }}</span> a été fondée en {{ $school->creation_year }} par <span class="text-sky-500 font-bold">{{ $school->created_by }}</span>.
                         <br>
                     </p>
-                    <p>
+                    <p class="mb-3.5">
                         L'école, dépuis sa création acceuille en moyenne plus de <span class="text-amber-500 font-semibold">{{ __formatNumber3($school->capacity) }}</span> apprenants.
                         Reconnue par ses <a href="#school_stats" class="underline underline-offset-3 hover:text-rose-300">statistiques remarquables aux différents examens</a>, il va sans doute, que <span class="text-yellow-400 font-bold">{{ $school_name }}</span> est une école de reférence pour garantir un avenir meillleur à la jeunesse de la nation.
                     </p>
+                    @if($school->current_subscription?->is_active)
                     <h5 class="flex justify-end cursor-pointer hover:text-rose-400 mt-3.5">
                         <span>
                             <span class="fas fa-phone mr-1"></span>
@@ -220,6 +236,7 @@
                             <span class="">{{ $school->contacts }}</span>
                         </span>
                     </h5>
+                    @endif
                 </div>
             </div>
         </div>
@@ -310,6 +327,94 @@
                 @endforeach
             </div>
         </div>
+        
+        @if($school->current_subscription?->max_videos > 0)
+        <div id="school_videos" class="text-sm p-6 shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
+            <h5 class="text-sky-400 text-sm sm:text-xl font-semibold flex justify-between letter-spacing-1 pb-4">#Des vidéos de l'école
+               <div class="flex gap-x-2 justify-start text-xs sm:text-sm">
+                    @auth
+                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['school-images-manager']))
+                            <button title="Ajouter des vidéos..." wire:click="addVideos" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="addVideos">
+                                    <span class="fas fa-video"></span>
+                                    <span>Ajouter</span>
+                                </span>
+                                <span wire:loading wire:target="addVideos">
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>En cours...</span>
+                                </span>
+                            </button>
+                            @if($school->hasVideos())
+                            <button title="Supprimer toutes les videos..." wire:click="removeAllVideos" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="removeAllVideos">
+                                    <span class="fas fa-trash"></span>
+                                    <span>Supprimer</span>
+                                </span>
+                                <span wire:loading wire:target="removeAllVideos">
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>En cours...</span>
+                                </span>
+                            </button>
+                            @endif
+                        @endif
+                    @endauth
+               </div>
+            </h5>
+            <div class="grid grid-cols-1 md:grid-cols-3 my-4 gap-1 card">
+                @foreach ($school->videos as $school_video)
+                    @if($school_video->subscription?->is_active)
+                        <div class="border border-purple-500">
+                            <div class="aspect-square bg-gray-100 relative group card">
+                                <video alt="Vidéo N° {{$loop->iteration}} de l'école" controls class="w-full h-full object-cover border shadow-sm">
+                                    <source src="{{url('storage', $school_video->path)}}" type="video/mp4">
+                                    Votre navigateur ne supporte pas la lecture vidéo.
+                                </video>
+
+                                <div  class="absolute top-2 left-1 items-center cursor-pointer bg-black/90 text-white inline-flex p-3 text-center  justify-center bg-opacity-70 opacity-80  group-hover:text-sky-400 group-hover:opacity-100 group-hover:bg-opacity-100 transition-all duration-200">
+                                    <div class="flex space-x-4 cursor-pointer text-center letter-spacing-2 text-xs">
+                                        <span class="text-center"> 
+                                            @if($school_video->title)
+                                                {{ $school_video->title }} 
+                                            @else
+                                                Vidéo N° {{ $loop->iteration }}
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            @auth
+                                @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['school-images-manager']))
+                                    <div class="mt-1 grid grid-cols-3 gap-x-1 p-1">
+                                        <span wire:click="removeVideoFromVideosOf('{{$school_video->id}}')" title="Supprimer cette vidéo de la liste des vidéos de l'école {{$school_name}}" class="py-2 hover:bg-red-500 text-center text-xs md:text-sm bg-red-300 text-red-800 cursor-pointer inline-block col-span-2 font-semibold">
+                                            <span wire:loading.remove wire:target="removeVideoFromVideosOf('{{$school_video->id}}')">
+                                                <span class="fas fa-trash mr-0.5"></span>
+                                                Retirer cette vidéo
+                                            </span>
+                                            <span wire:loading wire:target="removeVideoFromVideosOf('{{$school_video->id}}')">
+                                                <span>Suppression en cours...</span>
+                                                <span class="fas fa-rotate animate-spin"></span>
+                                            </span>
+                                        </span>
+                                        <span wire:click="manageVideo('{{$school_video->id}}')" title="Editer le titre de cette image de l'école {{$school_name}}" class="py-2 hover:bg-blue-700 text-center text-xs md:text-sm bg-blue-500 text-blue-100 cursor-pointer inline-block col-span-1 font-semibold">
+                                            <span wire:loading.remove wire:target="manageVideo('{{$school_video->id}}')">
+                                                <span class="fas fa-pen mr-0.5"></span>
+                                                Editer
+                                            </span>
+                                            <span wire:loading wire:target="manageVideo('{{$school_video->id}}')">
+                                                <span>Patientez...</span>
+                                                <span class="fas fa-rotate animate-spin"></span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                @endif
+                            @endauth
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+        @endif
 
         <div id="school_stats" class="text-sm p-6 shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
             <h5 class="card text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4">
@@ -386,7 +491,8 @@
                                             {{ $stat->exam }} {{ $stat->year }}
                                         </h4>
                                         <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
-                                            <span class="fas"> {{ $stat->stat_value }} </span>
+                                            <span class="fas"> 
+                                                {{ __formatDecimal($stat->stat_value) }} </span>
                                             <span class="fas fa-percent"></span>
                                         </h3>
                                     </div>

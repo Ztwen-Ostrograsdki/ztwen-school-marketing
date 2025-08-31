@@ -35,11 +35,15 @@ class SchoolImage extends Model
             
             SchoolDataHasBeenUpdatedEvent::dispatch($image->school);
 
+            $image->school->update(['posts_counter' => $image->school->posts_counter + 1]);
+
         });
 
         static::updated(function ($image){
             
             SchoolDataHasBeenUpdatedEvent::dispatch($image->school);
+
+            $image->school->update(['posts_counter' => $image->school->posts_counter + 1]);
 
         });
         

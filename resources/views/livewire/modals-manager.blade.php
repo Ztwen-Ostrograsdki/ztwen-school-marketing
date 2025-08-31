@@ -18,6 +18,10 @@
 
         <button data-modal-target="school-images-manager-modal" data-modal-toggle="school-images-manager-modal" class="hidden" type="button"></button>
         @livewire('modals.school-images-manager')
+        
+        
+        <button data-modal-target="school-videos-manager-modal" data-modal-toggle="school-videos-manager-modal" class="hidden" type="button"></button>
+        @livewire('modals.school-videos-manager')
 
         <button data-modal-target="assistant-manager-modal" data-modal-toggle="assistant-manager-modal" class="hidden" type="button"></button>
         @livewire('modals.assistant-manager-modal')

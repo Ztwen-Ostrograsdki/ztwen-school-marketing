@@ -5,22 +5,18 @@ namespace App\Livewire\Master;
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
-use App\Helpers\Robots\SpatieManager;
+use App\Helpers\Services\SubscriptionsDelayedService;
 use App\Livewire\Traits\SchoolActionsTraits;
+use App\Livewire\Traits\SchoolMediaActionsTrait;
 use App\Models\School;
 use App\Models\Stat;
-use App\Notifications\RealTimeNotification;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Title("Profil école")]
 class SchoolProfil extends Component
 {
-    use SchoolActionsTraits, ListenToEchoEventsTrait, Toast, Confirm;
+    use SchoolActionsTraits, SchoolMediaActionsTrait, ListenToEchoEventsTrait, Toast, Confirm;
     
     public $uuid, $slug, $school;
 
@@ -43,6 +39,8 @@ class SchoolProfil extends Component
                 $school->refreshImagesFolder();
 
                 $this->school = $school;
+
+                SubscriptionsDelayedService::runner([$school]);
 
                 $this->school_name = $school->name;
 
@@ -151,6 +149,11 @@ class SchoolProfil extends Component
     public function addImages()
     {
         $this->dispatch('ManageSchoolImagesLiveEvent', $this->school->id);
+    }
+    
+    public function addVideos()
+    {
+        $this->dispatch('ManageSchoolVideoLiveEvent', $this->school->id, null);
     }
     
     

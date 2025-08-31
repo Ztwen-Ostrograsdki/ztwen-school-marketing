@@ -21,18 +21,18 @@
                 </div>
                 <div class="text-gray-400 font-semibold letter-spacing-1 bg-black/80 p-2 shadow-2xl shadow-gray-800">
                     <div class="flex flex-col justify-center">
-                        <h5 class="text-gray-300">
+                        <h5 class="text-gray-300 card">
                             <span class="text-amber-500">
                                 Notre plateforme {{ config('app.name') }}
                             </span>
                             est un espace innovant dédié à la promotion et la visibilité des écoles à travers tout le pays. Elle a pour mission de rapprocher les établissements scolaires des élèves, parents et partenaires, en offrant une vitrine moderne et accessible en ligne.
                         </h5>
 
-                        <h6 class="text-amber-500 uppercase mt-3.5 mb-1.5 text-center border-y border-y-amber-600 py-2">#Nos services</h6>
+                        <h6 class="text-amber-500 uppercase mt-3.5 mb-1.5 text-center border-y border-y-amber-600 py-2 card">#Nos services</h6>
 
                         <div>
                             <ul>
-                                <li class="flex justify-between gap-x-2">
+                                <li class="flex justify-between gap-x-2 card">
                                     <span class="fas fa-circle mt-1.5 text-amber-800"></span>
                                     <span>
                                         <span class="text-amber-800">
@@ -42,7 +42,7 @@
                                     </span>
                                 </li>
 
-                                <li class="flex justify-between gap-x-2">
+                                <li class="flex justify-between gap-x-2 card">
                                     <span class="fas fa-circle mt-1.5 text-amber-700"></span>
                                     <span>
                                         <span class="text-amber-700">
@@ -52,7 +52,7 @@
                                     </span>
                                 </li>
 
-                                <li class="flex justify-between gap-x-2">
+                                <li class="flex justify-between gap-x-2 card">
                                     <span class="fas fa-circle mt-1.5 text-amber-600"></span>
                                     <span>
                                         <span class="text-amber-600">
@@ -62,7 +62,7 @@
                                     </span>
                                 </li>
 
-                                <li class="flex justify-between gap-x-2">
+                                <li class="flex justify-between gap-x-2 card">
                                     <span class="fas fa-circle mt-1.5 text-amber-500"></span>
                                     <span>
                                         <span class="text-amber-500">
@@ -72,7 +72,7 @@
                                     </span>
                                 </li>
 
-                                <li class="flex justify-between gap-x-2">
+                                <li class="flex justify-between gap-x-2 card">
                                     <span class="fas fa-circle mt-1.5 text-amber-400"></span>
                                     <span>
                                         <span class="text-amber-400">
@@ -82,7 +82,7 @@
                                     </span>
                                 </li>
 
-                                <li class="flex justify-between gap-x-2">
+                                <li class="flex justify-between gap-x-2 card">
                                     <span class="fas fa-circle mt-1.5 text-amber-300"></span>
                                     <span>
                                         <span class="text-amber-300">
@@ -94,7 +94,7 @@
 
                             </ul>
                         </div>
-                        <h6 class="my-2.5 shadow-amber-500 shadow-sm rounded-md p-3 text-center border border-amber-500">
+                        <h6 class="my-2.5 shadow-amber-500 shadow-sm rounded-md p-3 text-center border border-amber-500 card">
                             <span class="fas fa-quote"></span>
                             <span class="text-amber-500 mr-0.5">Notre vision</span> est de devenir la référence numérique pour l’information et la promotion des écoles, en valorisant leurs atouts et en facilitant l’orientation des élèves et étudiants.
                         </h6>

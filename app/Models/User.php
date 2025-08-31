@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Helpers\Robots\ModelsRobots;
 use App\Helpers\TraitsManagers\UserTrait;
+use App\Models\SubscriptionUpgradeRequest;
 use App\Models\UserRole;
 use App\Observers\ObserveUser;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -154,6 +155,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Subscription::class);
     }
+    
+    public function upgrade_subscription_requests()
+    {
+        return $this->hasMany(SubscriptionUpgradeRequest::class);
+    }
 
     public function infos()
     {
@@ -182,9 +188,21 @@ class User extends Authenticatable
 
     }
 
+
+
     public function current_subscription()
     {
-        return $this->subscriptions()->where('is_active', true)->where('will_closed_at', '>', now())->first();
+        return $this->hasOne(Subscription::class)->whereNotNull('validate_at')->where('is_active', true)->where('will_closed_at', '>', now())->latest('will_closed_at');
+    }
+
+    public function non_validated_upgrade_request()
+    {
+        return $this->hasOne(SubscriptionUpgradeRequest::class)->whereNull('validate_at')->latest('created_at');
+    }
+
+    public function non_validated_subscription()
+    {
+        return $this->hasOne(Subscription::class)->whereNull('validate_at')->latest('created_at');
     }
 
     public function current_payment()

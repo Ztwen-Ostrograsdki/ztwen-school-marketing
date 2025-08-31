@@ -29,9 +29,9 @@
 
         <!-- Scroll Down Icon -->
         <div class="absolute sm:bottom-14 bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <a href="#about" class="cursor-pointer">
+            <a href="{{route('packs.page')}}" class="cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
             </a>
         </div>
@@ -64,7 +64,7 @@
                         class="mx-auto flex h-16 w-16 -translate-y-12 transform items-center justify-center rounded-full shadow-lg bg-sky-500 shadow-sky-500/40">
                         <span class=" text-white fas fa-icons"></span>
                     </div>
-                    <h1 class="text-darken mb-3 text-lg font-semibold lg:px-14 text-sky-800">PUBLIEZ DES IMAGES... POUR PLUS DE VISIBILITES</h1>
+                    <h1 class="text-darken mb-3 text-lg font-semibold lg:px-14 text-sky-800">PUBLIEZ DES IMAGES, DES VIDEOS... POUR PLUS DE VISIBILITES</h1>
                     <p class="px-4 text-gray-900 font-semibold letter-spacing-1">
                         ... laissez les visiteurs apprécier la beauté de votre école, ...et l'épanouissement dans votre institution!
                     </p>

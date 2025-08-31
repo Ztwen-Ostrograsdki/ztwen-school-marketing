@@ -20,6 +20,7 @@ class MailToSendSubscriptionRefCodeToUser extends Mailable implements ShouldQueu
         public $user,
         public $key,
         public $html,
+        public bool $to_upgrade = false
     )
     {
         
@@ -40,9 +41,15 @@ class MailToSendSubscriptionRefCodeToUser extends Mailable implements ShouldQueu
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: "Code de validation abonnement",
-        );
+        if(!$this->to_upgrade) : 
+            return new Envelope(
+                subject: "Code de validation abonnement",
+            );
+        else :
+            return new Envelope(
+                subject: "Code de validation réabonnement",
+            );
+        endif;
     }
 
    

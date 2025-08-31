@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->foreignId('subscription_id')->constrained('subscriptions')->cascadeOnDelete();
             $table->unsignedBigInteger('pack_id')->nullable()->default(null);
+            $table->unsignedBigInteger('subscription_upgrading_request_id')->nullable()->default(null);
             $table->foreign('pack_id')->references('id')->on('packs')->nullOnDelete();
             $table->date('payed_at')->nullable()->default(null);
             $table->decimal('amount', 15, 2)->nullable()->default(null);

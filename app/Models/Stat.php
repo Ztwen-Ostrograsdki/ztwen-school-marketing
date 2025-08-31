@@ -31,9 +31,6 @@ class Stat extends Model
     {
         static::created(function ($stat){
 
-            
-
-
         });
 
         static::updating(function ($stat){

@@ -399,12 +399,25 @@ trait PackSusbscriptionActionsTraits {
         }
     }
 
+    public function nofifySubscriberToPaidSubscriptionUpgradeRequestForValidation($subscription_upgrade_request_id)
+    {
+
+    }
+
+    public function deleteSubscriptionUpgradeRequest($subscription_upgrade_request_id)
+    {
+
+    }
+    
+    public function approvedSouscriptionUpgradeRequest($subscription_upgrade_request_id)
+    {
+
+    }
 
     public function deleteAllRequests()
     {
 
     }
-
 
     public function approvedAllRequests()
     {

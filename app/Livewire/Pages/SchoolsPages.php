@@ -5,6 +5,7 @@ namespace App\Livewire\Pages;
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
+use App\Helpers\Services\SubscriptionsDelayedService;
 use App\Models\School;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -14,14 +15,25 @@ class SchoolsPages extends Component
 {
     use Toast, Confirm, ListenToEchoEventsTrait;
 
-    public $counter = 3;
+    public $schools = [], $counter = 3;
+
+    public function mount()
+    {
+        $this->schools = School::whereHas('subscriptions', function($q){
+
+            $q->whereNotNull('validate_at')
+              ->where('will_closed_at', '>', now())
+              ->where('is_active', true);
+
+        })->with('current_subscription')->get();
+
+        SubscriptionsDelayedService::runner($this->schools ?? null);
+    }
 
 
 
     public function render()
     {
-        $schools = School::whereNotNull('name')->get();
-        
-        return view('livewire.pages.schools-pages', compact('schools'));
+        return view('livewire.pages.schools-pages');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Events\NewPackSubscriptionCreatedEvent;
 use App\Events\PackSubscriptionWasUpdatedEvent;
+use App\Jobs\JobToJoinSchoolDataToCurrentSubscription;
 use App\Jobs\JobToSendSimpleMailMessageToAdmins;
 use App\Models\Subscription;
 use App\Notifications\RealTimeNotification;
@@ -24,8 +25,8 @@ class ObserveSubscription
 
         JobToSendSimpleMailMessageToAdmins::dispatch("L'utilisateur {$subscription->user->getFullName()} vient de faire une nouvelle demande de souscription ou abonnement pour le pack {$name}  pour son école {$subscription->school->name}", "Nouvelle Souscription - Abonnement", null, route('admin.packs.subscriptions.list'));
 
-
         broadcast(new NewPackSubscriptionCreatedEvent($subscription));
+
     }
 
     /**

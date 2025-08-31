@@ -13,7 +13,9 @@ class ObserveStat
      */
     public function created(Stat $stat): void
     {
-        NewSchoolStatAddedEvent::dispatch($stat->school);
+        NewSchoolStatAddedEvent::dispatch($stat);
+
+        $stat->school->update(['posts_counter' => $stat->school->posts_counter + 1]);
     }
 
     /**
@@ -21,7 +23,9 @@ class ObserveStat
      */
     public function updated(Stat $stat): void
     {
-        SchoolStatUpdatedEvent::dispatch($stat->school);
+        SchoolStatUpdatedEvent::dispatch($stat);
+
+        $stat->school->update(['posts_counter' => $stat->school->posts_counter + 1]);
     }
 
     /**
@@ -29,7 +33,7 @@ class ObserveStat
      */
     public function deleting(Stat $stat): void
     {
-        SchoolStatUpdatedEvent::dispatch($stat->school);
+        SchoolStatUpdatedEvent::dispatch($stat);
     }
 
     /**

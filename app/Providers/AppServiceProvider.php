@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\Services\SubscriptionsDelayedService;
 use App\Helpers\Services\VisitorsRegisterService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -30,5 +31,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Enregistrement des visiteurs
         VisitorsRegisterService::visitorRegistorManager();
+
+        //Désactivation des souscriptions expirées active_upgrading_request
+
+        SubscriptionsDelayedService::runner();
     }
 }

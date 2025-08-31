@@ -28,12 +28,24 @@ class PackSubscriptionsListing extends Component
 
             if(!($search && strlen($search) > 3)){
 
-                $query->whereNull('validate_at');
+                $query->whereNull('validate_at')
+                      ->orWhere(function($q){
+                            $q->whereNotNull('validate_at')->whereHas('upgrading_requests', function($sq){
+                                $sq->whereNull('validate_at');
+                            });
+                        });
 
             }
             else{
 
-                $query->whereNull('validate_at')->where('ref_key', 'like', $search);
+                $query->whereNull('validate_at')
+                ->where('ref_key', 'like', $search)
+                ->orWhere(function($q){
+                    $q->whereNotNull('validate_at')->whereHas('upgrading_requests', function($sq){
+                        $sq->whereNull('validate_at');
+                    });
+                });
+
             }
 
         })->orderBy('created_at', 'desc')->get();

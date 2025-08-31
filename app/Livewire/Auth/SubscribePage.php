@@ -142,11 +142,10 @@ class SubscribePage extends Component
 
             $this->toast("Votre demande a été lancé avec succès!", "success");
 
-            $this->reset();
-
             return redirect()->to($this->user->to_subscribes_route());
 
-            
+            $this->reset();
+
         }
 
 

@@ -20,10 +20,6 @@ class SchoolImagesManager extends Component
 
     public array $images = [];
 
-    public $lycee_id;
-
-    public $lycee;
-
     public $max_images = 5;
 
     protected $rules = [

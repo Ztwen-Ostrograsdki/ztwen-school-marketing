@@ -44,6 +44,7 @@ class School extends Model
         'is_public',
         'created_by',
         'creation_year',
+        'posts_counter',
         'geographic_position',
 
     ];
@@ -123,8 +124,10 @@ class School extends Model
 
     public function current_subscription()
     {
-        return $this->subscriptions()->where('is_active', true)->where('will_closed_at', '>', now())->first();
+        return $this->hasOne(Subscription::class)->whereNotNull('validate_at')->where('is_active', true)->where('will_closed_at', '>', now())->latest('will_closed_at');
     }
+
+
 
     public function current_payment()
     {
@@ -176,20 +179,6 @@ class School extends Model
 
             $models_images = $this->images;
 
-            // $images = $this->images()->pluck('path')->toArray();
-
-            // $images_from_storage = Storage::disk('public')->files($this->folder);
-
-            // foreach($images_from_storage as $file){
-
-            //     if(!in_array($file, $images)){
-
-            //         Storage::disk('public')->delete($file);
-
-            //     }
-
-            // }
-
             foreach($models_images as $img){
 
                 if(!Storage::disk('public')->exists($img->path)){
@@ -201,6 +190,42 @@ class School extends Model
 
 
         }
+    }
+    
+    public function refreshVideosFolder()
+    {
+
+        $is_dir = Storage::disk('public')->exists($this->folder);
+
+        if($is_dir){
+
+            $models_videos = $this->videos;
+
+            foreach($models_videos as $video){
+
+                if(!Storage::disk('public')->exists($video->path)){
+
+                    $video->delete();
+                }
+
+            }
+
+
+        }
+    }
+
+
+    public function getStatsByYears()
+    {
+        return Stat::where(function ($query) {
+                        $query->where('school_id', $this->id);
+                    })
+                    ->orderBy('created_at')
+                    ->get()
+                    ->groupBy(function ($stat) {
+
+                    return $stat->year;
+                });
     }
 
     public function stats()

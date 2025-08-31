@@ -217,6 +217,16 @@ if(!function_exists('zero')){
 
 }
 
+if(!function_exists('__formatDecimal')){
+
+    function __formatDecimal($number, $string = false)
+    {
+        return strpos($number, '.') !== false ? rtrim(rtrim($number, '0'), '.') : $number;
+        
+    }
+
+}
+
 if(!function_exists('__formatNumber3')){
 
     function __formatNumber3(int $number)
@@ -569,21 +579,11 @@ if(!function_exists('school_images')){
 			}
 
 			return $images;
-
-
 		}
 		else{
 
 			return $defaults;
 		}
-
-
-
-            
-
-        
-
-
     }
 
 }

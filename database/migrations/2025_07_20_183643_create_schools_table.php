@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->boolean('is_public')->default(false);
+            $table->unsignedBigInteger('posts_counter')->nullable()->default(5);
             $table->unsignedBigInteger('likes')->nullable()->default(2);
             $table->boolean('is_active')->default(false);
             $table->string('name')->nullable()->default(null);

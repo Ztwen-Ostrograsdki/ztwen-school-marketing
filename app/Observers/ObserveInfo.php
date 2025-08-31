@@ -14,6 +14,8 @@ class ObserveInfo
     public function created(Info $info): void
     {
         NewSchoolInfoAddedEvent::dispatch($info);
+
+        $info->school->update(['posts_counter' => $info->school->posts_counter + 1]);
     }
 
     /**
@@ -22,6 +24,8 @@ class ObserveInfo
     public function updated(Info $info): void
     {
         SchoolInfoUpdatedEvent::dispatch($info);
+
+        $info->school->update(['posts_counter' => $info->school->posts_counter + 1]);
     }
 
     /**

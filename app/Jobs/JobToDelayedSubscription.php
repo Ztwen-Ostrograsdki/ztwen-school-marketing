@@ -20,7 +20,7 @@ class JobToDelayedSubscription implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public Subscription $subscription, public ?User $admin_validator)
+    public function __construct(public Subscription $subscription, public ?User $admin_validator = null)
     {
         //
     }
@@ -30,17 +30,26 @@ class JobToDelayedSubscription implements ShouldQueue
      */
     public function handle(): void
     {
-        if($this->subscription->hasPlannedDelayedTask()){
 
-            $message = "L'abonnement ref:{$this->subscription->ref_key} du pack {$this->subscription->pack->name} a déjà une tâche de désactivation plannifiée!";
+        if($this->subscription->is_active && $this->subscription->will_closed_at < now()){
 
-            Notification::sendNow([$this->subscription->user], new RealTimeNotification($message));
+            self::runner();
 
-            return ;
         }
         else{
 
+            if($this->subscription->hasPlannedDelayedTask()){
 
+                $message = "L'abonnement ref:{$this->subscription->ref_key} du pack {$this->subscription->pack->name} a déjà une tâche de désactivation plannifiée!";
+
+                Notification::sendNow([$this->subscription->user], new RealTimeNotification($message));
+
+                return ;
+            }
+            else{
+
+                self::runner();
+            }
         }
     }
 
@@ -54,8 +63,6 @@ class JobToDelayedSubscription implements ShouldQueue
         if($subscription->is_active){
 
             DB::beginTransaction();
-
-            $today = now();
 
             $subscriber = $subscription->subscriber;
 
@@ -137,7 +144,7 @@ class JobToDelayedSubscription implements ShouldQueue
     {
         return [
             Skip::when(!$this->subscription->exists),
-            Skip::when($this->subscription->hasPlannedDelayedTask()),
+            Skip::when($this->subscription->is_active && $this->subscription->will_closed_at > now() && $this->subscription->hasPlannedDelayedTask()),
         ];
     }
 }

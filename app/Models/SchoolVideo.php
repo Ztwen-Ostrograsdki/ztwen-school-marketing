@@ -35,11 +35,15 @@ class SchoolVideo extends Model
             
             SchoolDataHasBeenUpdatedEvent::dispatch($video->school);
 
+            $video->school->update(['posts_counter' => $video->school->posts_counter + 1]);
+
         });
 
         static::updated(function ($video){
             
             SchoolDataHasBeenUpdatedEvent::dispatch($video->school);
+
+            $video->school->update(['posts_counter' => $video->school->posts_counter + 1]);
 
         });
         

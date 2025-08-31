@@ -56,13 +56,16 @@ class MyProfil extends Component
     
     public function render()
     {
-        $all_subscribes = getRand(100, 333);
+        $all_subscribes = count($this->user->subscriptions);
 
-        $all_posts = getRand(1881, 88888);
+        $all_posts = array_sum($this->user->schools()->pluck('posts_counter')->toArray());
 
-        $all_likes = getRand(1000, 959599);
+        $all_likes = 0;
 
+        foreach($this->user->schools as $school){
 
+            $all_likes += count($school->followers);
+        }
 
         return view('livewire.user.my-profil', compact('all_subscribes', 'all_posts', 'all_likes'));
     }
@@ -78,7 +81,7 @@ class MyProfil extends Component
 
         $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action est irréversible! </p>";
 
-        $options = ['event' => 'confirmImageDeletion', 'confirmButtonText' => 'Validé', 'cancelButtonText' => 'Annulé', 'data' => ['image_id' => $image_id, 'school_id' => $school_id]];
+        $options = ['event' => 'confirmImageDeletion', 'confirmButtonText' => 'Supprimer', 'cancelButtonText' => 'Annulé', 'data' => ['image_id' => $image_id, 'school_id' => $school_id]];
 
         $this->confirm($html, $noback, $options);
 
@@ -127,6 +130,14 @@ class MyProfil extends Component
     public function generateAssistantTokenFor()
     {
         $this->dispatch('AddNewAssistantLiveEvent');
+
+    } 
+    
+    public function upgradeSubscription($subscription_id = null)
+    {
+        if(!$this->user->current_subscription) return $this->toast( "Vous n'avez aucun abonnement actif!", 'error');
+
+        return redirect()->to($this->user->current_subscription->to_upgrading_route());
 
     }
 

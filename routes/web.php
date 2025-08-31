@@ -8,6 +8,7 @@ use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\RegisterPage;
 use App\Livewire\Auth\ResetPasswordPage;
 use App\Livewire\Auth\SubscribePage;
+use App\Livewire\Auth\SubscriptionUpgradingPage;
 use App\Livewire\Master\AbonnementsListing;
 use App\Livewire\Master\AssistantsListing;
 use App\Livewire\Master\Dashboard;
@@ -75,6 +76,8 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('boutique/abonnement/k={token}/pu={pack_uuid}/ps={pack_slug}/validation-souscription', SubscribePage::class)->name('subscribe.confirmation');
     
+    Route::get('boutique/re-abonnement/k={token}/abonnement={subscription_ref_key}/su={subscription_uuid}/ecole={school_uuid}/', SubscriptionUpgradingPage::class)->name('subscribe.upgrade');
+
     Route::get('mon-profil/u={uuid}/edition-profil', RegisterPage::class)->name('user.profil.edition')->middleware(['user.self']);
 
     Route::get('mon-profil/u={user_uuid}/gestion/creation-ecole', CreateSchool::class)->name('create.school');

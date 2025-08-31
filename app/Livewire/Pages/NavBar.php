@@ -20,7 +20,12 @@ class NavBar extends Component
 
     public function render()
     {
-        $subscription_demandes = Subscription::where('validate_at', null)->count();
+        $subscription_demandes = Subscription::whereNull('validate_at')
+                      ->orWhere(function($q){
+                            $q->whereNotNull('validate_at')->whereHas('upgrading_requests', function($sq){
+                                $sq->whereNull('validate_at');
+                            });
+                        })->count();
 
         $subscriptions = Subscription::whereNotNull('validate_at')->count();
 

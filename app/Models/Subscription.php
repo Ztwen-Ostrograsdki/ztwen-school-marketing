@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use App\Events\NewPackSubscriptionCreatedEvent;
-use App\Events\PackSubscriptionWasUpdatedEvent;
 use App\Helpers\Robots\ModelsRobots;
-use App\Helpers\Services\EmailTemplateBuilder;
 use App\Jobs\JobToDelayedSubscription;
+use App\Jobs\JobToJoinSchoolDataToCurrentSubscription;
+use App\Jobs\JobToQueueSubscriptionApprobation;
 use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Jobs\JobToSendSubcriptionDetailsToTheSubcriber;
-use App\Mail\MailToSendSubscriptionRefCodeToUser;
 use App\Models\AssistantRequest;
 use App\Models\Info;
 use App\Models\Pack;
@@ -18,6 +16,7 @@ use App\Models\School;
 use App\Models\SchoolImage;
 use App\Models\SchoolVideo;
 use App\Models\Stat;
+use App\Models\SubscriptionUpgradeRequest;
 use App\Models\User;
 use App\Notifications\RealTimeNotification;
 use App\Observers\ObserveSubscription;
@@ -26,7 +25,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -85,6 +83,26 @@ class Subscription extends Model
         
     }
 
+    public function upgrading_requests()
+    {
+        return $this->hasMany(SubscriptionUpgradeRequest::class);
+    }
+
+    public function has_upgrade_request()
+    {
+        return $this->hasOne(SubscriptionUpgradeRequest::class)->latest('created_at');
+    }
+
+    public function active_upgrading_request()
+    {
+        return $this->hasOne(SubscriptionUpgradeRequest::class)->whereNotNull('validate_at')->where('is_active', true)->where('will_closed_at', '>', now())->latest('will_closed_at');
+    }
+
+    public function upgraded()
+    {
+        return $this->hasOne(SubscriptionUpgradeRequest::class)->whereNotNull('validate_at')->where('is_active', true)->where('will_closed_at', '>', now())->latest('will_closed_at');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -133,6 +151,11 @@ class Subscription extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function to_upgrading_route()
+    {
+        return route('subscribe.upgrade', ['school_uuid' => $this->school->uuid, 'subscription_uuid' => $this->uuid, 'subscription_ref_key' => $this->ref_key, 'token' => config('app.my_token')]);
     }
 
     public function to_details_route()
@@ -298,10 +321,15 @@ class Subscription extends Model
         ];
     }
 
+    public function joinSchoolDataToACurrentSubscription()
+    {
+        
+    }
+
 
     public function __subcriptionApprobationManager(?User $admin_validator = null)
     {
-        DB::beginTransaction();
+        
 
         $today = now();
 
@@ -309,13 +337,45 @@ class Subscription extends Model
 
         try {
 
-            $subscription_data = [
-                'free_days' => 3,
-                'validate_at' => $today,
-                'will_closed_at' => Carbon::now()->addMonths($this->months),
-                'payment_status' => "Payé",
-                'is_active' => true,
-            ];
+            $current_subscription = $subscriber->current_subscription;
+
+            if(!$current_subscription){
+
+                $subscription_data = [
+                    'free_days' => 3,
+                    'validate_at' => $today,
+                    'will_closed_at' => Carbon::now()->addMonths($this->months),
+                    'payment_status' => "Payé",
+                    'is_active' => true,
+                ];
+
+            }
+            else{
+
+                JobToQueueSubscriptionApprobation::dispatch($admin_validator, $this)->delay(Carbon::parse($current_subscription->will_closed_at)->addMinutes(15));
+
+                Notification::sendNow([$subscriber], new RealTimeNotification("La validation de votre abonnement ref:{$this->ref_key} au pack {$this->pack->name} fait pour l'école {$this->school->name} a été mise en attente car vous avez un abonnement actif en cours! "));
+
+                if($admin_validator) : 
+
+                    Notification::sendNow([$admin_validator], new RealTimeNotification("La validation de l'abonnement ref:{$this->ref_key} au pack {$this->pack->name} fait par {$this->user->getFullName()} a été mise en attente car l'abonné a un abonnement actif en cours! "));
+
+                    return false;
+
+                else :
+                    $admins = ModelsRobots::getAllAdmins();
+
+                    if(!empty($admins)){
+
+                        Notification::sendNow($admins, new RealTimeNotification("La validation de l'abonnement ref:{$this->ref_key} au pack {$this->pack->name} fait par {$this->user->getFullName()} a été mise en attente car l'abonné a un abonnement actif en cours! "));
+                    }
+
+                    return false;
+
+                endif; 
+            }
+
+            DB::beginTransaction();
 
             $payment_data = [
                 'email' => $this->email,
@@ -340,6 +400,11 @@ class Subscription extends Model
             DB::afterCommit(function() use ($payment, $subscriber, $admin_validator){
 
                 $message = "Votre demande d'abonnement ref:{$this->ref_key} du pack {$this->pack->name} a été approuvé et activé avec succès. Votre abonnement est à présent actif!";
+
+                if($payment && $this->is_active){
+
+                    JobToJoinSchoolDataToCurrentSubscription::dispatch($this);
+                }
 
                 Notification::sendNow([$this->user], new RealTimeNotification($message));
 
@@ -393,13 +458,6 @@ class Subscription extends Model
             endif;
         }
     }
-
-
-    public function joinSchoolDataToACurrentSubscription()
-    {
-        
-    }
-
 
     public function __notifySubscriberToFinalyseSubscriptionByPayingToValidateIt(?User $admin_validator = null)
     {
