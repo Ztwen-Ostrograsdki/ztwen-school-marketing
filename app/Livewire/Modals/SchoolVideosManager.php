@@ -50,9 +50,9 @@ class SchoolVideosManager extends Component
 
         if($school){
 
-            if($school->current_subscription()){
+            if($school->current_subscription){
 
-                if(!$school->current_subscription()->videosable){
+                if(!$school->current_subscription->videosable){
 
                     return $this->toast("Vous avez déjà épuisé le nombre de vidéos que vous pouvez publier avec votre abonnement actif actuellement!", 'info');
 
@@ -61,7 +61,7 @@ class SchoolVideosManager extends Component
 
                 $this->school = $school;
 
-                $this->max_videos = $school->current_subscription()->remainingVideos;
+                $this->max_videos = $school->current_subscription->remainingVideos;
 
                 if($video_id){
 
@@ -110,14 +110,7 @@ class SchoolVideosManager extends Component
     {
         if(!$this->video_model){
 
-            $this->validate([
-                'video' => [
-                    'required',
-                    'file', 
-                    'mimetypes:video/*', 
-                    // 'max:51200', // taille max (en kilo-octets) soit 50Mo
-                ],
-            ]);
+            $this->validate();
 
             $root_folder =  $this->school->folder;
 
@@ -200,14 +193,7 @@ class SchoolVideosManager extends Component
     {
         $this->resetErrorBag();
 
-        // $this->validate([
-        //     'video' => [
-        //         'required',
-        //         'file', 
-        //         'mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime', 
-        //         'max:51200', // taille max (en kilo-octets) soit 50Mo
-        //     ],
-        // ]);
+        $this->validate(['video']);
     }
 
     public function videosUploader($root_folder, $video)
@@ -245,10 +231,10 @@ class SchoolVideosManager extends Component
 
         if($video_path){
             
-            if($this->school->current_subscription()){
+            if($this->school->current_subscription){
 
                 SchoolVideo::create([
-                    'subscription_id' => $this->school->current_subscription()->id,
+                    'subscription_id' => $this->school->current_subscription->id,
                     'user_id' => auth_user_id(),
                     'school_id' => $this->school->id,
                     'path' => $video_path,

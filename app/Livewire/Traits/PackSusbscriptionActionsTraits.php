@@ -7,6 +7,7 @@ use Akhaled\LivewireSweetalert\Toast;
 use App\Events\PlannedTaskToDelayedSubscriptionEvent;
 use App\Helpers\Robots\SpatieManager;
 use App\Models\Subscription;
+use App\Models\SubscriptionUpgradeRequest;
 use App\Notifications\RealTimeNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -141,9 +142,6 @@ trait PackSusbscriptionActionsTraits {
             
         }
     }
-
-
-
 
 	public function activateSubscriptionRequest($subscription_id)
     {
@@ -401,17 +399,111 @@ trait PackSusbscriptionActionsTraits {
 
     public function nofifySubscriberToPaidSubscriptionUpgradeRequestForValidation($subscription_upgrade_request_id)
     {
+        SpatieManager::ensureThatUserCan();
 
+        if($subscription_upgrade_request_id){
+
+            $subscription_request = SubscriptionUpgradeRequest::find($subscription_upgrade_request_id);
+
+            if($subscription_request && $subscription_request->subscription?->validate_at){
+
+                $subscription_request->__notifySubscriberToFinalyseSubscriptionUpgradeRequestByPayingToValidateIt(auth_user());
+
+                return $this->toast("Un rappel a été envoyé à " . $subscription_request->subscriber->getFullName() . " afin qu'il procède au payement de sa demande de réabonnement!", 'success');
+
+            }
+        }
     }
 
     public function deleteSubscriptionUpgradeRequest($subscription_upgrade_request_id)
     {
+        SpatieManager::ensureThatUserCan();
 
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment supprimer cette demande de réabonnement ? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action est irréversible! </p>";
+
+        $options = ['event' => 'confirmPackSubscriptionUpgradeRequestDeletion', 'confirmButtonText' => 'Supprimer', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_upgrade_request_id' => $subscription_upgrade_request_id]];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+
+
+    #[On('confirmPackSubscriptionUpgradeRequestDeletion')]
+    public function onDeletePackSubscriptionUpgradeRequest($data)
+    {
+        if($data){
+
+            $subscription_upgrade_request_id = $data['subscription_upgrade_request_id'];
+
+            if($subscription_upgrade_request_id){
+
+                $subscription_request = SubscriptionUpgradeRequest::find($subscription_upgrade_request_id);
+
+                if($subscription_request){
+
+					$name = $subscription_request->ref_key;
+
+                    $message = "La demande de réabonnement " . $name . " a été supprimée avec succès!";
+
+                    $deleted = $subscription_request->delete();
+
+                    if($deleted){
+
+                        Notification::sendNow([auth_user()], new RealTimeNotification($message));
+
+                        return;
+                    }
+
+                }
+            }
+
+            return $this->toast("La suppression a échoué", 'error');
+        }
     }
     
     public function approvedSouscriptionUpgradeRequest($subscription_upgrade_request_id)
     {
+        SpatieManager::ensureThatUserCan();
 
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0 letter-spacing-2'>
+                    <p> Voulez-vous vraiment approuver cette demande de réabonnement ? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cela signifira que cette demande a été soldée! </p>";
+
+        $options = ['event' => 'confirmSubscriptionUpgradeRequest', 'confirmButtonText' => 'Approuvée', 'cancelButtonText' => 'Annulé', 'data' => ['subscription_upgrade_request_id' => $subscription_upgrade_request_id]];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+    #[On('confirmSubscriptionUpgradeRequest')]
+    public function onConfirmSubscriptionUpgradeRequest($data)
+    {
+        if($data){
+
+            $subscription_upgrade_request_id = $data['subscription_upgrade_request_id'];
+
+            if($subscription_upgrade_request_id){
+
+                $subscription_request = SubscriptionUpgradeRequest::find($subscription_upgrade_request_id);
+
+                if($subscription_request){
+
+					$subscription_request->__subcriptionUpgradeRequestApprobationManager(auth_user());
+
+                }
+            }
+            else{
+
+                return $this->toast("la validation de la demande de réabonnement a échoué", 'error');
+            }
+
+            
+        }
     }
 
     public function deleteAllRequests()

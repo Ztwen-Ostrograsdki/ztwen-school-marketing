@@ -60,7 +60,6 @@ class Subscription extends Model
         'payment_id',
         'school_id',
         'pack_id',
-        'validate',
         'ref_key',
 
     ];
@@ -342,9 +341,9 @@ class Subscription extends Model
             if(!$current_subscription){
 
                 $subscription_data = [
-                    'free_days' => 3,
+                    'free_days' => 2,
                     'validate_at' => $today,
-                    'will_closed_at' => Carbon::now()->addMonths($this->months),
+                    'will_closed_at' => Carbon::now()->addMonths($this->months)->addDays(2),
                     'payment_status' => "Payé",
                     'is_active' => true,
                 ];

@@ -6,13 +6,15 @@ use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Helpers\Robots\SpatieManager;
-use App\Models\School;
 use App\Models\SchoolImage;
+use App\Models\SchoolVideo;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title("Profil Utilisateur")]
 class MyProfil extends Component
 {
     use ListenToEchoEventsTrait, Toast, Confirm;
@@ -152,6 +154,68 @@ class MyProfil extends Component
         
         $this->dispatch('ManageCommuniqueLiveEvent', $info_id);
     }
+
+    public function removeVideoFromVideosOf($video_id, $school_id)
+    {
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $school_id, ['school-images-manager'], true);
+
+        $html = "<h6 class='font-semibold text-base text-orange-400 py-0 my-0'>
+                    <p> Vous êtes sur le point de supprimer une vidéo </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Cette action est irréversible! </p>";
+
+        $options = ['event' => 'confirmVideoDeletion', 'confirmButtonText' => 'Validé', 'cancelButtonText' => 'Annulé', 'data' => ['video_id' => $video_id]];
+
+        $this->confirm($html, $noback, $options);
+
+    }
+
+    #[On('confirmVideoDeletion')]
+    public function confirmVideoRemoving($data)
+    {
+        $video_id = $data['video_id'];
+
+        if($video_id){
+
+            $video = SchoolVideo::where('id', $video_id)->first();
+
+            $school = $video->school;
+
+            if($video){
+
+                $video_path = $video->path;
+
+                if(Storage::disk('public')->exists($video_path)){
+
+                    $deleted = $video->delete();
+
+                    $school->refreshVideosFolder();
+
+                    if($deleted) $this->toast( "La vidéo a été retirée avec succès!", 'success');
+
+                    else $this->toast( "Erreur : La suppression de la vidéo a échoué!", 'error');
+
+                    $this->counter = getRand();
+                    
+                }
+                else{
+
+                    return $this->toast( "Erreur stockage: Le fichier est introuvable!", 'error');
+                }
+
+            }
+            else{
+                return $this->toast( "Erreur stockage: Le fichier est introuvable!", 'error');
+            }
+        }
+    }
+
+    public function manageVideo($video_id, $school_id)
+    {
+        $this->dispatch('ManageSchoolVideoLiveEvent', $school_id, $video_id);
+    }
+
 
     
 }

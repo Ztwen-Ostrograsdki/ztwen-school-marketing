@@ -44,13 +44,13 @@
                         <table class="min-w-full divide-y text-xs sm: letter-spacing-1 divide-gray-200 border">
                             <thead class="bg-black/50 text-sky-500 ">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-left">
+                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-center">
                                         #N°
                                     </th>
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-left">
+                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-center">
                                         Pack
                                     </th>
-                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-left">
+                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider text-center">
                                         Reférence
                                     </th>
                                     <th scope="col" class="px-6 py-4 uppercase tracking-wider">
@@ -89,7 +89,7 @@
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="text-center my-0">
-                                                <a class="" href="{{$souscription->to_details_route()}}" class="text-center">
+                                                <a class="hover:underline hover:underline-offset-2 hover:text-gray-300" href="{{$souscription->to_details_route()}}" class="text-center">
                                                     <div class="text-center">
                                                         {{ $souscription->pack->name }}
                                                     </div>
@@ -107,15 +107,15 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
-                                            <div class="text-amber-600 font-semibold letter-spacing-1 hover:underline hover:underline-offset-2 hover:text-gray-500 flex flex-col gap-y-1.5">
-                                                <a href="{{$souscription->to_details_route()}}">
-                                                    {{ $souscription->ref_key }}
+                                            <div class="text-amber-600 font-semibold letter-spacing-1 hover:underline hover:underline-offset-2 hover:text-gray-300 flex flex-col gap-y-1.5 items-center">
+                                                <a class="text-center" href="{{$souscription->to_details_route()}}">
+                                                    #{{ $souscription->ref_key }}
                                                 </a>
                                                 <span class="px-2 inline-block text-xs leading-5 text-center font-semibold rounded-full @if($souscription->will_closed_at > now()) bg-green-100 text-green-800 @else bg-red-200 text-red-600 @endif">
                                                 {{ $souscription->will_closed_at > now() ? "Actif" : "Expiré" }}
                                                 </span>
                                                 @if($souscription->upgraded)
-                                                <span class="px-2 inline-block text-xs leading-5 text-center font-thin rounded-full bg-amber-200 text-amber-600">
+                                                <span class="px-2 inline-block text-xs leading-5 text-center font-thin rounded-full bg-amber-200 text-amber-800">
                                                     Abonnement prolongé
                                                 </span>
                                                 @endif
@@ -123,8 +123,19 @@
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="flex flex-col gap-y-1 items-center text-center">
-                                                {{ __moneyFormat($souscription->amount) }}
-                                                <small class="text-orange-400"> {{ __zero($souscription->months) }} mois</small>
+                                                <span class="flex flex-col gap-y-1">
+                                                    <span>{{ __moneyFormat($souscription->amount) }}</span>
+                                                    @if($souscription->has_upgrade_request?->validate_at)
+                                                        <span class="text-xs text-green-400 font-semibold"> + {{ __moneyFormat($souscription->has_upgrade_request->amount) }}</span>
+                                                    @endif
+                                                </span>
+                                                <span class="flex flex-col gap-y-1">
+                                                    <small class="text-orange-400"> {{ __zero($souscription->months) }} mois</small>
+                                                    @if($souscription->has_upgrade_request?->validate_at)
+                                                        <small class="text-xs text-green-400 font-semibold"> + {{ __zero($souscription->has_upgrade_request->months) }} mois prolongés</small>
+                                                    @endif
+                                                </span>
+                                                
                                             </div>
                                             
                                         </td>
@@ -145,7 +156,7 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-6 py-2 whitespace-nowrap"  @if($souscription->has_upgrade_request?->validate_at) rowspan="2" @endif>
                                             <div class="flex flex-col gap-y-1.5">
                                                 @if($souscription->validate_at && $souscription->will_closed_at)
                                                     <span>
@@ -159,13 +170,13 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap text-center">
+                                        <td class="px-6 py-2 whitespace-nowrap text-center" @if($souscription->has_upgrade_request?->validate_at) rowspan="2" @endif>
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if($souscription->validate_at) bg-green-100 text-green-800 @else bg-red-200 text-red-600 @endif">
                                              {{ $souscription->validate_at ? "Payé" : "Non payé" }}
                                             </span>
                                         </td>
                                         
-                                        <td class="px-6 py-2 whitespace-nowrap text-right  font-medium">
+                                        <td class="px-6 py-2 whitespace-nowrap text-right  font-medium" @if($souscription->has_upgrade_request?->validate_at) rowspan="2" @endif>
                                             <div class="flex gap-x-1.5">
                                                 <button wire:click='displaySubscriptionDetails({{$souscription->id}})' class="block text-white cursor-pointer bg-blue-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-700 focus:ring-blue-800" type="button">
                                                     <span wire:loading.remove wire:target='displaySubscriptionDetails({{$souscription->id}})'>
@@ -189,25 +200,27 @@
                                                         </span>
                                                     </button>
                                                 @else
-                                                <a href="{{$souscription->to_upgrading_route()}}" class="text-black cursor-pointer bg-green-500 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-yellow-800">
-                                                    <span class="w-full flex items-center px-1.5">
-                                                        <span class="fas fa-up-long mr-1"></span>
-                                                        prolonger
-                                                    </span>
-                                                </a>
+                                                    @unless($souscription->has_upgrade_request && !$souscription->has_upgrade_request->validate_at)
+                                                    <a href="{{$souscription->to_upgrading_route()}}" class="text-black cursor-pointer bg-green-500 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-yellow-800">
+                                                        <span class="w-full flex items-center px-1.5">
+                                                            <span class="fas fa-up-long mr-1"></span>
+                                                            prolonger
+                                                        </span>
+                                                    </a>
+                                                    @endunless
                                                 @endif
                                             </div>  
                                         </td>
                                         @if($souscription->has_upgrade_request)
                                             <tr class="w-full font-semibold letter-spacing-2">
-                                                <td colspan="6" class="px-6 py-2 whitespace-nowrap text-center">
+                                                <td colspan="5" class="px-6 py-2 whitespace-nowrap text-center bg-gray-900">
                                                     <span class="flex justify-center gap-x-1.5">
-                                                        <span class="text-amber-200">Vous avez lancé une demande de réabonnement pour cette souscription</span>
+                                                        <span class="text-amber-200"> Vous ({{ $souscription->has_upgrade_request->user->getFullName() }}) avez lancé un réabonnement pour cette souscription</span>
                                                         <span class="text-amber-600 underline underline-offset-2"> #{{$souscription->ref_key}} </span>
                                                     </span>
                                                     <div class="flex justify-center flex-col gap-1.5">
                                                         @if ($souscription->has_upgrade_request)
-                                                            <div class="flex justify-center p-4 items-center ">
+                                                            <div class="flex justify-center p-2 items-center ">
                                                                 <span class="flex flex-wrap gap-5 font-thin justify-center">
                                                                     <span>
                                                                         <span>Status : </span>
@@ -223,7 +236,7 @@
                                                                         </span>
                                                                     </span>
                                                                     <span>
-                                                                        <span>Nombre de mois : </span>
+                                                                        <span>Nombre de mois prolongés : </span>
                                                                         <span class="text-amber-500">
                                                                             {{ __zero($souscription->has_upgrade_request->months) }}
                                                                         </span>
@@ -249,7 +262,7 @@
                                                                 </span>
                                                             </div>
                                                             <span class="mb-1.5">
-                                                                <span class="text-sm font-semibold letter-spacing-1 text-gray-800 bg-green-400 p-2 rounded-md flex gap-x-3.5 justify-center items-center w-full">
+                                                                <span class="font-semibold letter-spacing-1 text-gray-800 bg-green-400 p-1 rounded-md flex gap-x-3.5 justify-center items-center w-full">
                                                                     <span>
                                                                         Souscrit le {{__formatDate($souscription->has_upgrade_request->created_at) }}
                                                                     </span>
@@ -266,22 +279,20 @@
                                                         @endif
                                                     </div>
                                                 </td>
-                                                <td colspan="2" class="px-6 py-2 whitespace-nowrap text-center">
-                                                    @if(!$souscription->has_upgrade_request->validate_at)
-                                                        <button wire:click='notifyAdminsThatPaymentHasBeenDone({{$souscription->id}})' class="block text-white cursor-pointer w-full bg-green-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-green-800" type="button">
-                                                            <span wire:loading.remove wire:target='notifyAdminsThatPaymentHasBeenDone({{$souscription->id}})'>
-                                                                <span class="fas fa-check-double mr-1"></span>
-                                                                Notifier payement effectuer validation
-                                                            </span>
-                                                            <span wire:loading wire:target='notifyAdminsThatPaymentHasBeenDone({{$souscription->id}})'>
-                                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                                                <span>En cours...</span>
-                                                            </span>
-                                                        </button>
-                                                    @else
-
-                                                    @endif
+                                                @if(!$souscription->has_upgrade_request->validate_at)
+                                                <td colspan="3" class="px-6 py-2 whitespace-nowrap text-center">
+                                                    <button wire:click='notifyAdminsThatPaymentHasBeenDone({{$souscription->id}})' class="block text-white cursor-pointer w-full bg-green-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-green-800" type="button">
+                                                        <span wire:loading.remove wire:target='notifyAdminsThatPaymentHasBeenDone({{$souscription->id}})'>
+                                                            <span class="fas fa-check-double mr-1"></span>
+                                                            Notifier payement effectuer pour la validation
+                                                        </span>
+                                                        <span wire:loading wire:target='notifyAdminsThatPaymentHasBeenDone({{$souscription->id}})'>
+                                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                            <span>En cours...</span>
+                                                        </span>
+                                                    </button>
                                                 </td>
+                                                @endif
                                             </tr>
                                         @endif
                                     </tr>

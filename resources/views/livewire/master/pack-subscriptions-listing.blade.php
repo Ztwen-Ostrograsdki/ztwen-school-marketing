@@ -121,14 +121,14 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
-                                            <div class="text-amber-600 font-semibold letter-spacing-1 flex flex-col gap-y-1">
+                                            <a href="{{$souscription->to_details_route()}}" class="text-amber-600 font-semibold letter-spacing-1 flex flex-col gap-y-1 hover:underline hover:underline-offset-2 hover:text-gray-400">
                                                 <span>
                                                     {{ $souscription->ref_key }}
                                                 </span>
                                                 <span>
                                                     Du {{ __formatDateTime($souscription->created_at) }}
                                                 </span>
-                                            </div>
+                                            </a>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="flex items-center gap-x-1.5">
@@ -238,67 +238,68 @@
                                                 <td colspan="6" class="px-6 py-2 whitespace-nowrap text-center bg-gray-900">
                                                     <span class="flex justify-center gap-x-1.5">
                                                         <span class="text-amber-200">{{ $souscription->has_upgrade_request->user->getFullName() }} a lancé une demande de réabonnement pour cette souscription</span>
-                                                        <span class="text-amber-600 underline underline-offset-2"> #{{$souscription->ref_key}} </span>
+                                                        <a href="{{$souscription->to_details_route()}}" class="text-amber-600 underline underline-offset-2 hover:text-gray-500"> #{{$souscription->ref_key}} </a>
                                                     </span>
                                                     <div class="flex justify-center flex-col gap-1.5">
-                                                        @if ($souscription->has_upgrade_request)
-                                                            <div class="flex justify-center p-2 items-center ">
-                                                                <span class="flex flex-wrap gap-5 font-thin justify-center">
+                                                        <div class="flex justify-center p-2 items-center ">
+                                                            <span class="flex flex-wrap gap-5 font-thin justify-center">
+                                                                <span>
+                                                                    <span>Status : </span>
                                                                     <span>
-                                                                        <span>Status : </span>
-                                                                        <span>
-                                                                            <span class="text-green-500">           {{ $souscription->has_upgrade_request->payment_status }}
-                                                                            </span>
-                                                                        </span>
-                                                                    </span>
-                                                                    <span>
-                                                                        <span>Prix unitaire : </span>
-                                                                        <span class="text-amber-500">
-                                                                            {{ __moneyFormat($souscription->has_upgrade_request->unique_price) }}
-                                                                        </span>
-                                                                    </span>
-                                                                    <span>
-                                                                        <span>Nombre de mois : </span>
-                                                                        <span class="text-amber-500">
-                                                                            {{ __zero($souscription->has_upgrade_request->months) }}
-                                                                        </span>
-                                                                    </span>
-                                                                    <span>
-                                                                        <span>Reduction : </span>
-                                                                        <span class="text-amber-500">
-                                                                            {{ $souscription->has_upgrade_request->discount }} %
-                                                                        </span>
-                                                                    </span>
-                                                                    <span>
-                                                                        <span>Montant total : </span>
-                                                                        <span class="text-amber-500">
-                                                                            {{ __moneyFormat($souscription->has_upgrade_request->amount) }}
-                                                                        </span>
-                                                                    </span>
-                                                                    <span>
-                                                                        <span>Montant payé : </span>
-                                                                        <span class="text-amber-500">
-                                                                            {{ __moneyFormat($souscription->has_upgrade_request->payment?->amount) }}
+                                                                        <span class="text-green-500">           {{ $souscription->has_upgrade_request->payment_status }}
                                                                         </span>
                                                                     </span>
                                                                 </span>
-                                                            </div>
-                                                            <span class="mb-1.5">
-                                                                <span class="text-sm font-semibold letter-spacing-1 text-gray-800 bg-green-400 p-2 rounded-md flex gap-x-3.5 justify-center items-center w-full">
-                                                                    <span>
-                                                                        Souscrit le {{__formatDate($souscription->has_upgrade_request->created_at) }}
+                                                                <span>
+                                                                    <span>Prix unitaire : </span>
+                                                                    <span class="text-amber-500">
+                                                                        {{ __moneyFormat($souscription->has_upgrade_request->unique_price) }}
                                                                     </span>
-                                                                    <span> - </span>
-                                                                    <span>
-                                                                        @if($souscription->has_upgrade_request->validate_at)
-                                                                            Validé le {{ __formatDate($souscription->has_upgrade_request->validate_at) }}
-                                                                        @else
-                                                                            <span class="bg-amber-500 p-1 px-3 rounded-md">En attente, pas encore traitée!</span>
-                                                                        @endif
+                                                                </span>
+                                                                <span>
+                                                                    <span>Nombre de mois : </span>
+                                                                    <span class="text-amber-500">
+                                                                        {{ __zero($souscription->has_upgrade_request->months) }}
+                                                                    </span>
+                                                                </span>
+                                                                <span>
+                                                                    <span>Reduction : </span>
+                                                                    <span class="text-amber-500">
+                                                                        {{ $souscription->has_upgrade_request->discount }} %
+                                                                    </span>
+                                                                </span>
+                                                                <span>
+                                                                    <span>Montant total : </span>
+                                                                    <span class="text-amber-500">
+                                                                        {{ __moneyFormat($souscription->has_upgrade_request->amount) }}
+                                                                    </span>
+                                                                </span>
+                                                                <span>
+                                                                    <span>Montant payé : </span>
+                                                                    <span class="text-amber-500">
+                                                                        {{ __moneyFormat($souscription->has_upgrade_request->payment?->amount) }}
                                                                     </span>
                                                                 </span>
                                                             </span>
-                                                        @endif
+                                                        </div>
+                                                        <span class="mb-1.5">
+                                                            <span class="text-sm font-semibold letter-spacing-1 text-gray-800 bg-green-400 p-2 rounded-md flex gap-x-3.5 justify-center items-center w-full">
+                                                                <span>
+                                                                    Souscrit le {{__formatDate($souscription->has_upgrade_request->created_at) }}
+                                                                </span>
+                                                                <span> - </span>
+                                                                <span>
+                                                                    @if($souscription->has_upgrade_request->validate_at)
+                                                                        Validé le {{ __formatDate($souscription->has_upgrade_request->validate_at) }}
+                                                                    @else
+                                                                        <span class="bg-amber-500 p-1 px-3 rounded-md">En attente, pas encore traitée!</span>
+                                                                    @endif
+                                                                </span>
+                                                            </span>
+                                                        </span>
+                                                        <span class="text-amber-400 font-semibold letter-spacing-1 text-left underline underline-offset-2 animate-pulse">
+                                                            Reférence réabonnement : #{{ $souscription->has_upgrade_request->ref_key }}
+                                                        </span>
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-2 whitespace-nowrap bg-gray-900">
@@ -307,9 +308,11 @@
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-2 whitespace-nowrap text-center bg-gray-900">
-                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if($souscription->has_upgrade_request->validate_at) bg-green-100 text-green-800 @else bg-red-200 text-red-600 @endif">
-                                                    {{ $souscription->has_upgrade_request->validate_at ? "Payé" : "Non payé" }}
-                                                    </span>
+                                                    <div class="flex gap-1.5 flex-col">
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if($souscription->has_upgrade_request->validate_at) bg-green-100 text-green-800 @else bg-red-200 text-red-600 @endif">
+                                                        {{ $souscription->has_upgrade_request->validate_at ? "Payé" : "Non payé" }}
+                                                        </span>
+                                                    </div>
                                                 </td>
                                                 <td class="px-6 py-2 whitespace-nowrap text-center bg-gray-900">
                                                     <div class="flex gap-x-1.5">

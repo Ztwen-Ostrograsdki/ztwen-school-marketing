@@ -129,6 +129,16 @@
                                                 <span class="text-xs text-gray-400">
                                                     Du {{ __formatDateTime($subscription->created_at) }}
                                                 </span>
+                                                @if($subscription->has_upgrade_request)
+                                                    <span class="font-semibold text-xs letter-spacing-1 rounded-md p-1 flex justify-between mt-1.5 items-center animate-pulse px-3 @if($subscription->has_upgrade_request->validate_at) bg-green-300 @else bg-red-300 @endif" >
+                                                        @if($subscription->has_upgrade_request->validate_at)
+                                                        <span class="text-green-800">Abonnement prolongé</span>
+                                                        @else
+                                                        <span class="text-red-800">Prolongement en cours ...</span>
+                                                        @endif
+                                                        <span class="fas fa-arrow-trend-up text-xl @if($subscription->has_upgrade_request->validate_at) text-green-600 @elseif(!$subscription->has_upgrade_request->validate_at) text-red-400 @else hidden @endif"></span>
+                                                    </span>
+                                                @endif
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
@@ -177,8 +187,19 @@
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="flex flex-col gap-y-1 items-center text-center">
-                                                {{ __moneyFormat($subscription->amount) }}
-                                                <small class="text-orange-400"> {{ __zero($subscription->months) }} mois</small>
+                                                <span class="flex flex-col gap-y-1">
+                                                    <span>{{ __moneyFormat($subscription->amount) }}</span>
+                                                    @if($subscription->has_upgrade_request?->validate_at)
+                                                        <span class="text-xs text-green-400 font-semibold"> + {{ __moneyFormat($subscription->has_upgrade_request->amount) }}</span>
+                                                    @endif
+                                                </span>
+                                                <span class="flex flex-col gap-y-1">
+                                                    <small class="text-orange-400"> {{ __zero($subscription->months) }} mois</small>
+                                                    @if($subscription->has_upgrade_request?->validate_at)
+                                                        <small class="text-xs text-green-400 font-semibold"> + {{ __zero($subscription->has_upgrade_request->months) }} mois prolongés</small>
+                                                    @endif
+                                                </span>
+                                                
                                             </div>
                                             
                                         </td>
@@ -187,7 +208,7 @@
                                                 <a href="{{ $subscription->school->to_profil_route() }}" class="p-1 border bg-gray-500 text-white hover:bg-gray-700 rounded-md">{{ $subscription->school->name }}</a>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap">
+                                        <td class="px-6 py-2 whitespace-nowrap" @if($subscription->has_upgrade_request?->validate_at) rowspan="2" @endif>
                                             <div class="flex flex-col gap-y-1.5">
                                                 @if($subscription->validate_at && $subscription->will_closed_at)
                                                     <span>
@@ -201,13 +222,13 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="px-6 py-2 whitespace-nowrap text-center">
+                                        <td class="px-6 py-2 whitespace-nowrap text-center" @if($subscription->has_upgrade_request?->validate_at) rowspan="2" @endif>
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if($subscription->validate_at) bg-green-100 text-green-800 @else bg-red-200 text-red-600 @endif">
                                              {{ $subscription->validate_at ? "Payé" : "Non payé" }}
                                             </span>
                                         </td>
                                         
-                                        <td class="px-6 py-2 whitespace-nowrap text-right  font-medium">
+                                        <td class="px-6 py-2 whitespace-nowrap text-right  font-medium" @if($subscription->has_upgrade_request?->validate_at) rowspan="2" @endif>
                                             <div class="flex gap-x-1.5">
                                                 @if($subscription->is_active)
                                                 <button wire:click='blockSubscriptionRequest({{$subscription->id}})' class="block  text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
@@ -255,7 +276,7 @@
                                             </div>  
                                         </td>
                                         @if($subscription->has_upgrade_request)
-                                            <tr class="w-full font-semibold letter-spacing-2 ">
+                                            <tr class="w-full font-semibold letter-spacing-2 @if($subscription->has_upgrade_request->validate_at) text-xs @endif">
                                                 <td colspan="6" class="px-6 py-2 whitespace-nowrap text-center bg-gray-900">
                                                     <span class="flex justify-center gap-x-1.5">
                                                         <span class="text-amber-200">{{ $subscription->has_upgrade_request->user->getFullName() }} a lancé une demande de réabonnement pour cette souscription</span>
@@ -279,7 +300,7 @@
                                                                         </span>
                                                                     </span>
                                                                     <span>
-                                                                        <span>Nombre de mois : </span>
+                                                                        <span>Nombre de mois prolongés : </span>
                                                                         <span class="text-amber-500">
                                                                             {{ __zero($subscription->has_upgrade_request->months) }}
                                                                         </span>
@@ -305,7 +326,7 @@
                                                                 </span>
                                                             </div>
                                                             <span class="mb-1.5">
-                                                                <span class="text-sm font-semibold letter-spacing-1 text-gray-800 bg-green-400 p-2 rounded-md flex gap-x-3.5 justify-center items-center w-full">
+                                                                <span class="font-semibold letter-spacing-1 text-gray-800 bg-green-400 p-1 rounded-md flex gap-x-3.5 justify-center items-center w-full">
                                                                     <span>
                                                                         Souscrit le {{__formatDate($subscription->has_upgrade_request->created_at) }}
                                                                     </span>
@@ -322,6 +343,7 @@
                                                         @endif
                                                     </div>
                                                 </td>
+                                                @if(!$subscription->has_upgrade_request->validate_at)
                                                 <td class="px-6 py-2 whitespace-nowrap bg-gray-900">
                                                     <div class="">
                                                         {{ __formatDateTime($subscription->has_upgrade_request->created_at) }}
@@ -368,6 +390,7 @@
                                                         @endif
                                                     </div>
                                                 </td>
+                                                @endif
                                             </tr>
                                         @endif
                                     </tr>

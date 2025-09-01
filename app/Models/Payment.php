@@ -49,7 +49,7 @@ class Payment extends Model
 
         static::created(function ($payment){
 
-            if($payment->subscription){
+            if($payment->subscription && !$payment->upgrading_request){
 
                 Notification::sendNow([$payment->subscription->user], new RealTimeNotification("Votre abonnement ref:{$payment->subscription->ref_key} du pack {$payment->pack->name} a été approuvé!"));
 

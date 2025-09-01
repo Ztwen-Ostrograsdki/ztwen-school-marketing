@@ -8,7 +8,10 @@ use App\Jobs\JobToSendSubcriptionDetailsToTheSubcriber;
 use App\Notifications\RealTimeNotification;
 use App\Observers\ObserveSubscriptionUpgradeRequest;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -65,9 +68,9 @@ class SubscriptionUpgradeRequest extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
     
-    public function payment()
+    public function payment() : Attribute
     {
-        return $this->belongsTo(Payment::class, 'payment_id');
+        return Attribute::get(fn() => Payment::where('subscription_upgrading_request_id', $this->id)->first());
     }
 
     public function subscription()
@@ -75,7 +78,7 @@ class SubscriptionUpgradeRequest extends Model
         return $this->belongsTo(Subscription::class);
     }
 
-     public function __notifySubscriberToFinalyseSubscriptionByPayingToValidateIt(?User $admin_validator = null)
+     public function __notifySubscriberToFinalyseSubscriptionUpgradeRequestByPayingToValidateIt(?User $admin_validator = null)
     {
         if(!$this->validated_at){
 
@@ -129,6 +132,115 @@ class SubscriptionUpgradeRequest extends Model
                 Notification::sendNow($admins, new RealTimeNotification($message));
             }
 
+        }
+    }
+
+
+    public function __subcriptionUpgradeRequestApprobationManager(?User $admin_validator = null)
+    {
+        $today = now();
+
+        $subscriber = $this->subscriber;
+
+        $subscription = $this->subscription;
+
+        try {
+
+            $computed_will_closed_at = Carbon::parse($subscription->will_closed_at)->addMonths($this->months)->addDays(2);
+
+            $subscription_request_data = [
+                'will_start_at' => $subscription->will_closed_at,
+                'validate_at' => $today,
+                'will_closed_at' => $computed_will_closed_at,
+                'payment_status' => "Payé",
+                'is_active' => true,
+            ];
+
+            $subscription_data = [
+                'will_closed_at' => $computed_will_closed_at,
+                'payment_status' => "Payé",
+                'is_active' => true,
+            ];
+
+            DB::beginTransaction();
+
+            $payment_data = [
+                'email' => $this->email,
+                'contacts' => $this->contacts,
+                'amount' => $this->amount,
+                'observation' => $this->observation,
+                'user_id' => $this->user_id,
+                'school_id' => $subscription->school_id,
+                'pack_id' => $subscription->pack->id,
+                'subscription_id' => $subscription->id,
+                'subscription_upgrading_request_id' => $this->id,
+                'payment_status' => $this->payment_status,
+                'validate' => true,
+                'payed_at' => $today,
+            ];
+
+            $this->update($subscription_request_data);
+
+            $subscription->update($subscription_data);
+
+            $payment = Payment::create($payment_data);
+
+            DB::commit();
+
+            DB::afterCommit(function() use ($payment, $subscriber, $admin_validator, $subscription){
+
+                $message = "Votre demande de réabonnement ref:{$this->ref_key} au pack {$subscription->pack->name} a été approuvé et activé avec succès. Votre abonnement est à été prolongé de {$this->months} mois!";
+
+                Notification::sendNow([$this->user], new RealTimeNotification($message));
+
+                $lien = $subscriber->to_subscribes_route();
+
+                $greating = $subscriber->greatingMessage($subscriber->getUserNamePrefix(true, false)) . ", ";
+
+                JobToSendSimpleMailMessageTo::dispatch($subscriber->email, $greating, $message, "REABONNEMENT " . $this->ref_key . " VALIDEE - ABONNEMENT PROLONGE ", null, $lien);
+
+                $message_to_admins = "La demande de ré-abonnement ref:{$this->ref_key} fait par {$subscriber->getFullName()} a été validé avec succès!";
+
+                if($admin_validator){
+
+                    Notification::sendNow([auth_user()], new RealTimeNotification($message_to_admins));
+
+                }
+                else{
+
+                    $admins = ModelsRobots::getAllAdmins();
+
+                    if(!empty($admins)){
+
+                        Notification::sendNow($admins, new RealTimeNotification($message_to_admins));
+                    }
+                }
+                return $payment;
+
+            });
+            
+
+        } catch (\Throwable $th) {
+
+            DB::rollBack();
+
+            if($admin_validator) : 
+
+                Notification::sendNow([$admin_validator], new RealTimeNotification("La validation de du ré-abonnement ref:{$this->ref_key} de la souscription #{$subscription->ref_key} fait par {$subscriber->getFullName()} a échoué! : " . $th->getMessage()));
+
+                return false;
+
+            else :
+                $admins = ModelsRobots::getAllAdmins();
+
+                if(!empty($admins)){
+
+                    Notification::sendNow($admins, new RealTimeNotification("La validation de du ré-abonnement ref:{$this->ref_key} de la souscription #{$subscription->ref_key} fait par {$subscriber->getFullName()} a échoué! : " . $th->getMessage()));
+                }
+
+                return false;
+
+            endif;
         }
     }
 

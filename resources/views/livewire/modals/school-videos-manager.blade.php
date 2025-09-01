@@ -1,5 +1,5 @@
 <div wire:ignore.self id="{{str_replace('#', '', $modal_name)}}" tabindex="-1"  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    @if($school && $school->current_subscription()->videosable)
+    @if($school && $school->current_subscription->videosable)
     <div class="relative p-4 w-full max-w-2xl max-h-full">
         <!-- Modal content -->
         <div class="relative border bg-black/80 shadow border-sky-500">
@@ -10,7 +10,7 @@
                     Gestion des vidéos de {{$school->name}}
                 </h3>
                 @else
-                <h3 class="text-lg font-semibold text-amber-600">
+                <h3 class="text-sm font-semibold text-amber-600">
                     Edition des données de la vidéo de {{$video_model->title}}
                 </h3>
                 @endif
@@ -20,7 +20,7 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <form class="p-1 md:p-5">
+            <form class="p-3 md:p-5">
                 <div class="sm:col-span-6 ">
                     <label for="video" class="block mb-2 font-semibold letter-spacing-1 text-sky-500">Vous pouvez ajouter encore {{ $max_videos }} vidéos </label>
                     <div class="">

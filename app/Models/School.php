@@ -127,8 +127,6 @@ class School extends Model
         return $this->hasOne(Subscription::class)->whereNotNull('validate_at')->where('is_active', true)->where('will_closed_at', '>', now())->latest('will_closed_at');
     }
 
-
-
     public function current_payment()
     {
         return $this->payments()->where('is_active', true)->first();
