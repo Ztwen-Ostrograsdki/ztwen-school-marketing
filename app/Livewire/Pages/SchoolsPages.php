@@ -7,6 +7,7 @@ use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Helpers\Services\SubscriptionsDelayedService;
 use App\Models\School;
+use App\Models\SchoolFollower;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -28,6 +29,11 @@ class SchoolsPages extends Component
         })->with('current_subscription')->get();
 
         SubscriptionsDelayedService::runner($this->schools ?? null);
+    }
+
+    public function likeAndFollow($school_id)
+    {
+        SchoolFollower::create(['school_id' => $school_id, 'follower_id' => auth_user_id() ?? null]);
     }
 
 

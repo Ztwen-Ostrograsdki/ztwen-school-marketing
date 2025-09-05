@@ -178,4 +178,7 @@ e.channel("public")
     })
     .listen("NewSchoolInfoAddedEvent", (info) => {
         Livewire.dispatch("LiveNewSchoolInfoAddedEvent", info);
+    })
+    .listen("UpdateQuotesListEvent", (info) => {
+        Livewire.dispatch("LiveUpdateQuotesListEvent", info);
     });

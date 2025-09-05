@@ -12,9 +12,21 @@
                     </a>
                 </p>
                 @auth
+                @if(auth_user()->isAdminsOrMaster())
                 <p class="m-0 p-0">
-                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('admin')}}">
+                        Administration
+                    </a>
+                </p>
+                @endif
+                <p class="m-0 p-0">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{auth_user()->to_my_notifications_route()}}">
                         Mes notifications
+                    </a>
+                </p>
+                <p class="m-0 p-0">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{auth_user()->to_quotes_route()}}">
+                        Mes citations
                     </a>
                 </p>
 
@@ -37,7 +49,7 @@
 
                 <p class="m-0 p-0">
                     <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{ auth_user()->to_my_receiveds_assistants_requests_list_route() }}">
-                        Mes demandes
+                        Mes demandes assistances
                     </a>
                 </p>
                 <p class="m-0 p-0">

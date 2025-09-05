@@ -15,6 +15,7 @@ use App\Livewire\Master\Dashboard;
 use App\Livewire\Master\PackProfil as AdminPackProfil;
 use App\Livewire\Master\PacksListing;
 use App\Livewire\Master\PackSubscriptionsListing;
+use App\Livewire\Master\PaymentsListing;
 use App\Livewire\Master\SchoolProfil;
 use App\Livewire\Master\SchoolsListing;
 use App\Livewire\Master\SpatieRoleProfilPage;
@@ -29,6 +30,7 @@ use App\Livewire\Shop\PacksPage;
 use App\Livewire\User\MyAssistantsListing;
 use App\Livewire\User\MyNotifications;
 use App\Livewire\User\MyProfil;
+use App\Livewire\User\MyQuotes;
 use App\Livewire\User\MyReceivedsAssistantRequestsPage;
 use App\Livewire\User\MySubscribes;
 use App\Livewire\User\SubscriptionDetailsPage;
@@ -56,6 +58,7 @@ Route::prefix('administration')->middleware(['auth', 'admin.or.master'])->group(
     Route::get('gestion/role-administrateurs/ID={role_id}', SpatieRoleProfilPage::class)->name('admin.role.profil');
 
     Route::get('gestion/packs/liste-des-packs', PacksListing::class)->name('admin.packs.list');
+    Route::get('gestion/abonnements/historique-payements', PaymentsListing::class)->name('admin.payments');
 
     Route::get('gestion/souscriptions/liste-des-demandes', PackSubscriptionsListing::class)->name('admin.packs.subscriptions.list');
 
@@ -85,6 +88,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('mon-profil/u={user_uuid}/s={school_slug}/is={school_id}/edition/edition-de-mon-ecole', CreateSchool::class)->name('school.edition');
 
     Route::get('profil/k={id}/u={uuid}/mon-profil', MyProfil::class)->name('user.profil');
+    
+    Route::get('profil/k={id}/u={uuid}/mes-citations', MyQuotes::class)->name('user.quotes');
     
     
     Route::get('profil/k={id}/u={uuid}/mes-notifications', MyNotifications::class)->name('my.notifications')->middleware(['user.self']);

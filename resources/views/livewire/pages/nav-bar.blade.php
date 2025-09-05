@@ -67,11 +67,17 @@
                         </span>
                         </div>
                         <ul class="py-2" aria-labelledby="user-menu-button" class="">
+                            
+                            @if(auth_user()->isAdminsOrMaster())
                             <li>
                                 <a href="{{route('admin')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Administrations</a>
                             </li>
+                            @endif
                             <li>
                                 <a href="{{auth_user()->to_profil_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mon profil</a>
+                            </li>
+                            <li>
+                                <a href="{{auth_user()->to_quotes_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Citations</a>
                             </li>
                             <li>
                                 <a href="{{auth_user()->to_my_notifications_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes notifications</a>

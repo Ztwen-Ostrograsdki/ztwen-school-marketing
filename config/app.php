@@ -92,6 +92,9 @@ return [
     "subcriptions_task_report" => "Tâche de suppression de l'abonnement une fois le delai expiré",
 
 
+    'max_quotes_by_user' => 3,
+
+
 
     /*
     |--------------------------------------------------------------------------

@@ -32,10 +32,23 @@
                 </div>
             </div>
             </div>
+
             <div class="mt-4">
-            <blockquote class="text-indigo-200 font-semibold letter-spacing-1">
-                La réussite est une façon, disons la meillleur des manières de s'exprimer et d'affirmer son existence!
-            </blockquote> 
+                <blockquote class="text-indigo-200 font-semibold letter-spacing-1">
+                    @if(count($user->quotes) > 0)
+                        @if($user->quote)
+                        <span>
+                            <span class="fas fa-quote-left"></span>
+                            {{ $user->quote->content }}
+                            <span class="fas fa-quote-right"></span>
+                        </span>
+                        @else
+                            <span class="text-gray-400 opacity-75 italic">Aucune citation publiée n'est' active!</span>
+                        @endif
+                    @else
+                        <span class="text-gray-400 opacity-75 italic">Aucune citation publiée!</span>
+                    @endif
+                </blockquote> 
             </div>
             
         </div>

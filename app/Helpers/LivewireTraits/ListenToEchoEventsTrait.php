@@ -9,7 +9,7 @@ trait ListenToEchoEventsTrait{
 
     // SPATIE ROLES CRUD events
 
-	#[On("LiveRolePermissionsWasUpdatedEvent")]
+    #[On("LiveRolePermissionsWasUpdatedEvent")]
     public function relaodDataForRolePermissionsUpdate()
     {
         $this->counter = getRandom();
@@ -176,6 +176,13 @@ trait ListenToEchoEventsTrait{
     public function assistantAccessUpdated($req = null)
     {
         $this->counter = getRand();
+    }
+
+
+    #[On("LiveUpdateQuotesListEvent")]
+    public function reloadQuotesList()
+    {
+        $this->counter = getRandom();
     }
     
     

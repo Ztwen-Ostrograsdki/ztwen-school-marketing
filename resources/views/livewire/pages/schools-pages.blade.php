@@ -1,17 +1,17 @@
-<div class="w-full max-w-6xl py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" x-data="{ show: false, currentImage: '', schoolName: '', simple_name: '', title: '' }">
+<div class="w-full max-w-7xl py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" x-data="{ show: false, currentImage: '', schoolName: '', simple_name: '', title: '' }">
     <div class="card mx-auto mt-10">
         <h5 class="text-amber-500 bg-black/75 py-4 px-2 rounded-lg letter-spacing-1 font-bold text-xl flex items-center justify-between gap-y-1">
             <span># Liste des écoles</span>
-            <span class="text-sm text-green-500 ml-4"> {{ numberZeroFormattor(count($schools)) }} </span>
+            <span class="ml-4"> {{ numberZeroFormattor(count($schools)) }} </span>
         </h5>
     </div>
     <div class="card mx-auto mt-5 shadow-gray-900 border border-sky-400 bg-black/70 rounded-lg shadow-2xl">
         
         <div class="">
-            <div class="font-semibold letter-spacing-1 text-gray-300 text-xs md:text-lg flex flex-col mx-auto p-5 text-left gap-y-3">
+            <div class="font-semibold letter-spacing-1 text-gray-300 text-xs md:text-lg flex flex-col mx-auto p-5 text-left gap-y-16">
                 @foreach ($schools as $school)
                     <div class="shadow-sm shadow-amber-400 bg-black/75 p-3 rounded-md">
-                        <h5 class="text-amber-600 py-2 "> 
+                        <h5 class="text-amber-600 py-2 text-lg md:text-3xl"> 
                             <a class="hover:text-pink-300 hover:underline hover:underline-offset-2 flex justify-between" href="{{$school->to_profil_route()}}">
                                 <span class="text-indigo-500 hover:text-pink-300">
                                     <span>Ecole </span>
@@ -19,7 +19,7 @@
                                 </span>
                                 <span>
                                     <span class="">{{ $school->name }}</span>
-                                    (<span class="text-sky-500">{{ $school->simple_name }}</span>)
+                                    (<span class="text-amber-700">{{ $school->simple_name }}</span>)
                                 </span>
                             </a>
                         </h5>
@@ -54,6 +54,23 @@
                                     <span>{{ $school->city }}</span>
                                 </span>
                             </h5>
+                            @if($school->user_id !== auth_user_id())
+                            <div class="w-full flex justify-start my-2">
+                                <button wire:click="likeAndFollow({{$school->id}})" class="bg-rose-400 cursor-pointer hover:bg-rose-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out w-full animate-pulse">
+                                    <span wire:loading.remove wire:target="likeAndFollow({{$school->id}})">
+                                            <span class="fas fa-thumbs-up mr-1 "></span>
+                                            Aimer | Suivre 
+                                            <span class="fas fa-quote-left"></span>
+                                            {{ $school->name }}
+                                            <span class="fas fa-quote-right"></span>
+                                        </span>
+                                        <span wire:loading wire:target="likeAndFollow({{$school->id}})">
+                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                            <span>En cours...</span>
+                                        </span>
+                                </button>
+                            </div>
+                            @endif
                             
                             <div class="mb-5">
                                 <h6 class="text-amber-400 py-3 uppercase font-semibold letter-spacing-1
@@ -158,6 +175,23 @@
                             @endif
                         </div>
                     </div>
+                    @if($school->user_id !== auth_user_id())
+                        <div class="w-full flex justify-start my-2">
+                            <button wire:click="likeAndFollow({{$school->id}})" class="bg-rose-400 cursor-pointer hover:bg-rose-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out w-full animate-pulse">
+                                <span wire:loading.remove wire:target="likeAndFollow({{$school->id}})">
+                                        <span class="fas fa-thumbs-up mr-1"></span>
+                                        Aimer | Suivre 
+                                        <span class="fas fa-quote-left"></span>
+                                        {{ $school->name }}
+                                        <span class="fas fa-quote-right"></span>
+                                    </span>
+                                    <span wire:loading wire:target="likeAndFollow({{$school->id}})">
+                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                        <span>En cours...</span>
+                                    </span>
+                            </button>
+                        </div>
+                    @endif
                 @endforeach
             </div>
         </div>

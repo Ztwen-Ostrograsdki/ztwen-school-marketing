@@ -29,10 +29,12 @@
         <button data-modal-target="school-image-editor-modal" data-modal-toggle="school-image-editor-modal" class="hidden" type="button"></button>
         @livewire('modals.school-image-edition-modal')
 
+        <button data-modal-target="user-quotes-manager-modal" data-modal-toggle="user-quotes-manager-modal" class="hidden" type="button"></button>
+        @livewire('modals.quote-manager-modal')
 
         <button data-modal-target="logout-modal" data-modal-toggle="logout-modal" class="hidden" type="button"></button>
         @livewire('auth.logout-page')
-
+        
         {{-- USER MODALS START --}}
         
         

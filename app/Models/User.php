@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Helpers\Robots\ModelsRobots;
 use App\Helpers\TraitsManagers\UserTrait;
+use App\Models\Quote;
 use App\Models\SubscriptionUpgradeRequest;
 use App\Models\UserRole;
 use App\Observers\ObserveUser;
@@ -146,6 +147,16 @@ class User extends Authenticatable
         });
     }
 
+    public function quote()
+    {
+        return $this->hasOne(Quote::class)->where('hidden', false);
+    }
+
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class);
+    }
+    
     public function payments()
     {
         return $this->hasMany(Payment::class);
@@ -230,6 +241,11 @@ class User extends Authenticatable
     public function to_profil_route()
     {
         return route('user.profil', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
+    }
+    
+    public function to_quotes_route()
+    {
+        return route('user.quotes', ['id' => $this->identifiant, 'uuid' => $this->uuid]);
     }
     
     public function to_subscribes_route()
