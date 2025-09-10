@@ -59,8 +59,12 @@
 
                 
                 <div class="flex items-center justify-end gap-x-2">
-                  <span wire:click='markAllAsRead' title="Marquées toutes les notifications lues..." class="hover:scale-110 rounded-md shadow-1 shadow-sky-500 py-2 flex items-center cursor-pointer  text-sky-600">
-                    <span class="fas fa-pen px-4"></span>
+                  <span wire:click='markAllAsRead' title="Marquer les notifications de la section en cours comme lues..." class="hover:scale-110 rounded-md flex items-center cursor-pointer shadow-1 shadow-sky-500 py-2  text-gray-400">
+                    <span wire:target='markAllAsRead' wire:loading.remove class="fas fa-eye px-4"></span>
+                    <span wire:target='markAllAsRead' wire:loading class="px-2" >
+                        <span class="fas fa-rotate animate-spin"></span>
+                        <span>en cours...</span>
+                    </span>
                   </span>
   
                   <span wire:click='deleteAllNotifications' title="Suprimer les notifications de la section en cours..." class="hover:scale-110 rounded-md flex items-center cursor-pointer shadow-1 shadow-sky-500 py-2  text-red-600">
@@ -88,11 +92,14 @@
                           <span class="sr-only">Check icon</span>
                       </div>
                       <div class="ms-3  text-xs md:text-ms break-all font-semibold letter-spacing-1">{{ $notif->data ? $notif->data['message'] : 'Une notification...' }}</div>
-                      <button wire:click='deleteNotification("{{$name}}")' title="Cliquer pour Masquer cette notification" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-red-700 dark:bg-gray-800 dark:hover:bg-red-400 cursor-pointer" data-dismiss-target="#notif-{{$notif->id}}" aria-label="Close">
+                      <button wire:loading.remove wire:target='deleteNotification("{{$name}}")' wire:click='deleteNotification("{{$name}}")' title="Cliquer pour Masquer cette notification" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-red-700 dark:bg-gray-800 dark:hover:bg-red-400 cursor-pointer" data-dismiss-target="#notif-{{$notif->id}}" aria-label="Close">
                           <span class="sr-only">Close</span>
                           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
+                      </button>
+                      <button wire:loading wire:target='deleteNotification("{{$name}}")' title="Cliquer pour Masquer cette notification" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-red-700 dark:bg-gray-800 dark:hover:bg-red-400 cursor-pointer" data-dismiss-target="#notif-{{$notif->id}}" aria-label="Close">
+                          <span class="fas fa-rotate animate-spin"></span>
                       </button>
                   </div>
                   <div class="text-right w-full py-0 my-0 text-xs border-b-2 bg-slate-600 font-semibold letter-spacing-1 text-yellow-400">

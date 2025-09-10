@@ -14,8 +14,18 @@
                 @auth
                 @if(auth_user()->isAdminsOrMaster())
                 <p class="m-0 p-0">
-                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('admin')}}">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-lime-500 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('admin')}}">
                         Administration
+                    </a>
+                </p>
+                <p class="m-0 p-0">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-lime-500 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('admin.payments')}}">
+                        Les payements
+                    </a>
+                </p>
+                <p class="m-0 p-0">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-lime-500 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('admin.packs.abonnements.list')}}">
+                        Les abonnements
                     </a>
                 </p>
                 @endif

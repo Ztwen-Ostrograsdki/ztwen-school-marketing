@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\SubscriptionUpgradeRequest;
 use App\Models\User;
 use App\Notifications\RealTimeNotification;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
@@ -33,7 +34,7 @@ class Payment extends Model
     ];
 
     protected $casts = [
-        'payed_at' => 'date'
+        'payed_at' => 'datetime'
     ];
 
     
@@ -110,5 +111,23 @@ class Payment extends Model
     public function upgrading_request()
     {
         return $this->belongsTo(SubscriptionUpgradeRequest::class, 'subscription_upgrading_request_id');
+    }
+    
+    public function upgrade_request()
+    {
+        return $this->belongsTo(SubscriptionUpgradeRequest::class, 'subscription_upgrading_request_id');
+    }
+
+    protected function ref() : Attribute
+    {
+        if($this->upgrade_request) :
+
+            return Attribute::get(fn() => $this->upgrade_request->ref_key);
+
+        else :
+
+            return Attribute::get(fn() => $this->subscription->ref_key);
+
+        endif;
     }
 }

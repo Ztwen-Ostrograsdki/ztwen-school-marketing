@@ -47,8 +47,9 @@
         <div 
             x-data="{ open: @entangle('showForm') }" 
             x-show="open" 
-            x-transition.duration.400ms
-            class="overflow-hidden bg-transparent p-4 rounded-lg mb-6"
+            x-collapse
+            x-transition.opacity
+            class="overflow-hidden bg-transparent p-4 rounded-2xl mb-6 shadow-sm"
         >
             <form wire:submit.prevent="save" class="bg-transparent flex flex-col gap-y-2">
                 <div class="grid gap-4 mb-4 grid-cols-2">
@@ -62,7 +63,7 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <button wire:click='save' type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700">
+                    <button wire:click='save' type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700 transition">
                         <span wire:loading.remove wire:target='save'>
                             <span class="fas fa-check"></span>
                             {{ $isEditing ? 'Mettre à jour' : 'Enregistrer' }}
@@ -74,7 +75,7 @@
                     </button>
                     <button type="button" 
                         wire:click="hideForm" 
-                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg cursor-pointer hover:bg-gray-500 hover:text-gray-100">
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg cursor-pointer hover:bg-gray-500 hover:text-gray-100 transition">
                         <span wire:loading.remove wire:target='hideForm'>
                             <span class="fas fa-eye-slash"></span>
                             Annuler
@@ -94,11 +95,11 @@
             @if (count($quotes) > 0)
                 <div class="w-full p-2 mx-auto flex flex-col gap-y-3">
                     @foreach ($quotes as $quote)
-                        <div wire:key="citation-{{$user->id}}-{{$quote->id}}" class="border p-3 z-bg-secondary-light rounded-lg card">
+                        <div wire:key="citation-{{$user->id}}-{{$quote->id}}" class="border p-3 z-bg-secondary-light shadow rounded-2xl flex justify-between items-center hover:shadow-md transition ">
                             <div class="flex w-full justify-between">
                                 <h6 class="uppercase letter-spacing-1 text-sky-400 py-2">Citation {{ $loop->iteration }}</h6>
                                 <div class="flex items-center justify-between gap-x-2">
-                                    <button wire:click="showEditForm({{ $quote->id }})" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition cursor-pointer">
+                                    <button wire:click="showEditForm({{ $quote->id }})" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition cursor-pointer transition">
                                         <span wire:loading.remove wire:target='showEditForm({{$quote->id}})'>
                                             Modifier la citation
                                         </span>

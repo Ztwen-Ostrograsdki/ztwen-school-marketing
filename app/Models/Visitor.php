@@ -33,11 +33,11 @@ class Visitor extends Model
 
         static::updated(function ($visitor){
 
-            NewVisitorHasBeenRegistredEvent::dispatch();
+            // NewVisitorHasBeenRegistredEvent::dispatch();
 
-            $admins = ModelsRobots::getAllAdmins();
+            // $admins = ModelsRobots::getAllAdmins();
 
-            Notification::sendNow($admins, new RealTimeNotification("Un nouvel visiteur a été enregistré sur la plateforme!"));
+            // Notification::sendNow($admins, new RealTimeNotification("Un nouvel visiteur a été enregistré sur la plateforme!"));
 
         });
         

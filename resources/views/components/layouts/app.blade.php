@@ -17,6 +17,8 @@
 
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
 
+        {{-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> --}}
+
         
 
         @livewireStyles
@@ -36,7 +38,7 @@
             
             {{ $slot }}
 
-             @livewire('modals-manager') {{--INCLUDE OF APP MODALS --}}
+            @livewire('modals-manager') {{--INCLUDE OF APP MODALS --}}
         </main>
 
         @livewire('pages.footer')
@@ -69,7 +71,7 @@
             window.addEventListener('load', revealOnScroll); // au cas où certains éléments sont visibles dès le début
         </script>
 
-        <script>
+        {{-- <script>
             document.addEventListener('alpine:init', () => {
                 Alpine.data('letterAnimator', () => ({
                     words: ['Bonjour', 'Hello', 'Salut', 'Bienvenue'],
@@ -94,22 +96,70 @@
                     }
                 }))
             });
-        </script>
+        </script> --}}
+
+        {{-- <script>
+            function initAllSwipers() {
+                const swiper1 = document.querySelector('.mySwiper');
+
+                const swiper2 = document.querySelector('.LyceeSwiper');
+
+                const swiper3 = document.querySelector('.MyCommuniquesSwiper');
+
+                if (swiper1 && !swiper1.swiper) {
+                    new Swiper(swiper1, {
+                        loop: true,
+                        autoplay: {
+                            delay: 5000,
+                            disableOnInteraction: false,
+                        },
+                        spaceBetween: 40,
+                        grabCursor: true,
+                    });
+                }
+
+                if (swiper2 && !swiper2.swiper) {
+                    new Swiper(swiper2, {
+                        loop: true,
+                        autoplay: {
+                            delay: 20000,
+                            disableOnInteraction: true,
+                        },
+                        spaceBetween: 40,
+                        grabCursor: true,
+                    });
+                }
+
+                if (swiper3 && !swiper3.swiper) {
+                    new Swiper(swiper3, {
+                        loop: false,
+                        autoplay: {
+                            delay: 20000,
+                            disableOnInteraction: false,
+                        },
+                        spaceBetween: 50,
+                        grabCursor: true,
+                    });
+                }
+            }
+
+
+            Livewire.hook('message.processed', (message, component) => {
+                
+                initAllSwipers();
+            });
+        </script> --}}
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
 
                 initFlowbite();
 
+                // initAllSwipers();
+
                 let message_focusable = document.getElementById('focusable-input');
 
                 if(message_focusable) {message_focusable.focus();}
-
-                // document.querySelectorAll('[id$="-modal"]').forEach(modal => {
-
-                //     modal.setAttribute('aria-hidden', 'true');
-                    
-                // });
 
             });
 
@@ -132,6 +182,7 @@
                     // setTimeout(() => {
 
                     //     initAllSwipers(); 
+
                     // }, 300); 
 
                 });

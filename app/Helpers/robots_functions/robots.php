@@ -498,6 +498,23 @@ if(!function_exists('randNumber')){
 
 }
 
+if(!function_exists('randColor')){
+
+    function randColor($text = 'bg-', $except = ['indigo', 'blue'])
+    {
+        $colors = ['sky', 'amber', 'green', 'red', 'orange', 'gray', 'yellow', 'indigo', 'blue', 'emerald', 'fuchsia', 'cyan', 'lime', 'pink', 'purple', 'teal', 'violet', 'rose'];
+
+        $filters = array_values(array_diff($colors, $except));
+
+        $color = collect($filters)->random();
+
+        $weight = collect(['200', '300', '400', '500', '600', '700', '800', '900'])->random();
+
+        return $text . '' . $color . '-' . $weight;
+    }
+
+}
+
 
 
 

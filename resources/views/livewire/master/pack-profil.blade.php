@@ -120,7 +120,7 @@
                             @php
                                 $user = $school->user;
 
-                                $subscription = $school->current_subscription();
+                                $subscription = $school->current_subscription;
                             @endphp
                         <tr wire:key='list-des-utilisateurs-abonnes-{{getRand(2999, 8888888)}}-de-ce-role' class="hover:bg-gray-50 transition-colors duration-150">
                             <td class="px-2 py-2 whitespace-nowrap">
@@ -226,6 +226,10 @@
                                         <span> {{ $subscription->max_images }} </span>
                                     </span>
                                     <span class="flex justify-between">
+                                        <span>Max Videos : </span>
+                                        <span> {{ $subscription->max_videos }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
                                         <span>Max Stats : </span>
                                         <span> {{ $subscription->max_stats }} </span>
                                     </span>
@@ -244,6 +248,10 @@
                                     <span class="flex justify-between">
                                         <span>Img : </span>
                                         <span> {{ $subscription->remainingImages }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
+                                        <span>Video : </span>
+                                        <span> {{ $subscription->remainingVideos }} </span>
                                     </span>
                                     <span class="flex justify-between">
                                         <span>Stats : </span>

@@ -149,7 +149,7 @@ class User extends Authenticatable
 
     public function quote()
     {
-        return $this->hasOne(Quote::class)->where('hidden', false);
+        return $this->hasOne(Quote::class)->where('hidden', false)->inRandomOrder();
     }
 
     public function quotes()

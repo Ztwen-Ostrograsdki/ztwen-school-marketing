@@ -103,9 +103,7 @@ class SchoolProfil extends Component
 
         $school_infos = $this->school->getSchoolInfos();
 
-        $school_offers = $this->school->getSchoolInfos("Offres d'emploi");
-
-        return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos', 'school_offers'));
+        return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos'));
     }
 
     public function updatedSelectedStatYear($selected)

@@ -138,27 +138,48 @@ class MyNotifications extends Component
     public function deleteNotification($notif_id)
     {
         
-        
+        $notif = User::find(auth_user()->id)->unreadNotifications()->where('id', $notif_id)->first();
+
+        if($notif){
+            
+            $notif->markAsRead();
+        }
+
+        $this->counter = getRandom();
        
     }
 
     public function deleteAllNotifications()
     {
         
-       
+       $notifs  = User::find(auth_user()->id)->notifications;
+
+        foreach($notifs as $notif){
+
+            $notif->delete();
+
+            $this->counter = getRandom();
+
+        }
+
+        $this->counter = getRandom();
     }
 
 
-    public function deleteNotificationsLL($section = null)
+
+    public function markAllAsRead($section = null)
     {
-        
-    }
+        $notifs  = User::find(auth_user()->id)->unreadNotifications;
 
+        foreach($notifs as $notif){
 
+            $notif->markAsRead();
 
-    public function deleteNotifications($section = null)
-    {
+            $this->counter = getRandom();
 
+        }
+
+        $this->counter = getRandom();
         
 
     }

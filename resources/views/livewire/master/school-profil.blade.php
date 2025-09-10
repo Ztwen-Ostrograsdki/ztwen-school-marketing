@@ -23,7 +23,7 @@
         </h5>
     </div>
     <div class="mx-auto pb-10 mt-6 bg-transparent flex flex-col gap-y-20  overflow-hidden">
-        <div class="p-6 card shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
+        <div class="p-6 card shadow-xl shadow-gray-900 rounded-lg bg-cover bg-center  w-full bg-gray-600 bg-blend-multiply" style="background-image: url('{{ asset('storage/' .  $school->profilImage) }}')">
             <h5 class="text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4 flex justify-between items-center">
                 <span>
                     #Auteur | fondateur
@@ -202,13 +202,6 @@
                             # Communiqués
                         </span>
                     </a>
-                    <a href="#school_offers" class="block text-black cursor-pointer bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-700 focus:ring-orange-800" type="button">
-                        <span>
-                            <span class="fab fa-leanpub mr-1"></span>
-                            # Annonces
-                        </span>
-                    </a>
-                    
                 </div>
             </div>
         </div>
@@ -651,49 +644,7 @@
             </div>
         </div>
 
-        <div id="school_offers" class="text-sm p-6 shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
-            <h5 class="card text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4">
-                # Les Offres
-            </h5>
-            <div class="flex flex-wrap gap-y-7 card my-4">
-                @foreach ($school_offers as $offer)
-                    @if($offer->subscription?->is_active)
-                        <div class="border border-r-gray-500 bg-black/60 p-3 letter-spacing-1 rounded-xl shadow-inner shadow-sky-400">
-                            <h4 class="text-start text-purple-400 font-bold uppercase">
-                                # Annonce | Offre N° {{$loop->iteration}}
-                            </h4>
-                            <div class="text-gray-300 text-base md:text-lg">
-                                {{ $offer->content }}
-                            </div>
-                            <div class="my-3 flex justify-end gap-x-2">
-                                @auth
-                                    @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
-                                        <button wire:click="manageSchoolInfo({{$offer->id}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
-                                            <span wire:loading.remove wire:target="manageSchoolInfo({{$offer->id}})">
-                                                <span class="fas fa-newspaper"></span>
-                                                <span>Modifier</span>
-                                            </span>
-                                            <span wire:loading wire:target="manageSchoolInfo({{$offer->id}})">
-                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                                <span>En cours...</span>
-                                            </span>
-                                        </button>
-                                        <button class="cursor-pointer shadow-sm bg-amber-500 hover:bg-amber-700 text-white p-2">
-                                            <span class="fas fa-eye-slash"></span>
-                                            <span>Masquer</span>
-                                        </button>
-                                        <button class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
-                                            <span class="fas fa-trash"></span>
-                                            <span>Supprimer</span>
-                                        </button>
-                                    @endif
-                                @endauth
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-            </div>
-        </div>
+        
     </div>
     <div 
         x-show="show"

@@ -18,11 +18,35 @@
 
             <!-- CTA Button -->
             <div class="flex justify-center items-center mt-8" data-aos="fade-up" data-aos-delay="400">
-                <a href="{{route('packs.page')}}" rel="noopener noreferrer"
-                    class="relative flex items-center justify-center px-6 py-3 bg-lime-600 hover:bg-lime-700 text-white text-lg font-thin rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 border border-white letter-spacing-2">
-                    <span class="absolute inset-0 rounded-full bg-lime-600 opacity-50 animate-ping"></span>
-                    <span class="relative z-10 pr-2">S'abonner maintenant</span>
+                @auth
+                    @if(auth_user()->current_school)
+                        @if(auth_user()->current_school->current_subscription)
+                            <a href="{{auth_user()->current_school->to_profil_route()}}" rel="noopener noreferrer"
+                            class="relative flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-thin rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 border border-white letter-spacing-2">
+                                <span class="absolute inset-0 rounded-full bg-indigo-600 opacity-50 animate-ping"></span>
+                                <span class="relative z-10 pr-2">Votre école {{ auth_user()->current_school->simple_name }} </span>
+                            </a>
+                        @else
+                        <a href="{{route('packs.page')}}" rel="noopener noreferrer"
+                            class="relative flex items-center justify-center px-6 py-3 bg-lime-600 hover:bg-lime-700 text-white text-lg font-thin rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 border border-white letter-spacing-2">
+                                <span class="absolute inset-0 rounded-full bg-lime-600 opacity-50 animate-ping"></span>
+                                <span class="relative z-10 pr-2">S'abonner maintenant</span>
+                            </a>
+                        @endif
+                    @else
+                    <a href="{{ auth_user()->to_create_school_route() }}" rel="noopener noreferrer"
+                    class="relative flex items-center justify-center px-6 py-3 bg-amber-600 hover:bg-amber-600 text-black text-lg font-thin rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 border border-white letter-spacing-2">
+                        <span class="absolute inset-0 rounded-full bg-amber-600 opacity-50 animate-ping"></span>
+                        <span class="relative z-10 pr-2">Enregistrer votre école</span>
+                    </a>
+                    @endif
+                @else
+                <a href="{{route('login')}}" rel="noopener noreferrer"
+                    class="relative flex items-center justify-center px-6 py-3 bg-green-400 hover:bg-green-400 text-black text-lg font-thin rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 border border-black letter-spacing-2">
+                    <span class="absolute inset-0 rounded-full bg-green-400 opacity-50 animate-ping"></span>
+                    <span class="relative z-10 pr-2">Connectez - vous ici</span>
                 </a>
+                @endauth
             </div>
 
         </div>
@@ -71,6 +95,60 @@
                 </div>
             </div>
         </div>
+        @if(count($quotes) > 0)
+        <div class="mx-auto p-4">
+            <h3 class="font-semibold letter-spacing-1 p-3 rounded-md bg-black/80 text-amber-600 text-2xl my-4" > # Quelques pensées de nos partenaires</h3>
+            <div class="w-3/4 mx-auto mt-10">
+                <div class="swiper mySwiper rounded-2xl shadow-lg overflow-hidden">
+                    <div class="swiper-wrapper">
+                        @foreach ($quotes as $quote)
+                            @php
+                                $user = $quote->user;
+                            @endphp
+                            <div wire:key='defilement-reviews-membre-{{$user->id}}' class="swiper-slide bg-sky-100 p-6 rounded-2xl shadow-lg">
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <img src="{{user_profil_photo($user)}}" class="w-24 h-24 rounded-full border-2 border-cyan-700" />
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">
+                                        {{ $user->getFullName(true) }}
+                                        </h3>
+                                        <span class="flex flex-col">
+                                            <a href="#" class="text-sm text-cyan-600 hover:underline">
+                                                <span class="fas fa-user-check"></span>
+                                                
+                                            </a>
+                                            
+                                            <a href="mailto:{{$user->email}}" class="text-sm text-cyan-600 hover:underline">
+                                                <span class="fas fa-envelope"></span>
+                                                {{ $user->email }}
+                                            </a>
+                                            @if($user->current_school)
+                                                <a href="{{$user->current_school->to_profil_route()}}" class="text-sm text-cyan-600 hover:underline hover:underline-offset-4">
+                                                    <span class="fas fa-phone"></span>
+                                                    {{ $user->current_school->name  }}
+                                                </a>
+                                                <a href="#" class="text-sm text-cyan-600 hover:underline">
+                                                    <span class="fas fa-home"></span>
+                                                    {{ $user->address ? $user->address : 'Non renseignée' }}
+                                                </a>
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                                <blockquote class="text-gray-600 italic border-l-4 border-cyan-600 pl-4">
+                                    “{{ $quote->content }}”
+                                </blockquote>
+                            </div>
+                        @endforeach
+                    </div>
+                    <!-- Pagination -->
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            
+            
+        </div>
+        @endif
     </div>
 
 </div>

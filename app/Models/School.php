@@ -92,6 +92,23 @@ class School extends Model
 
     }
 
+    public function profilImage() : Attribute
+    {
+        if(count($this->images) > 0) :
+
+            $image = $this->images()->inRandomOrder()->first()->path;
+
+            return Attribute::get(fn() => $image);
+
+        else :
+
+            $image = asset("/images/school1.jpg");
+
+            return Attribute::get(fn() => $image);
+
+        endif;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -139,7 +156,7 @@ class School extends Model
 
     public function hasProfilImages()
     {
-        return !empty($this->profil_images);
+        return count($this->profil_images) > 0;
     }
 
     public function hasVideos()
@@ -361,6 +378,6 @@ class School extends Model
 
     protected function posts() : Attribute
     {
-        return Attribute::get(fn() => randomNumber(200, 210));
+        return Attribute::get(fn() => $this->posts_counter);
     }
 }
