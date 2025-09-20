@@ -22,13 +22,13 @@ class ObserveSchool
 
         if(!empty($admins)){
 
-            $msg_to_admins = "Une nouvelle école de nom " . $school->name . " a été créée!";
+            $msg_to_admins = "Une nouvelle école du nom " . $school->name . " a été créée! Veuillez proccéder à la validation de son profil afin que cette école soit visible sur la plateforme";
 
             if($school->user_id && findUser($school->user_id)){
 
                 $user = findUser($school->user_id);
 
-                $msg_to_admins = "Une nouvelle école de nom " . $school->name . " a été créée par un utilisateur dont le nom et l'adresse mail sont " . $user->getFullName() . ' (' . $user->email . ')';
+                $msg_to_admins = "Une nouvelle école du nom " . $school->name . " a été créée par un utilisateur dont le nom et l'adresse mail sont " . $user->getFullName() . ' (' . $user->email . '). Veuillez proccéder à la validation de son profil afin que cette école soit visible sur la plateforme';
             }
 
             Notification::sendNow($admins, new RealTimeNotification($msg_to_admins));
@@ -38,7 +38,7 @@ class ObserveSchool
 
         if($school->user){
 
-            $msg = "Votre école " . $school->name . " a été créée avec succès! Vous pouvez assurer sa gestion à votre guise! Elle se sera visible sur par les autres que lorsque vous aurez fait un abonnement! Parcourer, les packs pour choisir un abonnement";
+            $msg = "Votre école " . $school->name . " a été créée avec succès! Vous pouvez assurer sa gestion à votre guise! Elle sera visible par les autres que lorsque vous aurez fait un abonnement! Parcourer, les packs pour choisir un abonnement";
 
             Notification::sendNow([$school->user], new RealTimeNotification($msg));
         }

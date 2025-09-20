@@ -44,6 +44,26 @@
                 </button>
             </div>
         </div>
+        <div>
+            <div class="w-full mx-auto border rounded-lg border-gray-500 px-2 mb-5 bg-black/60">
+                <span class="inline-block py-3 letter-spacing-2 text-amber-500 w-full text-center sm:text-xl font-semibold border-b mb-1 border-gray-500">
+                    Lister les abonnements actifs par abonné
+                </span>
+                <div class="grid md:grid-cols-2 md:gap-6 mt-2 justify-end">
+                    <div class="relative z-0 w-full mb-5 text-gray-400 group ">
+                        <label for="by_subscriber" class="block mb-1 font-medium text-gray-400 ml-1.5">L'utilisateur</label>
+                        <select aria-describedby="helper-text-by_subscriber" wire:model.live='subscriber_id' id="by_subscriber" class="bg-inherit border border-gray-300 text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option class="z-bg-secondary-light-opac" value="{{null}}">Sélectionner l'abonné</option>
+                        @foreach ($subscribers as $user)
+                            <option class="z-bg-secondary-light-opac" value="{{$user->id}}">{{$user->getFullName()}}</option>
+                        @endforeach
+                        </select>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
         <div class="w-full bg-transparent pt-12">
             <div class="w-full bg-black/60 shadow-2xl border border-sky-500 shadow-gray-900 flex flex-col items-center justify-center min-h-full py-5 px-5">
                 
@@ -53,7 +73,13 @@
                         <div class="relative py-2">
                             <div class="flex md:justify-between">
                                 <div class="text-green-400 font-semibold letter-spacing-1">
-                                    <h2 class=" sm:text-xl font-bold uppercase text-shadow shadow-amber-400">La liste des abonnements actifs</h2>
+                                    <h2 class=" sm:text-xl font-bold uppercase text-shadow shadow-amber-400">La liste des abonnements actifs
+                                        @if($subscriber)
+                                            <span class="sm:text-lg">
+                                                de <span class="text-amber-500"> {{ $subscriber->getFullName() }} </span>
+                                            </span>
+                                        @endif
+                                    </h2>
                                 </div>
                                 <div>
                                     
@@ -122,7 +148,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
-                                            <div class="text-amber-600 font-semibold letter-spacing-1 flex flex-col gap-y-1">
+                                            <a href="{{$subscription->to_details_route()}}" class="text-amber-600 font-semibold letter-spacing-1 flex flex-col gap-y-1 hover:underline underline-offset-2">
                                                 <span>
                                                     {{ $subscription->ref_key }}
                                                 </span>
@@ -139,7 +165,7 @@
                                                         <span class="fas fa-arrow-trend-up text-xl @if($subscription->has_upgrade_request->validate_at) text-green-600 @elseif(!$subscription->has_upgrade_request->validate_at) text-red-400 @else hidden @endif"></span>
                                                     </span>
                                                 @endif
-                                            </div>
+                                            </a>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="flex items-center gap-x-1.5">
@@ -231,7 +257,7 @@
                                         <td class="px-6 py-2 whitespace-nowrap text-right  font-medium" @if($subscription->has_upgrade_request?->validate_at) rowspan="2" @endif>
                                             <div class="flex gap-x-1.5">
                                                 @if($subscription->is_active)
-                                                <button wire:click='blockSubscriptionRequest({{$subscription->id}})' class="block  text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                <button wire:click='blockSubscriptionRequest({{$subscription->id}})' class="block  text-white cursor-pointer bg-fuchsia-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-fuchsia-800 focus:ring-fuchsia-800" type="button">
                                                     <span wire:loading.remove wire:target='blockSubscriptionRequest({{$subscription->id}})'>
                                                         <span class="fas fa-lock mr-1"></span>
                                                         Suspendre
@@ -269,6 +295,16 @@
                                                         Plannifier expiration
                                                     </span>
                                                     <span wire:loading wire:target='markAsExpired({{$subscription->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
+                                                <button wire:click='deleteSubscriptionRequest({{$subscription->id}})' class="block  text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                    <span wire:loading.remove wire:target='deleteSubscriptionRequest({{$subscription->id}})'>
+                                                        <span class="fas fa-trash mr-1"></span>
+                                                        Supprimer
+                                                    </span>
+                                                    <span wire:loading wire:target='deleteSubscriptionRequest({{$subscription->id}})'>
                                                         <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                                         <span>En cours...</span>
                                                     </span>

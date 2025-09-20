@@ -14,29 +14,32 @@
             </a>
 
             <!-- Desktop Menu Links -->
-            <div class="hidden md:flex items-center md:gap-8 text-white">
-                <a href="{{route('home')}}" class="text-sm font-medium @if(request()->route()->named('home')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Acceuil</a>
+            <div class="hidden text-xs lg:text-sm md:flex items-center md:gap-4 text-white letter-spacing-1">
+                <a href="{{route('home')}}" class=" font-medium @if(request()->route()->named('home')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">Acceuil</a>
                 @auth
-                    <a href="{{auth_user()->to_profil_route()}}" class="text-sm font-medium @if(request()->route()->named('user.profil')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">
-                        Mon profil
+                    <a href="{{auth_user()->to_profil_route()}}" class=" font-medium @if(request()->route()->named('user.profil')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">
+                        Profil
                     </a>
-                    <a href="{{route('admin')}}" class="text-sm font-medium @if(request()->route()->named('admin')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">
+                    <a href="{{route('admin')}}" class=" font-medium @if(request()->route()->named('admin')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">
                         Administration
                     </a>
                 @endauth
-                <a href="{{route('schools.page')}}" class="text-sm font-medium @if(request()->route()->named('schools.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
-                    Les écoles à la une
+                <a href="{{route('schools.page')}}" class=" font-medium @if(request()->route()->named('schools.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
+                    Les écoles
                 </a>
-                <a href="{{route('about.us')}}" class="text-sm font-medium @if(request()->route()->named('about.us')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
+                <a href="{{route('about.us')}}" class=" font-medium @if(request()->route()->named('about.us')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
                     A propos
                 </a>
-                <a href="{{route('packs.page')}}" class="@if(request()->route()->named('packs.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif text-sm font-medium  px-2 py-2 rounded-lg transition">
+                <a href="{{route('schools.searching')}}" class="@if(request()->route()->named('schools.searching')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  font-medium  px-2 py-2 rounded-lg transition">
+                    Rechercher
+                </a>
+                <a href="{{route('packs.page')}}" class="@if(request()->route()->named('packs.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  font-medium  px-2 py-2 rounded-lg transition">
                     Services
                 </a>
                 
                 @guest
                     @if(!request()->route()->named('register'))
-                        <a href="{{route('register')}}" class="cursor-pointer rounded-full border-2 py-2 px-6 border-white bg-white text-purple-900 hover:bg-purple-900 hover:text-white hover:shadow-lg transition duration-300 ease-in-out">
+                        <a href="{{route('register')}}" class="cursor-pointer rounded-full border-2 py-2 px-6 border-white bg-white text-purple-900 hover:bg-purple-900 hover:text-white hover:shadow-lg transition duration-300 ease-in-out hidden lg:inline">
                             S'inscire
                         </a>
                     @endif
@@ -91,11 +94,16 @@
                             <li>
                                 <a href="{{auth_user()->to_subscribes_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes abonnements</a>
                             </li>
+                            @if(!auth_user()->current_school)
                             <li>
                                 <a href="{{auth_user()->to_create_school_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Ajouter une école</a>
                             </li>
+                            @endif
                             <li>
                                 <a href="{{auth_user()->to_profil_edit_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Editer mon profil</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('schools.searching') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Trouvez une école</a>
                             </li>
                             <li>
                                 <a x-on:click="$dispatch('LogoutLiveEvent')" type="button" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Se déconnecter</a>
@@ -196,13 +204,20 @@
                     <span class="fas fa-newspaper"></span>
                     <span class="flex-1 ms-3 whitespace-nowrap">A propos de nous</span>
                     </a>
-                </li> 
+                </li>
+
                 <li>
                     <a href="{{route('packs.page')}}" class="flex items-center p-2 rounded-lg text-white  @if(request()->route()->named('packs.page')) bg-indigo-700/55 hover:text-yellow-400 @else hover:bg-gray-700 @endif group">
                     <span class="fab fa-shopify"></span>
                     <span class="flex-1 ms-3 whitespace-nowrap">Services</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('schools.searching')}}" class="flex items-center p-2 rounded-lg text-white  @if(request()->route()->named('schools.searching')) bg-indigo-700/55 hover:text-yellow-400 @else hover:bg-gray-700 @endif group">
+                    <span class="fas fa-newspaper"></span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Trouvez une école</span>
+                    </a>
+                </li> 
                 @guest
                     @if(!request()->route()->named('login'))
                     <li>
@@ -288,6 +303,15 @@
                         <span class="flex-1 ms-3 whitespace-nowrap">Les écoles</span>
                         <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
                             {{ __zero($schools) }}
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('schools.searching')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white @if(request()->route()->named('schools.searching')) text-lime-500 shadow-sm shadow-lime-400 px-3 mx-1 @else dark:hover:bg-gray-700 @endif group">
+                        <span class="fas fa-home"></span>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Trouvez une école</span>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                            
                         </span>
                     </a>
                 </li>

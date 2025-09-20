@@ -20,7 +20,7 @@ class SchoolsPages extends Component
 
     public function mount()
     {
-        $this->schools = School::whereHas('subscriptions', function($q){
+        $this->schools = School::where('is_active', true)->whereHas('subscriptions', function($q){
 
             $q->whereNotNull('validate_at')
               ->where('will_closed_at', '>', now())

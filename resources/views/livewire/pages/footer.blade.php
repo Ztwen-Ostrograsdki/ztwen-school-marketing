@@ -100,6 +100,11 @@
 
             <div class="mt-3 grid gap-y-2">
                 <p class="m-0 p-0">
+                    <a class="inline-block my-0 hover:bg-gray-800 py-1 w-full pl-2 footer-element gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('schools.searching')}}">
+                    Trouver une école
+                    </a>
+                </p>
+                <p class="m-0 p-0">
                     <a class="inline-block my-0 hover:bg-gray-800 py-1 w-full pl-2 footer-element gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('packs.page')}}">
                     Les packs disponibles
                     </a>

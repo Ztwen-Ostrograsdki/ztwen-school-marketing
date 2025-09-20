@@ -266,6 +266,7 @@
                     @endauth
                </div>
             </h5>
+            @if(count($school->images) > 0)
             <div class="grid grid-cols-1 md:grid-cols-3 my-4 gap-1 card">
                 @foreach ($school->images as $school_image)
                     @if($school_image->subscription?->is_active)
@@ -319,6 +320,9 @@
                     @endif
                 @endforeach
             </div>
+            @else
+                <h6 class="text-center font-semibold text-gray-500 italic text-lg py-3">Aucune image publiée</h6>
+            @endif
         </div>
         
         @if($school->current_subscription?->max_videos > 0)
@@ -353,6 +357,7 @@
                     @endauth
                </div>
             </h5>
+            @if(count($school->videos) > 0)
             <div class="grid grid-cols-1 md:grid-cols-3 my-4 gap-1 card">
                 @foreach ($school->videos as $school_video)
                     @if($school_video->subscription?->is_active)
@@ -406,6 +411,9 @@
                     @endif
                 @endforeach
             </div>
+            @else
+                <h6 class="text-center font-semibold text-gray-500 italic text-lg py-3">Aucune vidéo publiée</h6>
+            @endif
         </div>
         @endif
 
@@ -414,6 +422,7 @@
                 # Les statistiques de l'école aux examens
             </h5>
             <div class="flex justify-between gap-x-2 mb-3.5">
+                @if(count($school_stats) > 0)
                 <div class="justify-start">
                     <select class="bg-black/80 text-sky-300 font-semibold letter-spacing-1 rounded-md py-2" wire:model.live='selected_stat_year' name="selected_year" id="">
                         <option class="bg-gray-800" value="">Lister les stats par année</option>
@@ -422,6 +431,7 @@
                         @endforeach
                     </select>
                 </div>
+                @endif
                 <div class="flex justify-end gap-x-2">
                     @auth
                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['stats-manager']))
@@ -470,81 +480,85 @@
                     @endauth
                 </div>
             </div>
-            @foreach ($school_stats as $yr => $stats)
-                <div class="w-full flex flex-col  my-2.5">
-                    <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
-                        Les examens de l'année {{ $yr }}
-                    </h5>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 card my-6">
-                        @foreach($stats as $stat)
-                            @if($stat->subscription?->is_active)
-                                <div class="aspect-square shadow-inner shadow-sky-100 from-green-800 to-blue-900 via-sky-900 bg-linear-180 bg-black rounded-lg relative group card p-3 flex items-center justify-center flex-col font-bold letter-spacing-1 cursor-pointer hover:shadow-md hover:shadow-sky-400 gap-y-2 md:gap-y-5 ">
-                                    <div>
-                                        <h4 class="text-center text-lg md:text-3xl animate-pulse mb-3">
-                                            {{ $stat->exam }} {{ $stat->year }}
-                                        </h4>
-                                        <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
-                                            <span class="fas"> 
-                                                {{ __formatDecimal($stat->stat_value) }} </span>
-                                            <span class="fas fa-percent"></span>
-                                        </h3>
-                                    </div>
-                                    <div class="my-3 flex justify-end gap-x-2">
-                                        @auth
-                                            @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['stats-manager']))
-                                                <button wire:click="manageSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
-                                                    <span wire:loading.remove wire:target="manageSchoolStat({{$stat->id}})">
-                                                        <span class="fas fa-edit"></span>
-                                                        <span>Modifier</span>
-                                                    </span>
-                                                    <span wire:loading wire:target="manageSchoolStat({{$stat->id}})">
-                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                                        <span>En cours...</span>
-                                                    </span>
-                                                </button>
-                                                @if($stat->is_active)
-                                                <button wire:click="hideSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-orange-400 hover:bg-orange-600 text-white p-2">
-                                                    <span wire:loading.remove wire:target="hideSchoolStat({{$stat->id}})">
-                                                        <span class="fas fa-eye-slash"></span>
-                                                        <span>Masquer</span>
-                                                    </span>
-                                                    <span wire:loading wire:target="hideSchoolStat({{$stat->id}})">
-                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                                        <span>En cours...</span>
-                                                    </span>
-                                                </button>
-                                                @else
-                                                <button wire:click="unhideSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-green-400 hover:bg-green-600 text-white p-2">
-                                                    <span wire:loading.remove wire:target="unhideSchoolStat({{$stat->id}})">
-                                                        <span class="fas fa-eye-slash"></span>
-                                                        <span>Rendre visible</span>
-                                                    </span>
-                                                    <span wire:loading wire:target="unhideSchoolStat({{$stat->id}})">
-                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                                        <span>En cours...</span>
-                                                    </span>
-                                                </button>
+            @if(count($school_stats) > 0)
+                @foreach ($school_stats as $yr => $stats)
+                    <div class="w-full flex flex-col  my-2.5">
+                        <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
+                            Les examens de l'année {{ $yr }}
+                        </h5>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 card my-6">
+                            @foreach($stats as $stat)
+                                @if($stat->subscription?->is_active)
+                                    <div class="aspect-square shadow-inner shadow-sky-100 from-green-800 to-blue-900 via-sky-900 bg-linear-180 bg-black rounded-lg relative group card p-3 flex items-center justify-center flex-col font-bold letter-spacing-1 cursor-pointer hover:shadow-md hover:shadow-sky-400 gap-y-2 md:gap-y-5 ">
+                                        <div>
+                                            <h4 class="text-center text-lg md:text-3xl animate-pulse mb-3">
+                                                {{ $stat->exam }} {{ $stat->year }}
+                                            </h4>
+                                            <h3 class="text-xl md:text-8xl text-center text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">
+                                                <span class="fas"> 
+                                                    {{ __formatDecimal($stat->stat_value) }} </span>
+                                                <span class="fas fa-percent"></span>
+                                            </h3>
+                                        </div>
+                                        <div class="my-3 flex justify-end gap-x-2">
+                                            @auth
+                                                @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['stats-manager']))
+                                                    <button wire:click="manageSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
+                                                        <span wire:loading.remove wire:target="manageSchoolStat({{$stat->id}})">
+                                                            <span class="fas fa-edit"></span>
+                                                            <span>Modifier</span>
+                                                        </span>
+                                                        <span wire:loading wire:target="manageSchoolStat({{$stat->id}})">
+                                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                            <span>En cours...</span>
+                                                        </span>
+                                                    </button>
+                                                    @if($stat->is_active)
+                                                    <button wire:click="hideSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-orange-400 hover:bg-orange-600 text-white p-2">
+                                                        <span wire:loading.remove wire:target="hideSchoolStat({{$stat->id}})">
+                                                            <span class="fas fa-eye-slash"></span>
+                                                            <span>Masquer</span>
+                                                        </span>
+                                                        <span wire:loading wire:target="hideSchoolStat({{$stat->id}})">
+                                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                            <span>En cours...</span>
+                                                        </span>
+                                                    </button>
+                                                    @else
+                                                    <button wire:click="unhideSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-green-400 hover:bg-green-600 text-white p-2">
+                                                        <span wire:loading.remove wire:target="unhideSchoolStat({{$stat->id}})">
+                                                            <span class="fas fa-eye-slash"></span>
+                                                            <span>Rendre visible</span>
+                                                        </span>
+                                                        <span wire:loading wire:target="unhideSchoolStat({{$stat->id}})">
+                                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                            <span>En cours...</span>
+                                                        </span>
+                                                    </button>
+                                                    @endif
+                                                    <button wire:click="deleteSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
+                                                        <span wire:loading.remove wire:target="deleteSchoolStat({{$stat->id}})">
+                                                            <span class="fas fa-trash"></span>
+                                                            <span>Supprimer</span>
+                                                        </span>
+                                                        <span wire:loading wire:target="deleteSchoolStat({{$stat->id}})">
+                                                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                            <span>Suppression...</span>
+                                                        </span>
+                                                    </button>
+                                                    
                                                 @endif
-                                                <button wire:click="deleteSchoolStat({{$stat->id}})" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
-                                                    <span wire:loading.remove wire:target="deleteSchoolStat({{$stat->id}})">
-                                                        <span class="fas fa-trash"></span>
-                                                        <span>Supprimer</span>
-                                                    </span>
-                                                    <span wire:loading wire:target="deleteSchoolStat({{$stat->id}})">
-                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                                        <span>Suppression...</span>
-                                                    </span>
-                                                </button>
-                                                
-                                            @endif
-                                        @endauth
+                                            @endauth
+                                        </div>
                                     </div>
-                                </div>
-                            @endif
-                        @endforeach
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            @else
+                <h6 class="text-center font-semibold text-gray-500 italic text-lg py-3">Aucune statistique publiée</h6>
+            @endif
         </div>
 
 
@@ -599,6 +613,7 @@
                     @endif
                 @endauth
             </div>
+            @if(count($school_infos) > 0)
             <div class="flex flex-col gap-y-7 card my-4">
                 @foreach($school_infos as $type => $infos)
                     <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
@@ -642,6 +657,9 @@
                     @endforeach
                 @endforeach
             </div>
+            @else
+                <h6 class="text-center font-semibold text-gray-500 italic text-lg py-3">Aucune infos publié</h6>
+            @endif
         </div>
 
         

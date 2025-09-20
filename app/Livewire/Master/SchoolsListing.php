@@ -5,6 +5,7 @@ namespace App\Livewire\Master;
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
+use App\Livewire\Traits\SchoolActionsTraits;
 use App\Livewire\Traits\UserActionsTraits;
 use App\Models\School;
 use Livewire\Attributes\Title;
@@ -13,7 +14,7 @@ use Livewire\Component;
 #[Title("Administration - Liste des écoles")]
 class SchoolsListing extends Component
 {
-    use Toast, Confirm, ListenToEchoEventsTrait, UserActionsTraits;
+    use Toast, Confirm, ListenToEchoEventsTrait, UserActionsTraits, SchoolActionsTraits;
 
     public $search = '';
 
@@ -26,6 +27,12 @@ class SchoolsListing extends Component
     public $selected_schools = [];
 
     public $display_select_cases = false;
+
+
+    public function mount()
+    {
+
+    }
 
     public function render()
     {

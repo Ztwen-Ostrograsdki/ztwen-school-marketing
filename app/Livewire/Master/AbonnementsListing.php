@@ -7,6 +7,7 @@ use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Livewire\Traits\PackSusbscriptionActionsTraits;
 use App\Models\Subscription;
+use App\Models\User;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -18,6 +19,12 @@ class AbonnementsListing extends Component
     public $counter = 2, $search = "";
 
     public $subscriptions = [];
+
+    public $subscribers = [];
+
+    public $subscriber_id;
+
+    public $subscriber;
 
 
     public function mount()
@@ -38,11 +45,28 @@ class AbonnementsListing extends Component
             }
 
         })->orderBy('validate_at', 'desc')->get();
+
+        $this->subscribers = User::whereHas('current_subscription')->orderBy('firstname', 'asc')->orderBy('lastname', 'asc')->get();
     }
 
     public function render()
     {
         return view('livewire.master.abonnements-listing');
+    }
+
+
+    public function updatedSubscriberId($subscriber_id)
+    {
+        if($subscriber_id){
+
+            $this->subscriber = findUser($subscriber_id);
+
+            $this->subscriptions = Subscription::where('user_id', $subscriber_id)->where(function($query) {
+
+                $query->whereNotNull('validate_at');
+
+            })->orderBy('validate_at', 'desc')->get();
+        }
     }
 
     public function updatedSearch($search)

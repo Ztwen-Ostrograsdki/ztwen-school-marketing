@@ -1,4 +1,4 @@
-<div class="w-full max-w-[85rem] py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" x-data="{ show: false, currentImage: '', userName: '', email: '' }">
+<div class="w-full max-w-full py-3 px-4 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2" x-data="{ show: false, currentImage: '', userName: '', email: '' }">
     
     <div class="mt-10">
         <div>
@@ -9,45 +9,6 @@
         </div>
         <div class="flex justify-end my-2 bg-black/60 p-2 border-amber-500 border">
             <div class="flex justify-end gap-x-2 w-full text-xs">
-                
-                <button
-                    wire:click="unlockAllUsersAccount"
-                    class="bg-purple-400 text-gray-800 px-4 py-2 rounded-lg hover:bg-purple-700 hover:text-gray-900 transition cursor-pointer"
-                >
-                    <span wire:loading.remove wire:target='unlockAllUsersAccount'>
-                        <span class="fas fa-unlock-keyhole"></span>
-                        <span>Débloquer tous les comptes</span>
-                    </span>
-                    <span wire:target='unlockAllUsersAccount' wire:loading>
-                        <span>Déblocage en cours...</span>
-                        <span class="fas fa-rotate animate-spin"></span>
-                    </span>
-                </button>
-                <button
-                    wire:click="blockAllUsersAccount"
-                    class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 hover:text-gray-900 transition cursor-pointer"
-                >
-                    <span wire:loading.remove wire:target='blockAllUsersAccount'>
-                        <span class="fas fa-user-lock"></span>
-                        <span>Bloquer tous les comptes</span>
-                    </span>
-                    <span wire:target='blockAllUsersAccount' wire:loading>
-                        <span>Blocage en cours...</span>
-                        <span class="fas fa-rotate animate-spin"></span>
-                    </span>
-                </button>
-                <button
-                    wire:click="mailMessageToAdmins"
-                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-800 hover:text-gray-900 transition cursor-pointer">
-                    <span wire:loading.remove wire:target='mailMessageToAdmins'>
-                        <span>Envoyez un message aux admins</span>
-                        <span class="fas fa-paper-plane"></span>
-                    </span>
-                    <span wire:target='mailMessageToAdmins' wire:loading>
-                        <span>Envoie en cours...</span>
-                        <span class="fas fa-rotate animate-spin"></span>
-                    </span>
-                </button>
                 <button type="button" class="collapse-toggle text-white cursor-pointer border rounded-md bg-sky-600 hover:bg-indigo-800 gap-x-2 flex items-center px-4" data-drawer-target="drawer-admin-navigation" data-drawer-show="drawer-admin-navigation" aria-controls="drawer-admin-navigation">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -59,7 +20,7 @@
         <div class="w-full bg-transparent pt-12">
             <div class="w-full bg-black/60 shadow-2xl border border-sky-500 shadow-gray-900 flex flex-col items-center justify-center min-h-full py-5 px-5">
                 
-                <div class="container max-w-6xl">
+                <div class="container">
                     <div class="overflow-hidden">
                 <!-- Table Header -->
                         <div class="relative py-2">
@@ -73,21 +34,10 @@
                                         Ajouter un pack
                                     </a>
                                 </div>
-                                
                             </div>
-                            <span class="card absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
+                            <hr class="border border-amber-600 mt-2">
                         </div>
-                        <div class="mt-6 grid sm:grid-cols-5 gap-4">
-                            <div class="relative flex-grow  sm:col-span-3">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <input wire:model.live='search' type="text" class="pl-10 pr-4 py-2 border border-sky-600 bg-transparent rounded-lg w-full " placeholder="Recherche un utilisateur...">
-                            </div>
-                            
-                        </div>
+                        
                     </div>
                     
                     <!-- Table -->

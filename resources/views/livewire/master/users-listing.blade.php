@@ -284,10 +284,10 @@
                                         </td>
                                         <td class="px-2 py-2 whitespace-nowrap text-center">
                                             @if($user->schools)
-                                                @if($user->current_subscription())
-                                                    <a href="{{ $user->current_subscription()->to_details_route() }}" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-green-100 text-green-800 flex-col hover:underline hover:underline-offset-2">
-                                                      Actif ({{ $user->current_subscription()->ref_key }} )
-                                                      <span>Jusqu'au {{__formatDate($user->current_subscription()->will_closed_at) }}</span>
+                                                @if($user->current_subscription)
+                                                    <a href="{{ $user->current_subscription->to_details_route() }}" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-green-100 text-green-800 flex-col hover:underline hover:underline-offset-2">
+                                                      Actif ({{ $user->current_subscription->ref_key }} )
+                                                      <span>Jusqu'au {{__formatDate($user->current_subscription->will_closed_at) }}</span>
                                                     </a>
                                                 @else
                                                     <span class="px-2 flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-600 text-center items-center justify-center mx-auto">

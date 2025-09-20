@@ -32,7 +32,16 @@ class SchoolProfil extends Component
     {
         if($slug && $uuid){
 
-            $school = School::where('uuid', $uuid)->where('slug', $slug)->firstOrFail();
+            $user = findUser(auth_user_id());
+
+            if($user->isAdminsOrMaster()){
+
+                $school = School::where('uuid', $uuid)->where('slug', $slug)->firstOrFail();
+            }
+            else{
+
+                $school = School::where('uuid', $uuid)->where('slug', $slug)->where('is_active', true)->firstOrFail();
+            }
 
             if($school){
 

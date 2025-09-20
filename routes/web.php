@@ -23,6 +23,7 @@ use App\Livewire\Master\SpatieRolesPage;
 use App\Livewire\Master\UsersListing;
 use App\Livewire\Pages\AboutUs;
 use App\Livewire\Pages\Home;
+use App\Livewire\Pages\SchoolFindingPage;
 use App\Livewire\Pages\SchoolsPages;
 use App\Livewire\Shop\PackModuleManager;
 use App\Livewire\Shop\PackProfil;
@@ -115,6 +116,8 @@ Route::get('ecole/s={slug}/u={uuid}', SchoolProfil::class)->name('school.profil'
 Route::get('boutique/packs-disponibles', PacksPage::class)->name('packs.page');
 
 Route::get('ecoles/liste', SchoolsPages::class)->name('schools.page');
+
+Route::get('ecoles/trouver-ecole', SchoolFindingPage::class)->name('schools.searching');
 
 Route::get('boutique/u={pack_uuid}/pack={pack_slug}', PackProfil::class)->name('pack.profil');
 

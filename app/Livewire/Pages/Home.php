@@ -15,7 +15,7 @@ class Home extends Component
 
     public function render()
     {
-        $quotes = Quote::where('hidden', false)->get();
+        $quotes = Quote::where('hidden', false)->inRandomOrder()->take(5)->get();
         
         return view('livewire.pages.home', compact('quotes'));
     }

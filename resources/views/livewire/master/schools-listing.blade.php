@@ -200,6 +200,10 @@
                                         Données enregistrées<br>
                                         par l'école
                                     </th>
+
+                                    <th scope="col" class="px-2 py-4 uppercase tracking-wider">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y text-xs md:text-sm text-gray-200 divide-gray-200">
@@ -210,9 +214,9 @@
 
                                         $user = $school->user;
 
-                                        if($school->current_subscription() && $school->current_subscription()->is_active){
+                                        if($school->current_subscription && $school->current_subscription->is_active){
 
-                                            $subscription = $school->current_subscription();
+                                            $subscription = $school->current_subscription;
 
                                         }
                                     @endphp
@@ -302,10 +306,10 @@
                                         </td>
                                         <td class="px-2 py-2 whitespace-nowrap text-center">
                                             @if($user->schools)
-                                                @if($user->current_subscription())
-                                                    <a href="{{ $user->current_subscription()->to_details_route() }}" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-green-100 text-green-800 flex-col hover:underline hover:underline-offset-2">
-                                                      Actif ({{ $user->current_subscription()->ref_key }} )
-                                                      <span>Jusqu'au {{__formatDate($user->current_subscription()->will_closed_at) }}</span>
+                                                @if($user->current_subscription)
+                                                    <a href="{{ $user->current_subscription->to_details_route() }}" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-green-100 text-green-800 flex-col hover:underline hover:underline-offset-2">
+                                                      Actif ({{ $user->current_subscription->ref_key }} )
+                                                      <span>Jusqu'au {{__formatDate($user->current_subscription->will_closed_at) }}</span>
                                                     </a>
                                                 @else
                                                     <span class="px-2 flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-600 text-center items-center justify-center mx-auto">
@@ -319,7 +323,7 @@
                                             @endif
                                         </td>
                                         <td class="px-2 py-2 whitespace-nowrap">
-                                            @if($school->current_subscription()?->is_active)
+                                            @if($school->current_subscription?->is_active)
                                             <span class="flex flex-col justify-center text-sm font-thin letter-spacing-1 text-gray-400">
                                                 <span>
                                                     Souscrit le {{__formatDate($subscription->created_at) }}
@@ -356,7 +360,14 @@
                                                     <span>
                                                         <span>Images : </span>
                                                         <span>
-                                                            <span class="text-amber-500">           {{ __zero(count($school->images)) }}
+                                                            <span class="text-amber-500">{{ __zero(count($school->images)) }}
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                    <span>
+                                                        <span>Vidéos : </span>
+                                                        <span>
+                                                            <span class="text-amber-500"> {{ __zero(count($school->videos)) }}
                                                             </span>
                                                         </span>
                                                     </span>
@@ -379,6 +390,53 @@
                                                 Aucune donnée
                                             </span>
                                             @endif
+                                        </td>
+                                        <td class="px-2 py-2 whitespace-nowrap">
+                                            <div class="flex gap-x-1.5">
+                                                @if($school->is_active)
+                                                <button wire:click='lockSchoolProfil({{$school->id}})' class="block  text-white cursor-pointer bg-fuchsia-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-fuchsia-800 focus:ring-fuchsia-800" type="button">
+                                                    <span wire:loading.remove wire:target='lockSchoolProfil({{$school->id}})'>
+                                                        <span class="fas fa-lock mr-1"></span>
+                                                        Bloquer l'accès
+                                                    </span>
+                                                    <span wire:loading wire:target='lockSchoolProfil({{$school->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
+                                                @else
+                                                <button title="Cette école a été verrouillée! voulez-vous la réactiver" wire:click='unlockSchoolProfil({{$school->id}})' class="block  text-white cursor-pointer bg-green-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
+                                                    <span wire:loading.remove wire:target='unlockSchoolProfil({{$school->id}})'>
+                                                        <span class="fas fa-unlock mr-1"></span>
+                                                        Activer
+                                                    </span>
+                                                    <span wire:loading wire:target='unlockSchoolProfil({{$school->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
+                                                @endif
+                                                <button wire:click='deleteSchool({{$school->id}})' class="block  text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                                    <span wire:loading.remove wire:target='deleteSchool({{$school->id}})'>
+                                                        <span class="fas fa-trash mr-1"></span>
+                                                        Supprimer
+                                                    </span>
+                                                    <span wire:loading wire:target='deleteSchool({{$school->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
+                                                <button wire:click='resetSchoolData({{$school->id}})' class="block  text-white cursor-pointer bg-orange-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-800 focus:ring-orange-800" type="button">
+                                                    <span wire:loading.remove wire:target='resetSchoolData({{$school->id}})'>
+                                                        <span class="fas fa-recycle mr-1"></span>
+                                                        Rafraîchir les données
+                                                    </span>
+                                                    <span wire:loading wire:target='resetSchoolData({{$school->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -160,6 +160,8 @@ class PackModuleManager extends Component
 
         if($dispatched) $this->reset('price', 'promo_price', 'discount', 'name', 'privileges', 'max_infos', 'max_stats', 'max_images', 'max_assistants', 'notify_by_email', 'notify_by_sms');
 
+        if($this->pack) return redirect($this->pack->to_admin_pack_profil_route());
+
     }
 
 

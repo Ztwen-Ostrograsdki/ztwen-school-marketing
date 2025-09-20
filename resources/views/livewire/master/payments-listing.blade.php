@@ -43,7 +43,6 @@
                                 </div>
                                 <input wire:model.live='search' type="text" class="pl-10 pr-4 py-2 border border-sky-600 bg-transparent rounded-lg w-full " placeholder="Renseigner une référence pour filtrer une demande...">
                             </div>
-                            
                         </div>
                     </div>
                     

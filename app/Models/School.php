@@ -87,6 +87,8 @@ class School extends Model
 
             $school->refreshImagesFolder();
 
+            $school->refreshVideosFolder();
+
         });
 
 

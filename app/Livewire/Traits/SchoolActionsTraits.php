@@ -2,7 +2,9 @@
 namespace App\Livewire\Traits;
 
 use App\Helpers\Robots\SpatieManager;
+use App\Jobs\JobToDeleteSchool;
 use App\Models\Info;
+use App\Models\School;
 use App\Models\SchoolFollower;
 use App\Models\SchoolImage;
 use App\Models\SchoolVideo;
@@ -392,12 +394,159 @@ trait SchoolActionsTraits {
 		}
     }
 
-
-	
-
     public function likeAndFollow()
     {
         SchoolFollower::create(['school_id' => $this->school->id, 'follower_id' => auth_user_id() ?? null]);
+    }
+
+
+    public function lockSchoolProfil($school_id)
+    {
+        SpatieManager::ensureThatUserCan();
+
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment verrouiller cette école ? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Elle ne sera plus visible par vos visiteurs! </p>";
+
+        $options = ['event' => 'confirmSchoolLocked', 'confirmButtonText' => 'Verouiller profil', 'cancelButtonText' => 'Annulé', 'data' => ['school_id' => $school_id]];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+    #[On('confirmSchoolLocked')]
+    public function onLockSchoolProfil($data)
+    {
+        if($data){
+
+            $school_id = $data['school_id'];
+
+            if($school_id){
+
+                $school = School::find($school_id);
+
+                if($school){
+
+                    $name = $school->name;
+
+                    $message = "L'école " . $name . " a été verouillée avec succès!";
+                    
+					$locked = $school->update(['is_active' => false]);
+
+                    if($locked){
+
+                        Notification::sendNow([auth_user()], new RealTimeNotification($message));
+
+                        return;
+                    }
+
+                }
+            }
+
+            return $this->toast("Le verouillage de l'école a échoué", 'error');
+        }
+    }
+    
+    public function unlockSchoolProfil($school_id)
+    {
+        SpatieManager::ensureThatUserCan();
+
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment activer le profil cette école ? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Elle sera plus de nouveau visible et accessible par vos visiteurs! </p>";
+
+        $options = ['event' => 'activateSchoolProfil', 'confirmButtonText' => 'Activer profil', 'cancelButtonText' => 'Annulé', 'data' => ['school_id' => $school_id]];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+    #[On('activateSchoolProfil')]
+    public function onActivateSchoolProfil($data)
+    {
+        if($data){
+
+            $school_id = $data['school_id'];
+
+            if($school_id){
+
+                $school = School::find($school_id);
+
+                if($school){
+
+                    $name = $school->name;
+
+                    $message = "Le profil de l'école " . $name . " a été activé avec succès!";
+                    
+					$activate = $school->update(['is_active' => true]);
+
+                    if($activate){
+
+                        Notification::sendNow([auth_user()], new RealTimeNotification($message));
+
+                        return;
+                    }
+
+                }
+            }
+
+            return $this->toast("L'activation du profil de l'école a échoué", 'error');
+        }
+    }
+    
+    public function deleteSchool($school_id)
+    {
+        SpatieManager::ensureThatUserCan();
+
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment supprimer cette école ? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Les données de cette école seront définitivement supprimées ainsi que l'école! Elle ne sera plus disponible sur la plateforme</p>";
+
+        $options = ['event' => 'deleteSchool', 'confirmButtonText' => 'Supprimer cette école', 'cancelButtonText' => 'Annulé', 'data' => ['school_id' => $school_id]];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+    #[On('deleteSchool')]
+    public function onDeleteSchool($data)
+    {
+        if($data){
+
+            $school_id = $data['school_id'];
+
+            if($school_id){
+
+                $school = School::find($school_id);
+
+                if($school){
+
+                    $name = $school->name;
+
+                    $message = "La suppresion définitive de l'école " . $name . " a été lancée avec succès!";
+                    
+					$deleting = JobToDeleteSchool::dispatch($school, auth_user());
+
+                    if($deleting){
+
+                        Notification::sendNow([auth_user()], new RealTimeNotification($message));
+
+                        return;
+                    }
+
+                }
+            }
+
+            return $this->toast("La suppression de l'école a échoué", 'error');
+        }
+    }
+    
+    public function resetSchoolData($school_id)
+    {
+        
     }
 
 }

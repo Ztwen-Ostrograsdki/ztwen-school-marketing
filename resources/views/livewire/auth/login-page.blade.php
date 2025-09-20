@@ -26,14 +26,21 @@
                 id="passport" 
                 src="{{asset('icons/news/user-person-man.png')}}" 
                 alt=""
-                class="mx-auto h-20"  
+                class="mx-auto  hidden"  
             >
-            <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl sm:text-2xl uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
-                <span class="">
-                    Connexion
+            <span class="flex-col flex items-center ">
+                <span class="flex items-center justify-center rounded-full text-5xl h-20 w-20  bg-indigo-100 shadow-md shadow-gray-800">
+                    <span class="fas fa-user text-indigo-900"></span>
                 </span>
-                <span class="absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
-            </p>
+                <p class="py-2 relative flex flex-col text-xl sm:text-2xl uppercase font-bold letter-spacing-2"> 
+                    <span class="text-indigo-200">
+                        Connexion
+                    </span>
+                    <span class="text-center text-sm text-amber-500">
+                        Veuillez vous identifier
+                    </span>
+                </p>
+            </span>
             
             <form wire:keydown.enter='login' @submit.prevent class="mt-5 text-left">
                 <div class="flex gap-y-2 flex-col text-sm">
