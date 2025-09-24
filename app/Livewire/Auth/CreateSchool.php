@@ -29,7 +29,7 @@ class CreateSchool extends Component
 
     public $city;
 
-    public $has_not_school = false;
+    public $has_not_school = true;
 
     public $department;
 
@@ -79,7 +79,10 @@ class CreateSchool extends Component
 
             if($user){
 
-                $this->has_not_school = SpatieManager::ensureThatUserHasNotSchool(auth_user());
+                if(!$school_id && !$school_slug){
+
+                    $this->has_not_school = SpatieManager::ensureThatUserHasNotSchool(auth_user());
+                }
 
                 $this->user_uuid = $user_uuid;
 
@@ -213,8 +216,8 @@ class CreateSchool extends Component
                     'level' => 'required|string',
                     'capacity' => 'required|integer',
                     'system' => 'required|string',
-                    'images' => 'required|array|max:2', 
-                    'images.*' => 'image|max:2048', 
+                    // 'images' => 'required|array|max:2', 
+                    // 'images.*' => 'image|max:2048', 
                 ]
             );
         }
@@ -269,9 +272,9 @@ class CreateSchool extends Component
 
         try {
 
-            $images_treated = self::imagesUploader($root_folder, $this->images);
+            // $images_treated = self::imagesUploader($root_folder, $this->images);
 
-            if($images_treated && !$this->error_message){
+            if(!$this->error_message){
 
                 $data = [
                     'name' => $this->name,
@@ -288,7 +291,7 @@ class CreateSchool extends Component
                     'level' => $this->level,
                     'capacity' => $this->capacity,
                     'system' => $this->system,
-                    'profil_images' => $images_treated,
+                    // 'profil_images' => $images_treated,
                     'user_id' => auth_user_id(),
                     'folder' => $root_folder,
                 ];

@@ -77,8 +77,11 @@ class MyQuotes extends Component
         $this->validate();
 
         if ($this->isEditing) {
+
             Quote::find($this->quoteId)->update(['content' => $this->content]);
+
         } else {
+
             Quote::create(['content' => $this->content, 'user_id' => auth_user_id()]);
         }
 
@@ -109,15 +112,15 @@ class MyQuotes extends Component
     }
 
 
-    public function manageQuote($quote_id = null)
-    {
-        if(Gate::denies('is_self_user', $this->user->id)){
+    // public function manageQuote($quote_id = null)
+    // {
+    //     if(Gate::denies('is_self_user', $this->user->id)){
 
-            return abort(403, "Action non authorisée!");
-        }
+    //         return abort(403, "Action non authorisée!");
+    //     }
 
-        $this->dispatch('ManageUserQuoteLiveEvent', $quote_id);
-    }
+    //     $this->dispatch('ManageUserQuoteLiveEvent', $quote_id);
+    // }
     
     public function deleteQuote($quote_id)
     {
@@ -163,7 +166,7 @@ class MyQuotes extends Component
 
                 $this->toast( "La citation  a été supprimée avec succès!", 'success');
 
-                $this->counter = getRand();
+                $this->quotes = Quote::latest()->get();
 
             }
             else{
@@ -176,8 +179,6 @@ class MyQuotes extends Component
        
 
     }
-
-
 
     #[On('LiveUpdateQuotesListEvent')]
     public function reloadData($data = null)

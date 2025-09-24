@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\SchoolDataHasBeenUpdatedEvent;
+use App\Events\SchoolDataUpdatedEvent;
 use App\Models\School;
 use App\Models\Subscription;
 use App\Models\User;
@@ -33,7 +33,7 @@ class SchoolVideo extends Model
         
         static::created(function ($video){
             
-            SchoolDataHasBeenUpdatedEvent::dispatch($video->school);
+            SchoolDataUpdatedEvent::dispatch($video->school);
 
             $video->school->update(['posts_counter' => $video->school->posts_counter + 1]);
 
@@ -41,7 +41,7 @@ class SchoolVideo extends Model
 
         static::updated(function ($video){
             
-            SchoolDataHasBeenUpdatedEvent::dispatch($video->school);
+            SchoolDataUpdatedEvent::dispatch($video->school);
 
             $video->school->update(['posts_counter' => $video->school->posts_counter + 1]);
 
@@ -51,7 +51,7 @@ class SchoolVideo extends Model
             
             Storage::disk('public')->delete($video->path);
 
-            SchoolDataHasBeenUpdatedEvent::dispatch($video->school);
+            SchoolDataUpdatedEvent::dispatch($video->school);
 
         });
     }

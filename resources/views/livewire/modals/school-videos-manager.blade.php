@@ -4,13 +4,13 @@
         <!-- Modal content -->
         <div class="relative border bg-black/80 shadow border-sky-500">
             <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 text-lime-500 letter-spacing-1">
                 @if(!$video_model)
-                <h3 class="text-lg font-semibold text-amber-600">
+                <h3 class="text-lg font-semibold ">
                     Gestion des vidéos de {{$school->name}}
                 </h3>
                 @else
-                <h3 class="text-sm font-semibold text-amber-600">
+                <h3 class="text-sm font-semibold ">
                     Edition des données de la vidéo de {{$video_model->title}}
                 </h3>
                 @endif

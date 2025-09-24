@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SchoolDataHasBeenUpdatedEvent implements ShouldBroadcast
+class SchoolDataUpdatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,12 +20,11 @@ class SchoolDataHasBeenUpdatedEvent implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct(
-        public School $school,
-
-        public ?User $updater = null,
+        public ?School $school = null,
+        public ?User $updater = null
     )
     {
-
+        //
     }
 
     /**

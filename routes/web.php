@@ -35,9 +35,7 @@ use App\Livewire\User\MyQuotes;
 use App\Livewire\User\MyReceivedsAssistantRequestsPage;
 use App\Livewire\User\MySubscribes;
 use App\Livewire\User\SubscriptionDetailsPage;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 Route::get('/', Home::class)->name('home');

@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Quote;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -18,7 +17,7 @@ class UpdateQuotesListEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public Quote $quote)
+    public function __construct()
     {
         //
     }

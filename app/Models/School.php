@@ -24,6 +24,7 @@ class School extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'cover_image',
         'contacts',
         'simple_name',
         'user_id',
@@ -39,6 +40,7 @@ class School extends Model
         'objectives',
         'profil_images',
         'observation',
+        'description',
         'likes',
         'folder',
         'is_public',
@@ -69,30 +71,15 @@ class School extends Model
     }
 
 
-    public static function booted()
-    {
-        static::creating(function ($school){
+    // public static function booted()
+    // {
+    //     static::creating(function ($school){
 
-            $school->uuid = Str::uuid();
+            
 
-            $school->is_active = false;
-
-            $school->likes = generateRandomNumber(2);
-
-            $school->slug = Str::slug($school->name) . '-' . generateRandomNumber();
-
-        });
+    //     });
         
-        static::updated(function ($school){
-
-            $school->refreshImagesFolder();
-
-            $school->refreshVideosFolder();
-
-        });
-
-
-    }
+    // }
 
     public function profilImage() : Attribute
     {
@@ -109,6 +96,12 @@ class School extends Model
             return Attribute::get(fn() => $image);
 
         endif;
+    }
+
+
+    public function getCoverImage()
+    {
+        return $this->cover_image ? $this->cover_image : asset("/images/default_cover_image.jpg");
     }
 
     public function user()
@@ -205,6 +198,41 @@ class School extends Model
 
             }
 
+
+        }
+    }
+    
+    
+    public function refreshSchoolCoverImage()
+    {
+        $is_dir = Storage::disk('public')->exists($this->folder);
+
+        if($is_dir){
+
+            $target = 'photo-de-couverture-ecole-' . $this->id;
+
+            $cover_image = $this->cover_image;
+
+            if($cover_image && !Storage::disk('public')->exists($cover_image)){
+
+                $this->update(['cover_image' => null]);
+            }
+
+            if(!$cover_image){
+
+                $this->update(['cover_image' => null]);
+
+                $files = Storage::allFiles('public/'.$this->folder);
+
+                foreach($files as $file){
+
+                    if(str_contains($file, $target)){
+
+                        Storage::disk('public')->delete($file);
+
+                    }
+                }
+            }
 
         }
     }

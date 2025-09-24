@@ -30,6 +30,8 @@ class EmailTemplateBuilder
 
         $templates_data['plateforme'] = env('APP_NAME');
 
+        $templates_data['site_name'] = config('app.site_name');
+
         // Remplace chaque variable {{ var }}
         foreach ($templates_data as $key => $value) {
 

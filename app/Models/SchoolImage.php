@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\SchoolDataHasBeenUpdatedEvent;
+use App\Events\SchoolDataUpdatedEvent;
 use App\Models\School;
 use App\Models\Subscription;
 use App\Models\User;
@@ -33,7 +33,7 @@ class SchoolImage extends Model
         
         static::created(function ($image){
             
-            SchoolDataHasBeenUpdatedEvent::dispatch($image->school);
+            SchoolDataUpdatedEvent::dispatch($image->school);
 
             $image->school->update(['posts_counter' => $image->school->posts_counter + 1]);
 
@@ -41,7 +41,7 @@ class SchoolImage extends Model
 
         static::updated(function ($image){
             
-            SchoolDataHasBeenUpdatedEvent::dispatch($image->school);
+            SchoolDataUpdatedEvent::dispatch($image->school);
 
             $image->school->update(['posts_counter' => $image->school->posts_counter + 1]);
 
@@ -51,7 +51,7 @@ class SchoolImage extends Model
             
             Storage::disk('public')->delete($image->path);
 
-            SchoolDataHasBeenUpdatedEvent::dispatch($image->school);
+            SchoolDataUpdatedEvent::dispatch($image->school);
 
         });
     }

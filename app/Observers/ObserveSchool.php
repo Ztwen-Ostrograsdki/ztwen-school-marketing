@@ -3,14 +3,26 @@
 namespace App\Observers;
 
 use App\Events\NewSchoolCreatedEvent;
-use App\Events\SchoolDataHasBeenUpdatedEvent;
+use App\Events\SchoolDataUpdatedEvent;
 use App\Helpers\Robots\ModelsRobots;
 use App\Models\School;
 use App\Notifications\RealTimeNotification;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class ObserveSchool
 {
+
+    public function creating(School $school): void
+    {
+        $school->uuid = Str::uuid();
+
+        $school->is_active = false;
+
+        $school->likes = generateRandomNumber(2);
+
+        $school->slug = Str::slug($school->name) . '-' . generateRandomNumber();
+    }
     /**
      * Handle the School "created" event.
      */
@@ -49,16 +61,17 @@ class ObserveSchool
      */
     public function updated(School $school): void
     {
-        SchoolDataHasBeenUpdatedEvent::dispatch($school);
-
+        broadcast(new SchoolDataUpdatedEvent());
+        
         $admins = ModelsRobots::getUserAdmins(false);
 
-        if(!empty($admins)){
+        if(count($admins) > 0){
 
             $msg_to_admins = "Des données de l'école " . $school->name . " ont été mises à jour!";
 
             Notification::sendNow($admins, new RealTimeNotification($msg_to_admins));
         }
+
     }
 
     /**
@@ -66,7 +79,7 @@ class ObserveSchool
      */
     public function deleting(School $school): void
     {
-        SchoolDataHasBeenUpdatedEvent::dispatch($school);
+        broadcast(new SchoolDataUpdatedEvent());
 
         $admins = ModelsRobots::getUserAdmins(false);
 

@@ -57,9 +57,24 @@ class NewAssistantModal extends Component
     }
 
     #[On("AddNewAssistantLiveEvent")]
-    public function openModal()
+    public function openModal($school_id = null)
     {
-        $this->dispatch('OpenModalEvent', $this->modal_name);
+        if($school_id){
+
+            $school = School::whereId($school_id)->first();
+
+            if($school){
+
+                $this->school = $school;
+
+                $this->school_id = $school_id;
+                
+                $this->dispatch('OpenModalEvent', $this->modal_name);
+            }
+
+
+        }
+        
     }
 
     public function hideModal()
@@ -82,13 +97,13 @@ class NewAssistantModal extends Component
 
     public function addAssistant()
     {
-        if(!$this->school->current_subscription()){
+        if(!$this->school->current_subscription){
 
             return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
 
             return;
         }
-        elseif($this->school->current_subscription() && !$this->school->current_subscription()->assistable){
+        elseif($this->school->current_subscription && !$this->school->current_subscription->assistable){
 
             return $this->toast("Vous avez déjà épuisé le nombre d'assistants que vous pouvez avoir avec votre abonnement actif actuellement!", 'info');
 

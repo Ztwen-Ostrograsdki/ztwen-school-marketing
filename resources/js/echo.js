@@ -122,8 +122,8 @@ e.private("confirmeds")
     .listen("UserDataHasBeenUpdatedEvent", (user) => {
         Livewire.dispatch("LiveUserDataHasBeenUpdatedEvent", user);
     })
-    .listen("SchoolDataHasBeenUpdatedEvent", (user) => {
-        Livewire.dispatch("LiveSchoolDataHasBeenUpdatedEvent", user);
+    .listen("SchoolDataUpdatedEvent", (user) => {
+        Livewire.dispatch("LiveSchoolDataUpdatedEvent", user);
     })
     .listen("NewSchoolCreatedEvent", (user) => {
         Livewire.dispatch("LiveNewSchoolCreatedEvent", user);
@@ -152,8 +152,8 @@ e.channel("public")
     .listen("UserAccountWasDeletedEvent", (user) => {
         Livewire.dispatch("LiveUserAccountWasDeletedEvent", user);
     })
-    .listen("SchoolDataHasBeenUpdatedEvent", (user) => {
-        Livewire.dispatch("LiveSchoolDataHasBeenUpdatedEvent", user);
+    .listen("SchoolDataUpdatedEvent", (user) => {
+        Livewire.dispatch("LiveSchoolDataUpdatedEvent", user);
     })
     .listen("NewSchoolCreatedEvent", (school) => {
         Livewire.dispatch("LiveNewSchoolCreatedEvent", school);

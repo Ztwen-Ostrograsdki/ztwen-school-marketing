@@ -18,6 +18,13 @@
 
         <button data-modal-target="school-images-manager-modal" data-modal-toggle="school-images-manager-modal" class="hidden" type="button"></button>
         @livewire('modals.school-images-manager')
+
+
+        <button data-modal-target="school-cover-image-editor-modal" data-modal-toggle="school-cover-image-editor-modal" class="hidden" type="button"></button>
+        @livewire('modals.manage-school-cover-image-modal')
+        
+        <button data-modal-target="school-description-manager-modal" data-modal-toggle="school-description-manager-modal" class="hidden" type="button"></button>
+        @livewire('modals.manage-school-description-modal')
         
         
         <button data-modal-target="school-videos-manager-modal" data-modal-toggle="school-videos-manager-modal" class="hidden" type="button"></button>

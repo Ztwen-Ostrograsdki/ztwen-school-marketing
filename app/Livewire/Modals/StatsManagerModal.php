@@ -40,13 +40,13 @@ class StatsManagerModal extends Component
 
                 $this->school = $school;
 
-                if(!$this->school->current_subscription()){
+                if(!$this->school->current_subscription){
 
                     return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
 
                     return;
                 }
-                elseif($this->school->current_subscription()  &&!$school->current_subscription()->statisable){
+                elseif($this->school->current_subscription  &&!$school->current_subscription->statisable){
 
                     return $this->toast("Vous avez déjà épuisé le nombre de statistiques que vous pouvez publier avec votre abonnement actif actuellement!", 'info');
 
@@ -86,7 +86,7 @@ class StatsManagerModal extends Component
 
     public function insert()
     {
-        if(!$this->school->current_subscription()){
+        if(!$this->school->current_subscription){
 
             return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
 
@@ -193,7 +193,7 @@ class StatsManagerModal extends Component
                     'stat_value' => $this->stat_value,
                     'year' => $this->year,
                     'exam' => $this->exam,
-                    'subscription_id' => $this->school->current_subscription()->id,
+                    'subscription_id' => $this->school->current_subscription->id,
                 ];
 
                 $done = Stat::create($data);

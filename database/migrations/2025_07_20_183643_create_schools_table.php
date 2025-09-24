@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('level')->nullable()->default(null);
             $table->string('slug')->unique();
             $table->string('folder')->unique();
+            $table->text('description')->nullable()->default(null);
             $table->string('system')->nullable()->default(null);
             $table->string('department')->nullable()->default(null);
             $table->string('city')->nullable()->default(null);
@@ -36,6 +37,7 @@ return new class extends Migration
             $table->string('capacity')->nullable()->default(null);
             $table->json('objectives')->nullable()->default(null);
             $table->json('profil_images')->nullable()->default(null);
+            $table->string('cover_image')->nullable()->default(null);
             $table->text('observation')->nullable()->default(null);
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();

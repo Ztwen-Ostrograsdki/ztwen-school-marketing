@@ -61,13 +61,13 @@ class SchoolImageEditionModal extends Component
 
     public function updateImageData()
     {
-        if(!$this->school->current_subscription()){
+        if(!$this->school->current_subscription){
 
             return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
 
             return;
         }
-        elseif($this->school->current_subscription() && !$this->school->current_subscription()->assistable){
+        elseif($this->school->current_subscription && !$this->school->current_subscription->assistable){
 
             return $this->toast("Vous avez déjà épuisé le nombre d'assistants que vous pouvez avoir avec votre abonnement actif actuellement!", 'info');
 

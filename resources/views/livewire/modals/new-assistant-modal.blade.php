@@ -4,7 +4,7 @@
             <div class="relative bg-black/80 border border-sky-500 rounded-lg shadow-2xl">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                    <h3 class="text-sm sm:text-lg font-semibold text-amber-400">
+                    <h3 class="text-sm sm:text-lg font-semibold text-lime-500 letter-spacing-1">
                         <span class="fas fa-user-plus mr-1.5"></span>
                         Enroler un assistant
                     </h3>
@@ -16,11 +16,11 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form wire:submit.prevent="addAssistant" class="p-4 md:p-5">
+                <form wire:submit.prevent="addAssistant" class="p-4 md:p-5 letter-spacing-1">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
                             <label for="school_id" class="block mb-2 text-sm text-amber-400 font-medium ">L'école</label>
-                            <select wire:model.live='school_id' id="school_id" class="bg-transparent border border-sky-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <select disabled wire:model.live='school_id' id="school_id" class="border border-sky-400 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:border-gray-500 dark:placeholder-gray-400 text-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500 disabled bg-gray-700">
                                 <option class="text-sm text-white py-1.5 bg-black" >Selectionner l'école</option>
                                 @foreach ($schools as $school)
                                     <option class="text-white py-1.5 bg-black px-2.5" value="{{$school->id}}">{{ $school->name }}</option>

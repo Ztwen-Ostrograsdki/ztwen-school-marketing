@@ -126,7 +126,7 @@ trait ListenToEchoEventsTrait{
         $this->counter = getRandom();
     }
 
-    #[On("LiveSchoolDataHasBeenUpdatedEvent")]
+    #[On("LiveSchoolDataUpdatedEvent")]
     public function shoolDataUpdated()
     {
         $this->counter = getRand();

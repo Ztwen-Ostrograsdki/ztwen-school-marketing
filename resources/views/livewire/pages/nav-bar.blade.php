@@ -98,6 +98,10 @@
                             <li>
                                 <a href="{{auth_user()->to_create_school_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Ajouter une école</a>
                             </li>
+                            @else
+                            <li title="Charger le profil de mon école {{auth_user()->current_school->name}}">
+                                <a href="{{auth_user()->current_school->to_profil_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mon école</a>
+                            </li>
                             @endif
                             <li>
                                 <a href="{{auth_user()->to_profil_edit_route()}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Editer mon profil</a>

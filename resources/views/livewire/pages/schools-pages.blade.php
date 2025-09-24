@@ -35,6 +35,10 @@
                                     Reconnue par ses <a href="{{$school->to_profil_route()}}" class="underline underline-offset-3 hover:text-rose-300">statistiques remarquables aux différents examens</a>, il va sans doute, que <a href="{{$school->to_profil_route()}}" class="text-yellow-400 font-bold">{{ $school->name }}</a> est une école de reférence pour garantir un avenir meillleur à la jeunesse de la nation.
                                 </p>
 
+                                <p>
+                                    {{ $school->description ? $school->description : ''}}
+                                </p>
+
 
                             </div>
                             <h5 class="flex justify-end gap-x-1.5 ">

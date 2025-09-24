@@ -337,7 +337,7 @@ trait SpatieManager{
 
 		$school = School::where('id', $school_id)->first();
 
-		if(!$school->current_subscription()){
+		if(!$school->current_subscription){
 
 			return $redirect_if_unauthorized ? redirect()->to('/403') : false;
 

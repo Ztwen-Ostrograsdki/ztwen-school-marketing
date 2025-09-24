@@ -5,11 +5,11 @@
             <div class="relative bg-black/80 border border-sky-500 rounded-lg shadow-2xl">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                    <h3 class="text-sm sm:text-lg font-semibold text-amber-400">
+                    <h3 class="text-sm sm:text-lg font-semibold text-lime-500 letter-spacing-1">
                         <span class="fas fa-user-plus mr-1.5"></span>
                         Edition image de 
                         
-                        <span class="text-amber-600">
+                        <span class="text-lime-600">
                             {{ $school->name }}
                         </span>
                     </h3>

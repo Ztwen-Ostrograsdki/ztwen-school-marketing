@@ -10,6 +10,7 @@ use App\Livewire\Traits\SchoolActionsTraits;
 use App\Livewire\Traits\SchoolMediaActionsTrait;
 use App\Models\School;
 use App\Models\Stat;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -18,7 +19,7 @@ class SchoolProfil extends Component
 {
     use SchoolActionsTraits, SchoolMediaActionsTrait, ListenToEchoEventsTrait, Toast, Confirm;
     
-    public $uuid, $slug, $school;
+    public $uuid, $slug, $school_id, $school;
 
     public $simple_name = "ECOLE-ABC";
 
@@ -47,7 +48,7 @@ class SchoolProfil extends Component
 
                 $school->refreshImagesFolder();
 
-                $this->school = $school;
+                $this->school_id = $school->id;
 
                 SubscriptionsDelayedService::runner([$school]);
 
@@ -58,6 +59,8 @@ class SchoolProfil extends Component
                 $this->uuid = $uuid;
 
                 $this->slug = $slug;
+
+                $this->school = $school;
             }
             else{
 
@@ -93,12 +96,12 @@ class SchoolProfil extends Component
         $school_stats = Stat::where(function ($query) {
                         if($this->selected_stat_year && $this->selected_stat_year !== ''){
 
-                            $query->where('school_id', $this->school->id)->where('year', $this->selected_stat_year);
+                            $query->where('school_id', $this->school_id)->where('year', $this->selected_stat_year);
 
                         }
                         else{
 
-                            $query->where('school_id', $this->school->id);
+                            $query->where('school_id', $this->school_id);
                         }
                     })
                     ->orderBy('created_at')
@@ -108,7 +111,7 @@ class SchoolProfil extends Component
                     return $stat->year;
                 });
 
-        $stats_years = Stat::where('school_id', $this->school->id)->orderBy('year', 'desc')->pluck('year')->toArray();
+        $stats_years = Stat::where('school_id', $this->school_id)->orderBy('year', 'desc')->pluck('year')->toArray();
 
         $school_infos = $this->school->getSchoolInfos();
 
@@ -122,45 +125,67 @@ class SchoolProfil extends Component
 
     public function addNewSchoolStat($stat_id = null)
     {
-        if(__ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true)){
-            $this->dispatch('ManageStatLiveEvent', $this->school->id);
+        if(__ensureThatAssistantCan(auth_user_id(), $this->school_id, ['stats-manager'], true)){
+            $this->dispatch('ManageStatLiveEvent', $this->school_id);
         }
         
     }
     
     public function manageSchoolStat($stat_id = null)
     {
-        if(__ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true)) $this->dispatch('ManageStatLiveEvent', $this->school->id, $stat_id);
+        if(__ensureThatAssistantCan(auth_user_id(), $this->school_id, ['stats-manager'], true)) $this->dispatch('ManageStatLiveEvent', $this->school_id, $stat_id);
     }
 
     
 
     public function manageSchoolInfo($info_id = null)
     {
-        if(__ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true))
-        $this->dispatch('ManageCommuniqueLiveEvent', $this->school->id, $info_id);
+        if(__ensureThatAssistantCan(auth_user_id(), $this->school_id, ['infos-manager'], true))
+        $this->dispatch('ManageCommuniqueLiveEvent', $this->school_id, $info_id);
     }
 
     public function addNewSchoolInfo()
     {
-        if(__ensureThatAssistantCan(auth_user_id(), $this->school->id, ['infos-manager'], true))
-        $this->dispatch('ManageCommuniqueLiveEvent', $this->school->id);
+        if(__ensureThatAssistantCan(auth_user_id(), $this->school_id, ['infos-manager'], true))
+        $this->dispatch('ManageCommuniqueLiveEvent', $this->school_id);
     }
     
 
     public function openAddAssistantModal()
     {
-        $this->dispatch('AddNewAssistantLiveEvent');
+        $this->dispatch('AddNewAssistantLiveEvent', $this->school_id);
     }
 
     public function addImages()
     {
-        $this->dispatch('ManageSchoolImagesLiveEvent', $this->school->id);
+        $this->dispatch('ManageSchoolImagesLiveEvent', $this->school_id);
     }
     
     public function addVideos()
     {
-        $this->dispatch('ManageSchoolVideoLiveEvent', $this->school->id, null);
+        $this->dispatch('ManageSchoolVideoLiveEvent', $this->school_id, null);
+    }
+    
+    public function manageSchoolCoverImage()
+    {
+        $this->dispatch('ManageSchoolCoverImageData', $this->school_id);
+    }
+    
+    public function manageSchoolDescription()
+    {
+        $this->dispatch('ManageSchoolDescriptionLiveEvent', $this->school_id);
+    }
+    
+    
+    public function commentThisSchool($school_id = null)
+    {
+        $this->dispatch('AddNewComment', $this->school_id);
+    }
+
+    #[On("LiveSchoolDataUpdatedEvent")]
+    public function shoolDataUpdated()
+    {
+        $this->school = School::where('uuid', $this->uuid)->where('slug', $this->slug)->firstOrFail();
     }
     
     

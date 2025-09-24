@@ -38,13 +38,13 @@ class CommuniqueManagerModal extends Component
 
                 $this->school = $school;
 
-                if(!$this->school->current_subscription()){
+                if(!$this->school->current_subscription){
 
                     return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
 
                     return;
                 }
-                elseif($this->school->current_subscription()  &&!$school->current_subscription()->infosable){
+                elseif($this->school->current_subscription  &&!$school->current_subscription->infosable){
 
                     return $this->toast("Vous avez déjà épuisé le nombre d'infos que vous pouvez publier avec votre abonnement actif actuellement!", 'info');
 
@@ -80,7 +80,7 @@ class CommuniqueManagerModal extends Component
 
     public function insert()
     {
-        if(!$this->school->current_subscription()){
+        if(!$this->school->current_subscription){
 
             return $this->toast("Vous n'avez aucun abonnement actif actuellement; veuillez en activer un avant d'effectuer cette action!", 'info');
 
@@ -154,7 +154,7 @@ class CommuniqueManagerModal extends Component
                     'target' => $this->target,
                     'content' => $this->content,
                     'type' => $this->type,
-                    'subscription_id' => $this->school->current_subscription()->id
+                    'subscription_id' => $this->school->current_subscription->id
                 ];
 
                 $done = Info::create($data);
@@ -175,7 +175,7 @@ class CommuniqueManagerModal extends Component
 
                     if($done){
 
-                        $this->toast("La {$this->type} a été enregistrée et publiée avec succès", 'success');
+                        $this->toast("Les données concernant {$this->type} a été enregistrée et publiée avec succès", 'success');
 
                         $this->reset();
 
@@ -188,7 +188,7 @@ class CommuniqueManagerModal extends Component
                 
                 DB::rollBack();
 
-                $this->toast("Une erreure est survenue {$th->getMessage()} : L'insertion de la donnée a échoué", 'error');
+                $this->toast("Une erreure est survenue : {$th->getMessage()} : L'insertion de la donnée a échoué", 'error');
             }
         }
     }

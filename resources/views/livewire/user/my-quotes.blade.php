@@ -95,11 +95,11 @@
             @if (count($quotes) > 0)
                 <div class="w-full p-2 mx-auto flex flex-col gap-y-3">
                     @foreach ($quotes as $quote)
-                        <div wire:key="citation-{{$user->id}}-{{$quote->id}}" class="border p-3 z-bg-secondary-light shadow rounded-2xl flex justify-between items-center hover:shadow-md transition ">
+                        <div wire:key="citation-{{$user->id}}-{{$quote->id}}" class="border p-3 z-bg-secondary-light shadow rounded-2xl flex  justify-between hover:shadow-md transition flex-col">
                             <div class="flex w-full justify-between">
                                 <h6 class="uppercase letter-spacing-1 text-sky-400 py-2">Citation {{ $loop->iteration }}</h6>
                                 <div class="flex items-center justify-between gap-x-2">
-                                    <button wire:click="showEditForm({{ $quote->id }})" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition cursor-pointer transition">
+                                    <button wire:click="showEditForm({{ $quote->id }})" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition cursor-pointer">
                                         <span wire:loading.remove wire:target='showEditForm({{$quote->id}})'>
                                             Modifier la citation
                                         </span>

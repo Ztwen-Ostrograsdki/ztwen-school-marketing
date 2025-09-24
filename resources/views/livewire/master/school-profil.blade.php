@@ -23,7 +23,7 @@
         </h5>
     </div>
     <div class="mx-auto pb-10 mt-6 bg-transparent flex flex-col gap-y-20  overflow-hidden">
-        <div class="p-6 card shadow-xl shadow-gray-900 rounded-lg bg-cover bg-center  w-full bg-gray-600 bg-blend-multiply" style="background-image: url('{{ asset('storage/' .  $school->profilImage) }}')">
+        <div class="p-6 card shadow-xl shadow-gray-900 rounded-lg bg-cover bg-center  w-full bg-gray-600 bg-blend-multiply" style="background-image: url('{{ $school->cover_image ?  asset('storage/' .  $school->cover_image) : $school->getCoverImage() }}');">
             <h5 class="text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4 flex justify-between items-center">
                 <span>
                     #Auteur | fondateur
@@ -45,7 +45,7 @@
                     <img class="h-20 w-20 md:h-32 md:w-32 rounded-full object-cover border-2 border-amber-500 cursor-pointer" src="{{user_profil_photo($school->user)}}" alt="Image de profil de l'auteur">
                 </div>
                 <div class="flex-1 min-w-0">
-                    <a href="{{$school->user->to_profil_route()}}" class="text-sm md:text-lg font-bold text-amber-600 truncate hover:text-gray-400">
+                    <a href="{{$school->user->to_profil_route()}}" class="text-sm md:text-lg font-bold text-amber-600 truncate hover:text-lime-500">
                         {{ $school->user?->getFullName() }}
                     </a>
                     @if($school->current_subscription?->is_active)
@@ -81,7 +81,7 @@
                 
             </div>
             <div class="px-6 mt-6 overflow-x-auto card">
-                <div class="text-xs sm:text-sm mt-4 md:mt-0 flex flex-wrap gap-3 justify-start ">
+                <div class="text-xs mt-4 md:mt-0 flex flex-wrap gap-3 justify-start letter-spacing-1">
                     @auth
                         @if($school->user_id == auth_user_id())
                         <a href="{{$school->to_school_update_route()}}" class="block text-white cursor-pointer bg-green-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
@@ -96,6 +96,29 @@
                                 Mon profil
                             </span>
                         </a>
+                        <button title="Mettre à jour la description de l'école..." wire:click="manageSchoolDescription" class="cursor-pointer shadow-sm bg-gray-600 hover:bg-gray-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="manageSchoolDescription">
+                                <span class="fas fa-pen mr-1"></span>
+                                <span>Description</span>
+                            </span>
+                            <span wire:loading wire:target="manageSchoolDescription">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        
+                        <button title="Editer la photo de couverture..." wire:click="manageSchoolCoverImage" class="cursor-pointer shadow-sm bg-lime-400 hover:bg-lime-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="manageSchoolCoverImage">
+                                <span class="fas fa-images"></span>
+                                <span>Couverture</span>
+                            </span>
+                            <span wire:loading wire:target="manageSchoolCoverImage">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+
+                        
                         @if($school->subscribing())
                             <button wire:click='openAddAssistantModal' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
                                 <span wire:loading.remove wire:target='openAddAssistantModal'>
@@ -104,7 +127,7 @@
                                 </span>
                                 <span wire:loading wire:target='openAddAssistantModal'>
                                     <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                    <span>Un instant, chargement...</span>
+                                    <span>Chargement...</span>
                                 </span>
                             </button>
                         @endif
@@ -133,19 +156,17 @@
                             </span>
                         </button>
                         @endif
-                        
-                        @if($school->user_id == auth_user_id())
-                        <button class="bg-red-600 cursor-pointer hover:bg-red-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
-                            <span class="fas fa-trash mr-1"></span>
-                            Suppr. les assistants.
-                        </button>
-                        @endif
-                        
                     @endauth
                     
-                    <button class="bg-green-600 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
-                        <span class="fas fa-message mr-1"></span>
-                        Message
+                    <button wire:click="commentThisSchool" title="Laisser un commentaire pour cette école" class="bg-green-600 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                        <span wire:loading.remove wire:target="commentThisSchool">
+                            <span class="fas fa-comments mr-1"></span>
+                            Commentaire
+                        </span>
+                        <span wire:loading wire:target="commentThisSchool">
+                            <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                            <span>En cours...</span>
+                        </span>
                     </button>
 
                     @if($school->user_id !== auth_user_id())
@@ -220,6 +241,9 @@
                     <p class="mb-3.5">
                         L'école, dépuis sa création acceuille en moyenne plus de <span class="text-amber-500 font-semibold">{{ __formatNumber3($school->capacity) }}</span> apprenants.
                         Reconnue par ses <a href="#school_stats" class="underline underline-offset-3 hover:text-rose-300">statistiques remarquables aux différents examens</a>, il va sans doute, que <span class="text-yellow-400 font-bold">{{ $school_name }}</span> est une école de reférence pour garantir un avenir meillleur à la jeunesse de la nation.
+                    </p>
+                    <p>
+                        {{ $school->description ? $school->description : ''}}
                     </p>
                     @if($school->current_subscription?->is_active)
                     <h5 class="flex justify-end cursor-pointer hover:text-rose-400 mt-3.5">
@@ -571,7 +595,7 @@
                     @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
                         <button title="Ajouter une info | communiqué | annonce..." wire:click="addNewSchoolInfo" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                             <span wire:loading.remove wire:target="addNewSchoolInfo">
-                                <span class="fas fa-chart-simple"></span>
+                                <span class="fas fa-newspaper"></span>
                                 <span>Ajouter</span>
                             </span>
                             <span wire:loading wire:target="addNewSchoolInfo">

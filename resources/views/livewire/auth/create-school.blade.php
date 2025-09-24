@@ -45,7 +45,9 @@
                                     @endif
                                 </span>
                                 <h6 class="text-yellow-400 font-semibold text-sm">
+                                    @if(!$school)
                                     Créer une école que vous aller gérer sur notre plateforme
+                                    @endif
                                 </h6>
                             </span>
                         </h5>

@@ -45,7 +45,19 @@
                         Mon profil
                     </a>
                 </p>
-                
+                @if(auth_user()->current_school)
+                <p class="m-0 p-0">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{auth_user()->current_school->to_profil_route()}}">
+                        Mon école
+                    </a>
+                </p>
+                @else
+                <p class="m-0 p-0">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{auth_user()->to_create_school_route()}}">
+                        Créer mon école
+                    </a>
+                </p>
+                @endif
                 <p class="m-0 p-0">
                     <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{auth_user()->to_subscribes_route()}}">
                         Mes abonnements
@@ -63,7 +75,7 @@
                     </a>
                 </p>
                 <p class="m-0 p-0">
-                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                    <a class=" hover:bg-gray-800 pl-2 py-1 footer-element w-full inline-block my-0 gap-x-2 text-gray-400 hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{auth_user()->to_quotes_route()}}">
                         Mes citations
                     </a>
                 </p>

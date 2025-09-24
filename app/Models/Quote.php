@@ -15,13 +15,13 @@ class Quote extends Model
     {
         static::creating(function ($quote){
 
-            UpdateQuotesListEvent::dispatch($quote);
+            UpdateQuotesListEvent::dispatch();
 
         });
         
         static::updated(function ($quote){
 
-            UpdateQuotesListEvent::dispatch($quote);
+            UpdateQuotesListEvent::dispatch();
 
         });
 

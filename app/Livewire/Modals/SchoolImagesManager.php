@@ -47,9 +47,9 @@ class SchoolImagesManager extends Component
 
         if($school){
 
-            if($school->current_subscription()){
+            if($school->current_subscription){
 
-                if(!$school->current_subscription()->imageable){
+                if(!$school->current_subscription->imageable){
 
                     return $this->toast("Vous avez déjà épuisé le nombre d'images que vous pouvez publier avec votre abonnement actif actuellement!", 'info');
 
@@ -58,7 +58,7 @@ class SchoolImagesManager extends Component
 
                 $this->school = $school;
 
-                $this->max_images = $school->current_subscription()->remainingImages;
+                $this->max_images = $school->current_subscription->remainingImages;
 
                 $this->dispatch('OpenModalEvent', $this->modal_name);
             }
@@ -192,12 +192,12 @@ class SchoolImagesManager extends Component
 
         if(count($images_paths) == count($images)){
             
-            if($this->school->current_subscription()){
+            if($this->school->current_subscription){
 
                 foreach($images_paths as $name => $img_p){
 
                     SchoolImage::create([
-                        'subscription_id' => $this->school->current_subscription()->id,
+                        'subscription_id' => $this->school->current_subscription->id,
                         'user_id' => auth_user_id(),
                         'school_id' => $this->school->id,
                         'path' => $img_p,
