@@ -32,9 +32,8 @@ e.private("App.Models.User." + window.ClientUser.id)
         if (notification.type == "new.notification") {
         }
     })
-
-    .listen("LogoutUserEvent", (ev) => {
-        Livewire.dispatch("LiveLogoutUserEvent", ev);
+    .listen("NewCommentDispatchedEvent", (ev) => {
+        Livewire.dispatch("LiveNewCommentDispatchedEvent", ev);
     })
     .listen("UserAccountWasBlockedEvent", (ev) => {
         Livewire.dispatch("LiveUserAccountWasBlockedEvent", ev);
@@ -181,4 +180,7 @@ e.channel("public")
     })
     .listen("UpdateQuotesListEvent", (info) => {
         Livewire.dispatch("LiveUpdateQuotesListEvent", info);
+    })
+    .listen("CommentUpdatedEvent", (info) => {
+        Livewire.dispatch("LiveCommentUpdatedEvent", info);
     });

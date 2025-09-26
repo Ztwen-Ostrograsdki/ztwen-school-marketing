@@ -131,6 +131,18 @@ trait ListenToEchoEventsTrait{
     {
         $this->counter = getRand();
     }
+    
+    #[On("LiveCommentUpdatedEvent")]
+    public function newCommentUpdated()
+    {
+        $this->counter = getRand();
+    }
+    
+    #[On("LiveNewCommentDispatchedEvent")]
+    public function newComment()
+    {
+        $this->counter = getRand();
+    }
 
     // School STAT CRUD events
     #[On("LiveNewSchoolStatAddedEvent")]

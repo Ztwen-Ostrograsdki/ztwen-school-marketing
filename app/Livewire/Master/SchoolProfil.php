@@ -115,7 +115,9 @@ class SchoolProfil extends Component
 
         $school_infos = $this->school->getSchoolInfos();
 
-        return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos'));
+        $school_comments = $this->school->comments;
+
+        return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos', 'school_comments'));
     }
 
     public function updatedSelectedStatYear($selected)
@@ -179,7 +181,7 @@ class SchoolProfil extends Component
     
     public function commentThisSchool($school_id = null)
     {
-        $this->dispatch('AddNewComment', $this->school_id);
+        $this->dispatch('AddNewCommentLiveEvent', $this->school_id);
     }
 
     #[On("LiveSchoolDataUpdatedEvent")]

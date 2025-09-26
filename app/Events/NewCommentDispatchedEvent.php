@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\School;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,16 +11,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PacksHasBeenUpdatedEvent implements shouldBroadcast
+class NewCommentDispatchedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct(public School $school, public ?string $content = null)
     {
-        //
+        
     }
 
     /**
@@ -30,7 +31,7 @@ class PacksHasBeenUpdatedEvent implements shouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('public'),
+            new PrivateChannel('App.Models.User.' . $this->school->user->id),
         ];
     }
 }

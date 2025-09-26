@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\Services\PacksManagerService;
 use App\Models\Pack;
 use App\Models\Payment;
+use App\Models\SchoolComment;
 use App\Models\SchoolFollower;
 use App\Models\SchoolImage;
 use App\Models\SchoolVideo;
@@ -112,6 +113,11 @@ class School extends Model
     public function followers()
     {
         return $this->hasMany(SchoolFollower::class);
+    } 
+    
+    public function comments()
+    {
+        return $this->hasMany(SchoolComment::class);
     }
     
     public function subscriptions()

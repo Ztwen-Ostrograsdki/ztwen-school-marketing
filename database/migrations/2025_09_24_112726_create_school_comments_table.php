@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::create('quotes', function (Blueprint $table) {
+        Schema::create('school_comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id')->nullable()->default(null);
+            $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->text('content')->nullable()->default(null);
-            $table->boolean('hidden')->default(false);
-            $table->boolean('on_page')->default(false);
+            $table->boolean('hidden')->default(true);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('quotes');
+        Schema::dropIfExists('school_comments');
     }
 };

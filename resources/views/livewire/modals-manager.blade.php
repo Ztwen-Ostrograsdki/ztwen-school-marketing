@@ -25,6 +25,9 @@
         
         <button data-modal-target="school-description-manager-modal" data-modal-toggle="school-description-manager-modal" class="hidden" type="button"></button>
         @livewire('modals.manage-school-description-modal')
+
+        <button data-modal-target="school-comment-manager-modal" data-modal-toggle="school-comment-manager-modal" class="hidden" type="button"></button>
+        @livewire('modals.school-comment-manager-modal')
         
         
         <button data-modal-target="school-videos-manager-modal" data-modal-toggle="school-videos-manager-modal" class="hidden" type="button"></button>

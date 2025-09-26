@@ -74,6 +74,10 @@
                             12.8k 
                             @endauth
                         <span class="font-normal text-gray-400">followers</span></span>
+                        <span class="text-sm font-medium text-gray-400">
+                            <span> {{ __zero(count($school->comments)) }} </span>
+                            <span class="fas fa-comments"></span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -221,6 +225,12 @@
                         <span>
                             <span class="fas fa-newspaper mr-1"></span>
                             # Communiqués
+                        </span>
+                    </a>
+                    <a href="#school_comments" class="block text-black cursor-pointer bg-orange-400 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-500 focus:ring-orange-800" type="button">
+                        <span>
+                            <span class="fas fa-comments mr-1"></span>
+                            # Les commentaires
                         </span>
                     </a>
                 </div>
@@ -683,6 +693,110 @@
             </div>
             @else
                 <h6 class="text-center font-semibold text-gray-500 italic text-lg py-3">Aucune infos publié</h6>
+            @endif
+        </div>
+
+        <div id="school_comments" class="text-sm p-6 shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
+            <h5 class="card text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4">
+                # Les Commentaires publiés
+            </h5>
+            <div class="flex justify-end gap-x-2">
+                @auth
+                    @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
+                        
+                        <button title="Rendre visibles tous les commentaires..." wire:click="unhideAllComments" class="cursor-pointer shadow-sm bg-green-500 hover:bg-green-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="unhideAllComments">
+                                <span class="fas fa-eye"></span>
+                                <span>Rendre visible</span>
+                            </span>
+                            <span wire:loading wire:target="unhideAllComments">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        <button title="Masquer toutes les commentaires..." wire:click="hideAllComments" class="cursor-pointer shadow-sm bg-orange-500 hover:bg-orange-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="hideAllComments">
+                                <span class="fas fa-eye-slash"></span>
+                                <span>MAsquer</span>
+                            </span>
+                            <span wire:loading wire:target="hideAllComments">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        <button title="Supprimer tous les commentaires..." wire:click="deleteAllComments" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="deleteAllComments">
+                                <span class="fas fa-trash"></span>
+                                <span>Supprimer</span>
+                            </span>
+                            <span wire:loading wire:target="deleteAllComments">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                    @endif
+                @endauth
+            </div>
+            @if(count($school_comments) > 0)
+            <div class="flex flex-col gap-y-7 card my-4">
+                <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
+                    #QUELQUES COMMENTAIRES
+                </h5>
+                @foreach ($school_comments as $comment)
+                    @if((auth_user() && (auth_user_id() == $school->user_id || auth_user()->isAdminsOrMaster())) || !$comment->hidden)
+                        <div class="border border-r-gray-500 bg-black/60 p-3 letter-spacing-1 rounded-xl shadow-inner shadow-sky-400">
+                            <h4 class="text-start text-purple-400 font-bold uppercase">
+                                # Commentaire N° {{$loop->iteration}}
+                            </h4>
+                            <div class="text-gray-300 text-base md:text-lg">
+                                {{ $comment->content }}
+                            </div>
+                            <div class="my-3 flex justify-end gap-x-2">
+                                @auth
+                                    @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
+                                        
+                                        @if(!$comment->hidden)
+                                        <button wire:click="hideComment({{$comment->id}})" class="cursor-pointer shadow-sm bg-amber-500 hover:bg-amber-700 text-white p-2">
+                                            <span wire:loading.remove wire:target="hideComment({{$comment->id}})">
+                                                <span class="fas fa-eye-slash"></span>
+                                                <span>Masquer</span>
+                                            </span>
+                                            <span wire:loading wire:target="hideComment({{$comment->id}})">
+                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                <span>En cours...</span>
+                                            </span>
+                                        </button>
+                                        @else
+                                        <button wire:click="approveComment({{$comment->id}})" class="cursor-pointer shadow-sm bg-green-500 hover:bg-green-700 text-white p-2">
+                                            <span wire:loading.remove wire:target="approveComment({{$comment->id}})">
+                                                <span class="fas fa-check"></span>
+                                                <span>Approuver</span>
+                                            </span>
+                                            <span wire:loading wire:target="approveComment({{$comment->id}})">
+                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                <span>En cours...</span>
+                                            </span>
+                                        </button>
+                                        @endif
+                                        <button wire:click="deleteComment({{$comment->id}})" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
+                                            <span wire:loading.remove wire:target="deleteComment({{$comment->id}})">
+                                                <span class="fas fa-trash"></span>
+                                                <span>Supprimer</span>
+                                            </span>
+                                            <span wire:loading wire:target="deleteComment({{$comment->id}})">
+                                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                <span>En cours...</span>
+                                            </span>
+                                        </button>
+                                    @endif
+                                @endauth
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+            @else
+                <h6 class="text-center font-semibold text-gray-500 italic text-lg py-3">Aucun commentaire publié</h6>
             @endif
         </div>
 
