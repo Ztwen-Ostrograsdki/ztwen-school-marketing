@@ -18,6 +18,8 @@
 
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.umd.js"></script>
+
         {{-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> --}}
 
         
@@ -223,6 +225,24 @@
             //         initTinyMCE();
             //     }, 300);
             // });
+        </script>
+
+
+        {{-- <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.umd.min.js"></script> --}}
+        {{-- <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js"></script> --}}
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const picker = new EmojiButton(); // plus besoin de module.default
+                const button = document.querySelector("#emoji-btn");
+                const input = document.querySelector("#comment-box");
+
+                picker.on("emoji", selection => {
+                    input.value += selection.emoji;
+                    input.dispatchEvent(new Event("input")); // mise à jour Livewire
+                });
+
+                button.addEventListener("click", () => picker.togglePicker(button));
+            });
         </script>
     </body>
 </html>

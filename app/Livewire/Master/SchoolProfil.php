@@ -7,6 +7,7 @@ use Akhaled\LivewireSweetalert\Toast;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Helpers\Services\SubscriptionsDelayedService;
 use App\Livewire\Traits\SchoolActionsTraits;
+use App\Livewire\Traits\SchoolCommentActionsTraits;
 use App\Livewire\Traits\SchoolMediaActionsTrait;
 use App\Models\School;
 use App\Models\Stat;
@@ -17,7 +18,7 @@ use Livewire\Component;
 #[Title("Profil école")]
 class SchoolProfil extends Component
 {
-    use SchoolActionsTraits, SchoolMediaActionsTrait, ListenToEchoEventsTrait, Toast, Confirm;
+    use SchoolActionsTraits, SchoolMediaActionsTrait, SchoolCommentActionsTraits, ListenToEchoEventsTrait, Toast, Confirm;
     
     public $uuid, $slug, $school_id, $school;
 
@@ -33,11 +34,18 @@ class SchoolProfil extends Component
     {
         if($slug && $uuid){
 
-            $user = findUser(auth_user_id());
+            if(auth_user()){
 
-            if($user->isAdminsOrMaster()){
+                $user = findUser(auth_user_id());
 
-                $school = School::where('uuid', $uuid)->where('slug', $slug)->firstOrFail();
+                if($user->isAdminsOrMaster()){
+
+                    $school = School::where('uuid', $uuid)->where('slug', $slug)->firstOrFail();
+                }
+                else{
+
+                    $school = School::where('uuid', $uuid)->where('slug', $slug)->where('is_active', true)->firstOrFail();
+                }
             }
             else{
 

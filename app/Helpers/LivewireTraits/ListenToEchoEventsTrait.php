@@ -197,6 +197,18 @@ trait ListenToEchoEventsTrait{
         $this->counter = getRandom();
     }
     
+    #[On("LiveSchoolBestPupilCreatedEvent")]
+    public function reloadBestPupilsList()
+    {
+        $this->counter = getRandom();
+    }
+    
+    #[On("LiveSchoolBestPupilUpdatedEvent")]
+    public function reloadBestPupils()
+    {
+        $this->counter = getRandom();
+    }
+    
     
 
 

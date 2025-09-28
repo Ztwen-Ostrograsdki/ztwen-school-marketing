@@ -28,6 +28,7 @@ use App\Livewire\Pages\SchoolsPages;
 use App\Livewire\Shop\PackModuleManager;
 use App\Livewire\Shop\PackProfil;
 use App\Livewire\Shop\PacksPage;
+use App\Livewire\User\ManageSchoolBestPupil;
 use App\Livewire\User\MyAssistantsListing;
 use App\Livewire\User\MyNotifications;
 use App\Livewire\User\MyProfil;
@@ -85,6 +86,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('mon-profil/u={user_uuid}/gestion/creation-ecole', CreateSchool::class)->name('create.school');
 
     Route::get('mon-profil/u={user_uuid}/s={school_slug}/is={school_id}/edition/edition-de-mon-ecole', CreateSchool::class)->name('school.edition');
+    
+    Route::get('mon-profil/SID={school_uuid}/ecole={school_slug}/ajout-meilleur-eleve', ManageSchoolBestPupil::class)->name('create.school.best.pupil')->middleware([]);
+
+    Route::get('mon-profil/SID={school_uuid}/ecole={school_slug}/PID={best_pupil_id}/ID={best_pupil_uuid}/mise-a-jour-donnees-meilleur-eleve', ManageSchoolBestPupil::class)->name('update.school.best.pupil')->middleware([]);
 
     Route::get('profil/k={id}/u={uuid}/mon-profil', MyProfil::class)->name('user.profil');
     

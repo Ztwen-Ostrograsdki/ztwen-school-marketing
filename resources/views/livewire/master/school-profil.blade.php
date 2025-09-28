@@ -88,6 +88,12 @@
                 <div class="text-xs mt-4 md:mt-0 flex flex-wrap gap-3 justify-start letter-spacing-1">
                     @auth
                         @if($school->user_id == auth_user_id())
+                        <a href="{{$school->to_create_best_pupil_route()}}" class="block text-white cursor-pointer bg-lime-400 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-lime-600 focus:ring-lime-800" type="button">
+                            <span>
+                                <span class="fas fa-user-plus mr-1"></span>
+                                Ajouter un meilleur
+                            </span>
+                        </a>
                         <a href="{{$school->to_school_update_route()}}" class="block text-white cursor-pointer bg-green-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
                             <span>
                                 <span class="fas fa-pen mr-1"></span>

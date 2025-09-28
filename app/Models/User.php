@@ -267,7 +267,7 @@ class User extends Authenticatable
     {
         return route('create.school', ['user_uuid' => $this->uuid]);
     }
-    
+
     
     public function to_my_assistants_list_route()
     {

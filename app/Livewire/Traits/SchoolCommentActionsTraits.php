@@ -16,7 +16,7 @@ trait SchoolCommentActionsTraits{
 
     public function deleteComment($comment_id)
     {
-        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, true);
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, [], true);
 
         $html = "<h6 class='font-semibold text-base text-orange-400 py-0 my-0'>
                     <p> Vous êtes sur le point de supprimer ce commentaire ? </p>
@@ -31,7 +31,7 @@ trait SchoolCommentActionsTraits{
     }
 
     #[On('confirmCommentDeletion')]
-    public function confirmImageRemoving($data)
+    public function confirmCommentRemoving($data)
     {
         $comment_id = $data['comment_id'];
 
@@ -41,7 +41,7 @@ trait SchoolCommentActionsTraits{
 
             if($comment){
 
-                $message = "Le commentaire " . mb_substr($comment->content, 1, 10) . " a été supprimé avec succès!";
+                $message = "Le commentaire " . mb_substr($comment->content, 0, 10) . " a été supprimé avec succès!";
 
                 $deleted = $comment->delete();
 
@@ -61,9 +61,9 @@ trait SchoolCommentActionsTraits{
         }
     }
     
-	public function unhideComment($comment_id)
+	public function approveComment($comment_id)
     {
-        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true);
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, [], true);
 
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
                     <p> Voulez-vous vraiment approuvé ou réafficher ce commentaire ? </p>
@@ -89,7 +89,7 @@ trait SchoolCommentActionsTraits{
 
                 if($comment){
 
-                    $message = "Le commentaire " . mb_substr($comment->content, 1, 10) . " a été approuvé avec succès!";
+                    $message = "Le commentaire " . mb_substr($comment->content, 0, 10) . " a été approuvé avec succès!";
 
                     $hidden = $comment->update(['hidden' => false]);
 
@@ -115,7 +115,7 @@ trait SchoolCommentActionsTraits{
 
 	public function hideComment($comment_id)
     {
-        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true);
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, [], true);
 
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
                     <p> Voulez-vous vraiment masquer ce commentaire ? </p>
@@ -141,7 +141,7 @@ trait SchoolCommentActionsTraits{
 
                 if($comment){
 
-                    $message = "Le commentaire " . mb_substr($comment->content, 1, 10) . " a été masqué avec succès!";
+                    $message = "Le commentaire " . mb_substr($comment->content, 0, 10) . " a été masqué avec succès!";
 
                     $hidden = $comment->update(['hidden' => true]);
 
@@ -167,13 +167,13 @@ trait SchoolCommentActionsTraits{
 
 	public function hideAllComments()
     { 
-        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, ['stats-manager'], true);
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, [], true);
 
         $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
                     <p> Voulez-vous vraiment masquer tous les commentaires? </p>
                 </h6>";
 
-        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Ils se seront plus visibles par vos visiteurs! </p>";
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Ils ne seront plus visibles par vos visiteurs! </p>";
 
         $options = ['event' => 'confirmToHideAllComments', 'confirmButtonText' => 'Masquer tout commentaire', 'cancelButtonText' => 'Annuler'];
 
@@ -188,6 +188,64 @@ trait SchoolCommentActionsTraits{
 		$updates = $this->school->comments()->where('hidden', false)->update(['hidden' => true]);
 
 		if($updates){
+
+			Notification::sendNow([auth_user()], new RealTimeNotification($message));
+			return;
+		}
+    }
+
+    public function unhideAllComments()
+    { 
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, [], true);
+
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment approuver et réafficher tous les commentaires masqués? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Ils seront désormais visibles par vos visiteurs! </p>";
+
+        $options = ['event' => 'confirmToUnHideAllComments', 'confirmButtonText' => 'Approuver et afficher tout', 'cancelButtonText' => 'Annuler'];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+    #[On('confirmToUnHideAllComments')]
+    public function onUnHideAllComments()
+    {
+        $message = "Touts les commentaires publiés non affichés ou masqués sont à présents visibles!";
+
+		$updates = $this->school->comments()->where('hidden', true)->update(['hidden' => false]);
+
+		if($updates){
+
+			Notification::sendNow([auth_user()], new RealTimeNotification($message));
+			return;
+		}
+    }
+
+    public function deleteAllComments()
+    { 
+        SpatieManager::ensureThatAssistantCan(auth_user_id(), $this->school->id, [], true);
+
+        $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0'>
+                    <p> Voulez-vous vraiment supprimer les 10 anciens commentaires publiés? </p>
+                </h6>";
+
+        $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Ils seront définitivement supprimés! </p>";
+
+        $options = ['event' => 'confirmToDeleteAllComments', 'confirmButtonText' => 'Tout supprimer', 'cancelButtonText' => 'Annuler'];
+
+        $this->confirm($html, $noback, $options);
+    }
+
+    #[On('confirmToDeleteAllComments')]
+    public function ondeleteAllComments()
+    {
+        $message = "Les 10 anciens commentaires publiés ont été supprimés avec succès!";
+
+		$deleteds = $this->school->comments()->orderBy('created_at', 'desc')->take(10)->delete();
+
+		if($deleteds){
 
 			Notification::sendNow([auth_user()], new RealTimeNotification($message));
 			return;

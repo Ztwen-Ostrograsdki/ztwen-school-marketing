@@ -62,7 +62,7 @@
                                                 x-transition:enter="transition ease-out duration-500"
                                                 x-transition:enter-start="opacity-0 scale-90"
                                                 x-transition:enter-end="opacity-100 scale-100">
-                                                <video wire:key="{{ $video->getFilename() }}" controls class="w-200">
+                                                <video wire:key="{{ $video->getFilename() }}" controls="false" class="w-200">
                                                     <source src="{{ $video->temporaryUrl() }}" type="video/mp4">
                                                     Votre navigateur ne supporte pas la lecture vidéo.
                                                 </video>

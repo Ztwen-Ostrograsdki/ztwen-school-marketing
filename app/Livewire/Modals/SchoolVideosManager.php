@@ -256,5 +256,19 @@ class SchoolVideosManager extends Component
         return false;
             
     }
+
+
+    public function thumbnailer()
+    {
+        // $videoPath = storage_path('app/public/videos/exemple.mp4');
+        // $thumbnailPath = storage_path('app/public/videos/thumbnails/exemple.jpg');
+
+        // $ffmpeg = FFMpeg::create();
+        // $video = $ffmpeg->open($videoPath);
+
+        // // prendre la frame à 3 secondes
+        // $video->frame(TimeCode::fromSeconds(3))
+        //     ->save($thumbnailPath);
+    }
     
 }

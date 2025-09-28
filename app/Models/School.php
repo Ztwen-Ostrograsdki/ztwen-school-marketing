@@ -71,6 +71,16 @@ class School extends Model
         return route('school.edition', ['user_uuid' => $this->user->uuid, 'school_slug' => $this->slug, 'school_id' => $this->id]);
     }
 
+    public function to_create_best_pupil_route()
+    {
+        return route('create.school.best.pupil', ['school_uuid' => $this->uuid, 'school_slug' => $this->slug]);
+    }
+    
+    public function to_update_best_pupil_route($best_pupil_id, $best_pupil_uuid)
+    {
+        return route('update.school.best.pupil', ['school_uuid' => $this->uuid, 'school_slug' => $this->slug, 'best_pupil_id' => $best_pupil_id, 'best_pupil_uuid' => $best_pupil_uuid]);
+    }
+
 
     // public static function booted()
     // {
@@ -109,6 +119,11 @@ class School extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function bests_pupils()
+    {
+        return $this->hasMany(SchoolBestPupil::class);
+    } 
     
     public function followers()
     {
