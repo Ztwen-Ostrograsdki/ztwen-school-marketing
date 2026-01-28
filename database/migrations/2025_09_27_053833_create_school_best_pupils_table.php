@@ -17,12 +17,13 @@ return new class extends Migration
             $table->string('pupil_name')->nullable()->default(null);
             $table->string('exam')->nullable()->default(null);
             $table->boolean('hidden')->default(false);
-            $table->string('image_path');
+            $table->string('image_path')->nullable()->default(null);
             $table->json('details')->nullable()->default(null);
             $table->json('ranks')->nullable()->default(null);
             $table->uuid('uuid')->unique();
             $table->string('slug')->unique();
             $table->string('mention')->nullable()->default(null);
+            $table->decimal('average', 5, 2)->nullable()->default(null);
             $table->timestamps();
         });
     }

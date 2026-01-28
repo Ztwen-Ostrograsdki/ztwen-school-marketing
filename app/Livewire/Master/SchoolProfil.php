@@ -4,21 +4,24 @@ namespace App\Livewire\Master;
 
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
+use App\Events\InitSchoolMediaFolderRefreshingEvent;
 use App\Helpers\LivewireTraits\ListenToEchoEventsTrait;
 use App\Helpers\Services\SubscriptionsDelayedService;
 use App\Livewire\Traits\SchoolActionsTraits;
+use App\Livewire\Traits\SchoolBestsPupilsActionsTraits;
 use App\Livewire\Traits\SchoolCommentActionsTraits;
 use App\Livewire\Traits\SchoolMediaActionsTrait;
 use App\Models\School;
 use App\Models\Stat;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title("Profil école")]
+#[Title("PROFIL ECOLE")]
 class SchoolProfil extends Component
 {
-    use SchoolActionsTraits, SchoolMediaActionsTrait, SchoolCommentActionsTraits, ListenToEchoEventsTrait, Toast, Confirm;
+    use SchoolActionsTraits, SchoolMediaActionsTrait, SchoolCommentActionsTraits, SchoolBestsPupilsActionsTraits, ListenToEchoEventsTrait, Toast, Confirm;
     
     public $uuid, $slug, $school_id, $school;
 
@@ -125,7 +128,11 @@ class SchoolProfil extends Component
 
         $school_comments = $this->school->comments;
 
-        return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos', 'school_comments'));
+        $school_bests_pupils = $this->school->bests_pupils;
+
+
+
+        return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos', 'school_comments', 'school_bests_pupils'));
     }
 
     public function updatedSelectedStatYear($selected)
@@ -196,6 +203,18 @@ class SchoolProfil extends Component
     public function shoolDataUpdated()
     {
         $this->school = School::where('uuid', $this->uuid)->where('slug', $this->slug)->firstOrFail();
+    }
+
+
+    public function refreshSchoolMediaFolder()
+    {
+        InitSchoolMediaFolderRefreshingEvent::dispatch($this->school);
+    }
+
+
+    public function addNewBestPupil()
+    {
+        $this->school->to_create_best_pupil_route();
     }
     
     

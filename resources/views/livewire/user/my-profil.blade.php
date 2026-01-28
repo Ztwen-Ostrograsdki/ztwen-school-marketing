@@ -58,6 +58,14 @@
             <div class="text-xs sm:text-sm mt-4 md:mt-0 flex gap-x-2 justify-stat">
                 @auth
                     @if(auth_user()->id == $user->id)
+
+                        @if(count($user->schools))
+                            <a href="{{$user->to_my_current_school_profil_route()}}"  class=" text-black cursor-pointer bg-amber-500 focus:outline-none font-medium rounded-lg px-3 py-2 text-center hover:bg-amber-800 focus:ring-amber-800" type="button">
+                                <span class="fas fa-school"></span>
+                                Mon école
+                            </a>
+                        @endif
+
                         @if(count($user->schools))
                             <a href="{{$user->to_my_assistants_list_route()}}"  class=" text-white cursor-pointer bg-indigo-500 focus:outline-none font-medium rounded-lg px-3 py-2 text-center hover:bg-indigo-800 focus:ring-indigo-800" type="button">
                                 <span class="fas fa-users-gear"></span>

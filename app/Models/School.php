@@ -61,6 +61,23 @@ class School extends Model
         'is_public' => 'boolean',
     ];
 
+
+    public function bestsPupilsPhotosRootFolder() : Attribute
+    {
+
+        return Attribute::get(fn() => $this->folder . '/photos-meilleurs-eleves');
+
+    } 
+    
+    public function getBestPupilPhotoName($pupil_name, $exam)
+    {
+
+        $file_name = 'eleve-' . Str::slug($pupil_name) . '-' . Str::slug($exam) . '-' . time();
+
+        return $file_name;
+
+    }
+
     public function to_profil_route()
     {
         return route('school.profil', ['slug' => $this->slug, 'uuid' => $this->uuid]);
@@ -222,6 +239,49 @@ class School extends Model
 
         }
     }
+
+    public function refreshSchoolBestPupilsPhotos()
+    {
+        $is_dir = Storage::disk('public')->exists($this->folder);
+
+        if($is_dir){
+
+            $is_dirr = Storage::disk('public')->exists($this->folder . '/photos-meilleurs-eleves');
+
+            if($is_dirr){
+
+                $bests_photos = $this->bests_pupils()->whereNotNull('image_path')->pluck('image_path')->toArray();
+
+                $files = Storage::disk('public')->files($this->folder . '/photos-meilleurs-eleves');
+
+                $filesToDeleted = array_diff($files, $bests_photos);
+
+
+                // Suppression des fichiers n'ayant pas de correspondances dans la base de données TABLE:best_pupils
+                foreach($filesToDeleted as $file){
+
+                    Storage::disk('public')->delete($file);
+                }
+
+                
+
+                // Mise à null des données de la BDD ayant des noms image_path sans correspondance dans le stockage
+                $missingDBDataNameInStorage = array_diff($bests_photos, $files);
+
+                $this->bests_pupils()->whereIn('image_path', $missingDBDataNameInStorage)->update(['image_path' => null]);
+
+
+                if(!count($this->bests_pupils)){
+
+                    foreach($files as $file){
+
+                        Storage::disk('public')->delete($file);
+                    }
+                }
+            }
+
+        }
+    }
     
     
     public function refreshSchoolCoverImage()
@@ -243,7 +303,7 @@ class School extends Model
 
                 $this->update(['cover_image' => null]);
 
-                $files = Storage::allFiles('public/'.$this->folder);
+                $files = Storage::disk('public')->files($this->folder);
 
                 foreach($files as $file){
 
@@ -254,7 +314,6 @@ class School extends Model
                     }
                 }
             }
-
         }
     }
     

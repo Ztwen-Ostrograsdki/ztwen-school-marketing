@@ -861,4 +861,26 @@ if(!function_exists('admin_roles')){
 
 }
 
+if(!function_exists('rankFormat')){
+
+    function rankFormat($rank)
+    {
+        if($rank == 1){
+
+            return ['rank'=> 1, 'sup' => 'er'];
+        }
+        elseif($rank > 1){
+
+            return ['rank'=> $rank, 'sup' => 'è'];
+            
+        }
+        else{
+
+            return ['rank'=> $rank, 'sup' => 'null'];
+        }
+
+    }
+
+}
+
 

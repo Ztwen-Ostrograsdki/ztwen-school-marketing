@@ -238,6 +238,11 @@ class User extends Authenticatable
         return $this->assistant_of ? User::find($this->assistant_of) : null;
     }
 
+    public function to_my_current_school_profil_route()
+    {
+        return $this->current_school->to_profil_route();
+    }
+    
     public function to_profil_route()
     {
         return route('user.profil', ['id' => $this->identifiant, 'uuid' => $this->uuid]);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\SchoolDataHasBeenUpdatedEvent;
+use App\Events\SchoolDataUpdatedEvent;
 use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Models\School;
 use App\Notifications\RealTimeNotification;
@@ -35,7 +36,7 @@ class SchoolFollower extends Model
 
             endif;
             
-            SchoolDataHasBeenUpdatedEvent::dispatch($follow->school);
+            broadcast(new SchoolDataUpdatedEvent($follow->school));
 
         });
 

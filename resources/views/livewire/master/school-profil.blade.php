@@ -88,59 +88,70 @@
                 <div class="text-xs mt-4 md:mt-0 flex flex-wrap gap-3 justify-start letter-spacing-1">
                     @auth
                         @if($school->user_id == auth_user_id())
-                        <a href="{{$school->to_create_best_pupil_route()}}" class="block text-white cursor-pointer bg-lime-400 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-lime-600 focus:ring-lime-800" type="button">
-                            <span>
-                                <span class="fas fa-user-plus mr-1"></span>
-                                Ajouter un meilleur
-                            </span>
-                        </a>
-                        <a href="{{$school->to_school_update_route()}}" class="block text-white cursor-pointer bg-green-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
-                            <span>
-                                <span class="fas fa-pen mr-1"></span>
-                                Editer mon école
-                            </span>
-                        </a>
-                        <a href="{{$school->user->to_profil_route()}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
-                            <span>
-                                <span class="fas fa-home mr-1"></span>
-                                Mon profil
-                            </span>
-                        </a>
-                        <button title="Mettre à jour la description de l'école..." wire:click="manageSchoolDescription" class="cursor-pointer shadow-sm bg-gray-600 hover:bg-gray-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
-                            <span wire:loading.remove wire:target="manageSchoolDescription">
-                                <span class="fas fa-pen mr-1"></span>
-                                <span>Description</span>
-                            </span>
-                            <span wire:loading wire:target="manageSchoolDescription">
-                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                <span>En cours...</span>
-                            </span>
-                        </button>
-                        
-                        <button title="Editer la photo de couverture..." wire:click="manageSchoolCoverImage" class="cursor-pointer shadow-sm bg-lime-400 hover:bg-lime-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
-                            <span wire:loading.remove wire:target="manageSchoolCoverImage">
-                                <span class="fas fa-images"></span>
-                                <span>Couverture</span>
-                            </span>
-                            <span wire:loading wire:target="manageSchoolCoverImage">
-                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                <span>En cours...</span>
-                            </span>
-                        </button>
-
-                        
-                        @if($school->subscribing())
-                            <button wire:click='openAddAssistantModal' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
-                                <span wire:loading.remove wire:target='openAddAssistantModal'>
+                            <a href="{{$school->to_create_best_pupil_route()}}" class="block text-black cursor-pointer bg-lime-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-lime-800" type="button">
+                                <span>
                                     <span class="fas fa-user-plus mr-1"></span>
-                                    Ajouter un assistant
+                                    Ajouter un meilleur
                                 </span>
-                                <span wire:loading wire:target='openAddAssistantModal'>
+                            </a>
+                            <a href="{{$school->to_school_update_route()}}" class="block text-white cursor-pointer bg-green-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-800 focus:ring-green-800" type="button">
+                                <span>
+                                    <span class="fas fa-pen mr-1"></span>
+                                    Editer mon école
+                                </span>
+                            </a>
+                            <a href="{{$school->user->to_profil_route()}}" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
+                                <span>
+                                    <span class="fas fa-home mr-1"></span>
+                                    Mon profil
+                                </span>
+                            </a>
+                            <button title="Mettre à jour la description de l'école..." wire:click="manageSchoolDescription" class="cursor-pointer shadow-sm bg-gray-600 hover:bg-gray-800 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="manageSchoolDescription">
+                                    <span class="fas fa-pen mr-1"></span>
+                                    <span>Description</span>
+                                </span>
+                                <span wire:loading wire:target="manageSchoolDescription">
                                     <span class="fas fa-rotate animate-spin mr-1.5"></span>
-                                    <span>Chargement...</span>
+                                    <span>En cours...</span>
                                 </span>
                             </button>
-                        @endif
+                            
+                            <button title="Editer la photo de couverture..." wire:click="manageSchoolCoverImage" class="cursor-pointer shadow-sm bg-lime-400 hover:bg-lime-700 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="manageSchoolCoverImage">
+                                    <span class="fas fa-images"></span>
+                                    <span>Couverture</span>
+                                </span>
+                                <span wire:loading wire:target="manageSchoolCoverImage">
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>En cours...</span>
+                                </span>
+                            </button>
+
+                            
+                            @if($school->subscribing())
+                                <button wire:click='openAddAssistantModal' class="block text-white cursor-pointer bg-blue-600 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
+                                    <span wire:loading.remove wire:target='openAddAssistantModal'>
+                                        <span class="fas fa-user-plus mr-1"></span>
+                                        Ajouter un assistant
+                                    </span>
+                                    <span wire:loading wire:target='openAddAssistantModal'>
+                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                        <span>Chargement...</span>
+                                    </span>
+                                </button>
+                            @endif
+
+                            <button title="Rafraichir le stockage...Cette action permet de supprimer les fichiers chargés par erreurs" wire:click="refreshSchoolMediaFolder" class="cursor-pointer shadow-sm bg-amber-600 hover:bg-amber-800 text-black font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                                <span wire:loading.remove wire:target="refreshSchoolMediaFolder">
+                                    <span class="fas fa-folder"></span>
+                                    <span>Refraichir le stockage</span>
+                                </span>
+                                <span wire:loading wire:target="refreshSchoolMediaFolder">
+                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                    <span>En cours...</span>
+                                </span>
+                            </button>
                         @endif
                         @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['stats-manager']))
                         <button title="Enregistrer une statistique" wire:click="manageSchoolStat" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
@@ -201,7 +212,7 @@
                 <div class="text-xs sm:text-sm mt-4 md:mt-0 flex flex-wrap gap-3 justify-start ">
                     <a href="#school_description" class="block text-black cursor-pointer bg-yellow-300 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-yellow-500 focus:ring-yellow-800" type="button">
                         <span>
-                            <span class="fas fa-images mr-1"></span>
+                            <span class="fas fa-eye mr-1"></span>
                             #L'école en description
                         </span>
                     </a>
@@ -237,6 +248,12 @@
                         <span>
                             <span class="fas fa-comments mr-1"></span>
                             # Les commentaires
+                        </span>
+                    </a>
+                    <a href="#school_bests_pupils" class="block text-black cursor-pointer bg-orange-400 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-500 focus:ring-orange-800" type="button">
+                        <span>
+                            <span class="fas fa-comments mr-1"></span>
+                            # Nos meilleurs
                         </span>
                     </a>
                 </div>
@@ -456,6 +473,149 @@
             @endif
         </div>
         @endif
+
+        <div id="school_bests_pupils" class="text-sm p-6 shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
+            <h5 class="card text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4">
+                # Nos meilleurs élèves de tous les temps
+            </h5>
+            <div class="flex justify-end gap-x-2">
+                @auth
+                    @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
+                        <a href="{{$school->to_create_best_pupil_route()}}" title="Ajouter un meilleur" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span>
+                                <span class="fas fa-user-plus"></span>
+                                <span>Ajouter</span>
+                            </span>
+                        </a>
+                        <button title="Rendre visibles toutes les infos | communiqués | annonces..." wire:click="unhideAllInfos" class="cursor-pointer shadow-sm bg-green-500 hover:bg-green-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="unhideAllInfos">
+                                <span class="fas fa-eye"></span>
+                                <span>Rendre visible</span>
+                            </span>
+                            <span wire:loading wire:target="unhideAllInfos">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        <button title="Masquer toutes les infos | communiqués | annonces..." wire:click="hideAllInfos" class="cursor-pointer shadow-sm bg-orange-500 hover:bg-orange-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
+                            <span wire:loading.remove wire:target="hideAllInfos">
+                                <span class="fas fa-eye-slash"></span>
+                                <span>MAsquer</span>
+                            </span>
+                            <span wire:loading wire:target="hideAllInfos">
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                    @endif
+                @endauth
+            </div>
+            @if(count($school_bests_pupils) > 0)
+                <div class="flex flex-col gap-y-7 card my-4">
+                    @foreach($school_bests_pupils as $pupil)
+                        <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
+                            # EXAMEN : {{ $pupil->exam }}
+                        </h5>
+                        @if(true)
+                            <div class="border border-r-gray-500 bg-black/60 p-3 letter-spacing-1 rounded-xl shadow-inner shadow-sky-400">
+                                <div class="text-gray-300 text-base md:text-lg grid grid-cols-3">
+                                    <div class="aspect-square bg-gray-100 relative group card col-span-3 md:col-span-1">
+                                        <img class="w-full h-full object-cover border shadow-sm" src="{{url('storage', $pupil->image_path)}}" alt="photo de l'apprenant {{$pupil->pupil_name}}">
+                                        
+                                        <div  @click="currentImage = '{{ url('storage', $pupil->image_path) }}'; schoolName = 'Photo de {{ $pupil->pupil_name }}'; simple_name = '({{ $pupil->average }} / 20)'; title = 'Mention : {{ $pupil->mention }}'; show = true" class="absolute cursor-pointer inset-0 bg-black/75 bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                            <div class="flex space-x-4 cursor-pointer text-sky-600 text-center letter-spacing-1 font-semibold text-xs">
+                                                <span class="text-center">Cliquer pour agrandir cette photo</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 col-span-3 md:col-span-2 md:mt-0">
+                                        <div class="px-3 flex justify-center items-center flex-col">
+                                            <h2 class="text-left font-bold letter-spacing-1 py-3 uppercase  rounded-lg border-y-2 border-y-sky-600 text-sm md:text-xl w-full mb-3">
+                                                <span class="ml-2">
+                                                    <span class="fas fa-user"></span>
+                                                    Candidat(e) : </span>
+                                                <span class="text-sky-500">
+                                                    {{$pupil->pupil_name}}
+                                                </span>
+                                            </h2>
+                                            <h3 class="text-xl md:text-4xl uppercase text-center bg-green-400 shadow-2xl text-gray-900 w-full p-3 px-6 rounded-2xl">
+                                                <span class="">{{ $pupil->mention }} </span>
+                                            </h3>
+                                            <h3 class="text-xl md:text-2xl text-center  mt-4">
+                                                
+                                                <span>Moyenne : </span>
+                                                <span class="fas text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">{{ __formatDecimal($pupil->average) }} / 20 </span>
+                                            </h3>
+                                            <div class="w-full text-sm md:text-lg mt-3">
+                                                <h5 class="text-center font-semibold letter-spacing-1 py-1 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600 w-full my-2">Quelques records ou rangs</h5>
+                                                <ul>
+                                                @foreach ($pupil->ranks as $zone => $rank)
+                                                <li>
+                                                    <span class="fas fa-circle text-amber-500"></span>
+                                                    <span> {{ $zone }} :  </span>
+                                                    <span class="text-green-400"> 
+                                                        {{ rankFormat($rank)['rank'] }}<sup>{{ rankFormat($rank)['sup'] }}</sup> 
+                                                    </span>
+                                                </li> 
+                                                @endforeach
+                                                </ul>
+                                                
+                                            </div>
+                                            <div class="w-full">
+                                                <h5 class="text-center font-semibold letter-spacing-1 py-1 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600 w-full my-2">Quelques notes</h5>
+                                                <ul>
+                                                @foreach ($pupil->details as $subject => $mark)
+                                                <li>
+                                                    <span class="fas fa-circle text-amber-500"></span>
+                                                    <span> {{ $subject }} :  </span>
+                                                    <span class="text-green-400"> {{ $mark }} </span>
+                                                </li> 
+                                                @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="my-3 flex justify-end gap-x-2">
+                                    @auth
+                                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
+                                            <button wire:click="manageSchoolBestPupil({{$pupil->id}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
+                                                <span wire:loading.remove wire:target="manageSchoolBestPupil({{$pupil->id}})">
+                                                    <span class="fas fa-newspaper"></span>
+                                                    <span>Modifier</span>
+                                                </span>
+                                                <span wire:loading wire:target="manageSchoolBestPupil({{$pupil->id}})">
+                                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                    <span>En cours...</span>
+                                                </span>
+                                            </button>
+                                            <button class="cursor-pointer shadow-sm bg-amber-500 hover:bg-amber-700 text-white p-2">
+                                                <span class="fas fa-eye-slash"></span>
+                                                <span>Masquer</span>
+                                            </button>
+                                            
+                                            <button wire:click="deleteSchoolBestPupil({{$pupil->id}})" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
+                                                <span wire:loading.remove wire:target="deleteSchoolBestPupil({{$pupil->id}})">
+                                                    <span class="fas fa-trash"></span>
+                                                    <span>Supprimer</span>
+                                                </span>
+                                                <span wire:loading wire:target="deleteSchoolBestPupil({{$pupil->id}})">
+                                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                    <span>Suppression...</span>
+                                                </span>
+                                            </button>
+                                        @endif
+                                    @endauth
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            @else
+                <h6 class="text-center font-semibold text-gray-500 italic text-lg py-3">Aucune donnée publiée</h6>
+            @endif
+        </div>
+        
 
         <div id="school_stats" class="text-sm p-6 shadow-xl bg-black/60 shadow-gray-900 rounded-lg">
             <h5 class="card text-sky-400 text-sm sm:text-xl  font-semibold letter-spacing-1 pb-4">
