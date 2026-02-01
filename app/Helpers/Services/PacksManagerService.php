@@ -27,6 +27,7 @@ class PacksManagerService{
 			'Pro' => [
 				"Publications des images",
 				"Publications des statistiques de votre école aux examens",
+				"Publications des meilleurs candidats ou élèves de votre école aux examens",
 				"Possibilité d'enroler des assistants pour la gestion adéquate de votre école",
 				"Publications des infos|Communiqués|Offres",
 				"Publicité de votre école sur la plateforme",
@@ -36,6 +37,7 @@ class PacksManagerService{
 			'Premium' => [
 				"Publications des images",
 				"Publications des vidéos",
+				"Publications des meilleurs candidats ou élèves de votre école aux examens",
 				"Publications des statistiques de votre école aux examens",
 				"Possibilité d'enroler des assistants pour la gestion adéquate de votre école",
 				"Publications des infos|Communiqués|Offres",
@@ -49,6 +51,7 @@ class PacksManagerService{
 			'Premium-Gold' => [
 				"Publications des images",
 				"Publications des vidéos",
+				"Publications des meilleurs candidats ou élèves de votre école aux examens",
 				"Publications des statistiques de votre école aux examens",
 				"Possibilité d'enroler des assistants pour la gestion adéquate de votre école",
 				"Publications des infos|Communiqués|Offres",
@@ -77,15 +80,17 @@ class PacksManagerService{
 				'max_assistants' => 0,
 				'max_stats' => 0,
 				'max_infos' => 8,
+				'max_bests' => 0,
 				'notify_by_email' => false,
 				'notify_by_sms' => false,
 
 			],
 			'Pro' => [
 				'max_images' => 8,
-				'max_videos' => 0,
+				'max_videos' => 2,
 				'max_assistants' => 2,
-				'max_stats' => 3,
+				'max_bests' => 5,
+				'max_stats' => 5,
 				'max_infos' => 8,
 				'notify_by_email' => true,
 				'notify_by_sms' => false,
@@ -94,9 +99,10 @@ class PacksManagerService{
 			],
 			'Premium' => [
 				'max_images' => 12,
-				'max_videos' => 3,
+				'max_videos' => 4,
 				'max_assistants' => 4,
 				'max_stats' => 6,
+				'max_bests' => 7,
 				'max_infos' => 12,
 				'notify_by_email' => true,
 				'notify_by_sms' => true,
@@ -106,6 +112,7 @@ class PacksManagerService{
 			'Premium-Gold' => [
 				'max_images' => 20,
 				'max_videos' => 6,
+				'max_bests' => 9,
 				'max_assistants' => 10,
 				'max_stats' => 15,
 				'max_infos' => 15,

@@ -480,7 +480,7 @@
             </h5>
             <div class="flex justify-end gap-x-2">
                 @auth
-                    @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
+                    @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager', 'school-images-manager']))
                         <a href="{{$school->to_create_best_pupil_route()}}" title="Ajouter un meilleur" class="cursor-pointer shadow-sm bg-blue-400 hover:bg-blue-700 text-white font-medium py-2 px-2 rounded-lg transition duration-150 ease-in-out">
                             <span>
                                 <span class="fas fa-user-plus"></span>
@@ -514,11 +514,11 @@
                 <div class="flex flex-col gap-y-7 card my-4">
                     @foreach($school_bests_pupils as $pupil)
                         <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
-                            # EXAMEN : {{ $pupil->exam }}
+                            # EXAMEN : {{ $pupil->exam }} {{ $pupil->year }}
                         </h5>
                         @if(true)
                             <div class="border border-r-gray-500 bg-black/60 p-3 letter-spacing-1 rounded-xl shadow-inner shadow-sky-400">
-                                <div class="text-gray-300 text-base md:text-lg grid grid-cols-3">
+                                <div @if($pupil->hidden) title="Ce record est masqué" @endif class="text-gray-300 @if($pupil->hidden) opacity-35 @endif text-base md:text-lg grid grid-cols-3">
                                     <div class="aspect-square bg-gray-100 relative group card col-span-3 md:col-span-1">
                                         <img class="w-full h-full object-cover border shadow-sm" src="{{url('storage', $pupil->image_path)}}" alt="photo de l'apprenant {{$pupil->pupil_name}}">
                                         
@@ -530,14 +530,28 @@
                                     </div>
                                     <div class="mt-3 col-span-3 md:col-span-2 md:mt-0">
                                         <div class="px-3 flex justify-center items-center flex-col">
-                                            <h2 class="text-left font-bold letter-spacing-1 py-3 uppercase  rounded-lg border-y-2 border-y-sky-600 text-sm md:text-xl w-full mb-3">
-                                                <span class="ml-2">
+                                            <h2 class="text-left font-bold letter-spacing-1 py-3  rounded-lg border-y-2 border-y-sky-600 text-sm md:text-xl w-full mb-3">
+                                                <span class="ml-2 uppercase">
                                                     <span class="fas fa-user"></span>
-                                                    Candidat(e) : </span>
-                                                <span class="text-sky-500">
+                                                    Candidat {{$pupil->gender == 'Feminin' ? 'e' : '' }} : </span>
+                                                <span class="text-sky-500 uppercase">
                                                     {{$pupil->pupil_name}}
                                                 </span>
+
+                                                <small class="text-xs text-yellow-500 font-semibold lowercase letter-spacing-1">
+                                                    @if($pupil->gender && $pupil->gender == 'Masculin') 
+                                                    Homme
+                                                    @elseif($pupil->gender && $pupil->gender == 'Feminin') 
+                                                    Fille
+                                                    @endif
+                                                </small>
+                                                @if($pupil->hidden)
+                                                    <small class="bg-red-400 text-red-800 font-semibold text-sm py-2 px-3 letter-spacing-1 my-2 float-right rounded-sm">
+                                                        Ce record est masqué!
+                                                    </small>
+                                                @endif
                                             </h2>
+                                            
                                             <h3 class="text-xl md:text-4xl uppercase text-center bg-green-400 shadow-2xl text-gray-900 w-full p-3 px-6 rounded-2xl">
                                                 <span class="">{{ $pupil->mention }} </span>
                                             </h3>
@@ -547,7 +561,7 @@
                                                 <span class="fas text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">{{ __formatDecimal($pupil->average) }} / 20 </span>
                                             </h3>
                                             <div class="w-full text-sm md:text-lg mt-3">
-                                                <h5 class="text-center font-semibold letter-spacing-1 py-1 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600 w-full my-2">Quelques records ou rangs</h5>
+                                                <h5 class="text-center font-semibold letter-spacing-1 py-1 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600 w-full my-2">Quelques records et rangs de {{ $pupil->pupil_name }}</h5>
                                                 <ul>
                                                 @foreach ($pupil->ranks as $zone => $rank)
                                                 <li>
@@ -562,7 +576,7 @@
                                                 
                                             </div>
                                             <div class="w-full">
-                                                <h5 class="text-center font-semibold letter-spacing-1 py-1 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600 w-full my-2">Quelques notes</h5>
+                                                <h5 class="text-center font-semibold letter-spacing-1 py-1 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600 w-full my-2">Quelques notes de {{ $pupil->pupil_name }}</h5>
                                                 <ul>
                                                 @foreach ($pupil->details as $subject => $mark)
                                                 <li>
@@ -578,21 +592,37 @@
                                 </div>
                                 <div class="my-3 flex justify-end gap-x-2">
                                     @auth
-                                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['infos-manager']))
-                                            <button wire:click="manageSchoolBestPupil({{$pupil->id}})" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
-                                                <span wire:loading.remove wire:target="manageSchoolBestPupil({{$pupil->id}})">
-                                                    <span class="fas fa-newspaper"></span>
+                                        @if(__ensureThatAssistantCan(auth_user_id(), $school->id, ['school-images-manager']))
+                                            <a href="{{$school->to_update_best_pupil_route($pupil->id, $pupil->uuid)}}" class="cursor-pointer shadow-sm bg-blue-500 hover:bg-blue-700 text-white p-2">
+                                                <span>
+                                                    <span class="fas fa-edit"></span>
                                                     <span>Modifier</span>
                                                 </span>
-                                                <span wire:loading wire:target="manageSchoolBestPupil({{$pupil->id}})">
+                                            </a>
+
+                                            @if(!$pupil->hidden)
+                                            <button wire:click="hideSchoolBestPupil({{$pupil->id}})" class="cursor-pointer shadow-sm bg-amber-500 hover:bg-amber-700 text-white p-2">
+                                                <span wire:loading.remove wire:target="hideSchoolBestPupil({{$pupil->id}})">
+                                                    <span class="fas fa-eye-slash"></span>
+                                                    <span>Masquer</span>
+                                                </span>
+                                                <span wire:loading wire:target="hideSchoolBestPupil({{$pupil->id}})">
                                                     <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                                     <span>En cours...</span>
                                                 </span>
                                             </button>
-                                            <button class="cursor-pointer shadow-sm bg-amber-500 hover:bg-amber-700 text-white p-2">
-                                                <span class="fas fa-eye-slash"></span>
-                                                <span>Masquer</span>
+                                            @else
+                                            <button wire:click="unhideSchoolBestPupil({{$pupil->id}})" class="cursor-pointer shadow-sm bg-purple-500 hover:bg-purple-700 text-white p-2">
+                                                <span wire:loading.remove wire:target="unhideSchoolBestPupil({{$pupil->id}})">
+                                                    <span class="fas fa-eye"></span>
+                                                    <span>Rendre visible</span>
+                                                </span>
+                                                <span wire:loading wire:target="unhideSchoolBestPupil({{$pupil->id}})">
+                                                    <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                    <span>En cours...</span>
+                                                </span>
                                             </button>
+                                            @endif
                                             
                                             <button wire:click="deleteSchoolBestPupil({{$pupil->id}})" class="cursor-pointer shadow-sm bg-red-500 hover:bg-red-700 text-white p-2">
                                                 <span wire:loading.remove wire:target="deleteSchoolBestPupil({{$pupil->id}})">

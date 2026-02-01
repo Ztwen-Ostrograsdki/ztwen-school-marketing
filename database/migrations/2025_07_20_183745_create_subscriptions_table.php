@@ -34,6 +34,7 @@ return new class extends Migration
             $table->unsignedBigInteger('max_stats')->nullable()->default(3);
             $table->unsignedBigInteger('max_videos')->nullable()->default(0);
             $table->unsignedBigInteger('max_infos')->nullable()->default(3);
+            $table->unsignedBigInteger('max_bests')->nullable()->default(3);
             $table->boolean('on_page')->default(false);
             $table->boolean('seen_by')->default(false);
             $table->boolean('notify_by_sms')->default(false);

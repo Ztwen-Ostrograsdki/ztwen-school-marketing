@@ -238,7 +238,7 @@
                                             </span>
                                         </span>
                                         <span>
-                                            <span>Uses : </span>
+                                            <span>Utilisés : </span>
                                             <span class="text-amber-500">
                                                 {{ __zero(count($subscription->images)) }}
                                             </span>
@@ -265,7 +265,7 @@
                                             </span>
                                         </span>
                                         <span>
-                                            <span>Uses : </span>
+                                            <span>Utilisés : </span>
                                             <span class="text-amber-500">
                                                 {{ __zero(count($subscription->videos)) }}
                                             </span>
@@ -292,7 +292,7 @@
                                             </span>
                                         </span>
                                         <span>
-                                            <span>Uses : </span>
+                                            <span>Utilisés : </span>
                                             <span class="text-amber-500">
                                                 {{ __zero(count($subscription->assistants)) }}
                                             </span>
@@ -319,7 +319,7 @@
                                             </span>
                                         </span>
                                         <span>
-                                            <span>Uses : </span>
+                                            <span>Utilisés : </span>
                                             <span class="text-amber-500">
                                                 {{ __zero(count($subscription->stats)) }}
                                             </span>
@@ -346,7 +346,7 @@
                                             </span>
                                         </span>
                                         <span>
-                                            <span>Uses : </span>
+                                            <span>Utilisés : </span>
                                             <span class="text-amber-500">
                                                 {{ __zero(count($subscription->infos)) }}
                                             </span>

@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Events\SchoolBestPupilCreatedEvent;
 use App\Events\SchoolBestPupilUpdatedEvent;
 use App\Models\School;
+use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -14,8 +16,12 @@ class SchoolBestPupil extends Model
         'school_id',
         'mention',
         'details',
+        'subscription_id',
+        'user_id',
+        'year',
         'ranks',
         'average',
+        'gender',
         'exam',
         'pupil_name',
         'image_path',
@@ -66,15 +72,30 @@ class SchoolBestPupil extends Model
 
         });
 
-
-
         
         static::updated(function ($school_best_pupil){
 
             SchoolBestPupilUpdatedEvent::dispatch($school_best_pupil);
 
+            $school_best_pupil->school->refreshSchoolBestPupilsPhotos();
+
         });
 
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function school()

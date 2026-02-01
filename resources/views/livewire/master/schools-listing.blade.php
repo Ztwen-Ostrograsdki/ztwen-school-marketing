@@ -378,6 +378,12 @@
                                                         </span>
                                                     </span>
                                                     <span>
+                                                        <span>Meilleurs : </span>
+                                                        <span class="text-amber-500">
+                                                            {{ __zero(count($school->bests_pupils)) }}
+                                                        </span>
+                                                    </span>
+                                                    <span>
                                                         <span>Infos. : </span>
                                                         <span class="text-amber-500">
                                                             {{ __zero(count($school->infos)) }}

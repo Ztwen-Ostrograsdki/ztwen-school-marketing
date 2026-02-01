@@ -39,7 +39,7 @@
                         </div>
                         
                     </div>
-                    
+
                     <!-- Table -->
                     <div class="overflow-x-auto my-5">
                         @if(count($packs))
@@ -59,6 +59,9 @@
                                         Reduction
                                     </th><th scope="col" class="px-6 py-4 uppercase tracking-wider text-left">
                                         Images
+                                    </th>
+                                    <th scope="col" class="px-6 py-4 uppercase tracking-wider">
+                                        Meilleurs
                                     </th>
                                     <th scope="col" class="px-6 py-4 uppercase tracking-wider">
                                         Stats
@@ -132,6 +135,11 @@
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="">
                                                 {{ __zero($pack->max_infos) }}
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-2 whitespace-nowrap">
+                                            <div class="">
+                                                {{ __zero($pack->max_bests) }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">

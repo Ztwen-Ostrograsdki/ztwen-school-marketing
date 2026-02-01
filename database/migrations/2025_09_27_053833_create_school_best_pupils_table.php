@@ -16,6 +16,10 @@ return new class extends Migration
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->string('pupil_name')->nullable()->default(null);
             $table->string('exam')->nullable()->default(null);
+            $table->string('gender')->nullable()->default('masculin');
+            $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
+            $table->string('year')->nullable()->default(null);
+            $table->foreignId('subscription_id')->constrained('subscriptions')->cascadeOnDelete();
             $table->boolean('hidden')->default(false);
             $table->string('image_path')->nullable()->default(null);
             $table->json('details')->nullable()->default(null);

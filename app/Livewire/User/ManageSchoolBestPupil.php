@@ -26,9 +26,17 @@ class ManageSchoolBestPupil extends Component
 
     #[Validate('required|string')]
     public $mention;
+    
+    #[Validate('required|string')]
+    public $year;
+    
+    #[Validate('required|string')]
+    public $gender = 'Masculin';
 
     #[Validate('required|string')]
     public $exam;
+
+    public $subscription_id;
 
     public $data_to_save = [];
 
@@ -81,7 +89,9 @@ class ManageSchoolBestPupil extends Component
     {
         $mentions = ['Assez-bien', 'Bien', 'Tres Bien', 'Excellente'];
 
-        return view('livewire.user.manage-school-best-pupil', compact('mentions'));
+        $genders = ['Masculin', 'Feminin'];
+
+        return view('livewire.user.manage-school-best-pupil', compact('mentions', 'genders'));
     }
 
     public function initializer($best_pupil_id = null, $best_pupil_uuid = null)
@@ -96,11 +106,19 @@ class ManageSchoolBestPupil extends Component
 
                 $this->pupil_name = $school_best_pupil->pupil_name;
 
+                $this->mention = $school_best_pupil->mention;
+
+                $this->average = $school_best_pupil->average;
+
                 $this->exam = $school_best_pupil->exam;
 
-                $this->details = $school_best_pupil->details;
+                $this->year = $school_best_pupil->year;
 
-                $this->ranks = $school_best_pupil->ranks;
+                $this->gender = $school_best_pupil->gender;
+
+                $this->ranks_table = $school_best_pupil->ranks;
+
+                $this->details_table = $school_best_pupil->details;
 
             }
             else{
@@ -120,6 +138,10 @@ class ManageSchoolBestPupil extends Component
 
             return;
         }
+        else{
+
+            $this->subscription_id = $this->school->current_subscription->id;
+        }
 
         if($this->image){
 
@@ -136,30 +158,84 @@ class ManageSchoolBestPupil extends Component
         
         if($this->image) $image_path = self::imageUploader($root_folder, $this->image);
 
-
         $subjects_marks = $this->details_table;
 
-        $created = SchoolBestPupil::create([
-            'pupil_name' => $this->pupil_name,
-            'mention' => $this->mention,
-            'exam' => $this->exam,
-            'average' => $this->average,
-            'image_path' => $image_path,
-            'school_id' => $this->school->id,
-            'details' => $subjects_marks,
-            'ranks' => $this->ranks_table,
-        ]);
+        if(!$this->school_best_pupil){
+            // CREATION
 
-        if($created){
+            $created = SchoolBestPupil::create([
+                'pupil_name' => $this->pupil_name,
+                'mention' => $this->mention,
+                'exam' => $this->exam,
+                'year' => $this->year,
+                'gender' => $this->gender,
+                'subscription_id' => $this->subscription_id,
+                'average' => $this->average,
+                'image_path' => $image_path,
+                'school_id' => $this->school->id,
+                'details' => $subjects_marks,
+                'user_id' => auth_user_id(),
+                'ranks' => $this->ranks_table,
+            ]);
 
-            $this->done = true;
+            if($created){
 
-            $this->resetErrorBag();
+                $this->done = true;
 
-            $this->reset('mark', 'mention', 'average', 'image', 'details_table', 'ranks_table');
+                $this->resetErrorBag();
 
-            $this->toast("La mise à jour des données s'est bien déroulée!", 'success');
+                $this->reset('mark', 'mention', 'year', 'gender', 'average', 'image', 'details_table', 'ranks_table');
 
+                $this->toast("La mise à jour des données s'est bien déroulée!", 'success');
+
+            }
+        }
+        else{
+            // UPDATING
+
+            if($this->image){
+
+                $updating = $this->school_best_pupil->update([
+                    'pupil_name' => $this->pupil_name,
+                    'mention' => $this->mention,
+                    'exam' => $this->exam,
+                    'year' => $this->year,
+                    'gender' => $this->gender,
+                    'subscription_id' => $this->subscription_id,
+                    'average' => $this->average,
+                    'image_path' => $image_path,
+                    'user_id' => auth_user_id(),
+                    'details' => $subjects_marks,
+                    'ranks' => $this->ranks_table,
+                ]);
+            }
+            else{
+
+                $updating = $this->school_best_pupil->update([
+                    'pupil_name' => $this->pupil_name,
+                    'mention' => $this->mention,
+                    'exam' => $this->exam,
+                    'year' => $this->year,
+                    'gender' => $this->gender,
+                    'subscription_id' => $this->subscription_id,
+                    'average' => $this->average,
+                    'user_id' => auth_user_id(),
+                    'details' => $subjects_marks,
+                    'ranks' => $this->ranks_table,
+                ]);
+            }
+
+            if($updating){
+
+                $this->done = true;
+
+                $this->resetErrorBag();
+
+                $this->reset('mark', 'mention', 'year', 'gender', 'average', 'image', 'details_table', 'ranks_table');
+
+                $this->toast("La mise à jour des données s'est bien déroulée!", 'success');
+
+            }
         }
         
     }
@@ -232,6 +308,38 @@ class ManageSchoolBestPupil extends Component
     public function updatedSubject($subject)
     {
         $this->subject = Str::upper($subject);
+    }
+
+    public function editDetailByClick($subject, $mark)
+    {
+        $this->resetErrorBag('subject', 'mark');
+
+        if($subject && $mark){
+
+            $this->subject = $subject;
+
+            $this->mark = $mark;
+
+            self::removeDetailFrom($subject);
+            
+        }
+        
+    }
+
+    public function editRankByClick($zone, $rank)
+    {
+        $this->resetErrorBag('zone', 'rank');
+
+        if($zone && $rank){
+
+            $this->zone = $zone;
+
+            $this->rank = $rank;
+
+            self::removeRankFrom($zone);
+            
+        }
+        
     }
 
     public function pushIntoDetails()

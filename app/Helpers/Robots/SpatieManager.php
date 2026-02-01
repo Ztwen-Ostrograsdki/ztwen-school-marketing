@@ -155,6 +155,12 @@ trait SpatieManager{
 			'delete transactions',
 		];
 		
+		$permissions_on_bests = [
+			'create bests', 
+			'edit bests', 
+			'delete bests',
+		];
+		
 		if($data){
 
 			$existed = ${$data};
@@ -181,6 +187,7 @@ trait SpatieManager{
 			$permissions_on_school_images,
 			$permissions_on_assistants,
 			$permissions_on_transactions,
+			$permissions_on_bests,
 
 		);
 	}
@@ -209,6 +216,7 @@ trait SpatieManager{
 			'infos-manager',
 			'packs-manager',
 			'subscriptions-manager',
+			'bests-pupils-manager'
 
 		];
 
@@ -238,6 +246,7 @@ trait SpatieManager{
 			'subscriptions-manager'=> "Gestion des souscriptions | abonnements",
 			'transactions-manager'=> "Gestion des transactions",
 			'stats-manager'=> "Gestion des statistiques",
+			'bests-pupils-manager'=> "Gestion des records : meilleurs apprenants ou candidats",
 			'infos-manager'=> "Gestion des communiqués | infos | annonces",
 			'school-images-manager'=> "Gestion des images des écoles",
 
@@ -256,6 +265,7 @@ trait SpatieManager{
 			'subscriptions-manager',
 			'transactions-manager',
 			'stats-manager',
+			'bests-pupils-manager',
 			'infos-manager',
 			'school-images-manager',
 		];
@@ -299,6 +309,11 @@ trait SpatieManager{
 			'create stats' => "Enregistrer une statistique", 
 			'edit stats' => "Editer une statistique", 
 			'delete stats' => "Supprimer une statistique",
+
+			'create bests' => "Enregistrer meilleurs candidats | élèves", 
+			'edit bests' => "Editer meilleurs candidats | élèves", 
+			'delete bests' => "Supprimer meilleurs candidats | élèves",
+
 			'create subscriptions' => "Enregistrer une souscription | un abonnement", 
 			'edit subscriptions' => "Editer une souscription | un abonnement", 
 			'delete subscriptions' => "Supprimer une souscription | un abonnement",

@@ -13,6 +13,7 @@ use App\Models\Info;
 use App\Models\Pack;
 use App\Models\Payment;
 use App\Models\School;
+use App\Models\SchoolBestPupil;
 use App\Models\SchoolImage;
 use App\Models\SchoolVideo;
 use App\Models\Stat;
@@ -46,6 +47,7 @@ class Subscription extends Model
         'max_videos',
         'max_stats',
         'max_infos',
+        'max_bests',
         'max_assistants',
         'on_page',
         'amount',
@@ -131,6 +133,11 @@ class Subscription extends Model
     {
         return $this->hasMany(SchoolVideo::class);
     }
+    
+    public function bests()
+    {
+        return $this->hasMany(SchoolBestPupil::class);
+    }
 
     public function stats()
     {
@@ -174,6 +181,20 @@ class Subscription extends Model
     protected function videosable() : Attribute
     {
         return Attribute::get(fn() => $this->remainingVideos > 0);
+    }
+
+    protected function remainingBests() : Attribute
+    {
+        $max_bests = $this->max_bests;
+
+        $bests_publisheds = count($this->bests);
+
+        return Attribute::get(fn() => $max_bests - $bests_publisheds);
+    }
+
+    protected function bestable() : Attribute
+    {
+        return Attribute::get(fn() => $this->remainingBests > 0);
     }
 
     protected function remainingAssistants() : Attribute

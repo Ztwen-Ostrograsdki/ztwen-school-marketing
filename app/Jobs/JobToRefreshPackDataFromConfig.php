@@ -19,7 +19,7 @@ class JobToRefreshPackDataFromConfig implements ShouldQueue
      */
     public function __construct(public User $admin_generator, public ?Pack $pack = null, public ?array $data = [])
     {
-        //
+        
     }
 
     /**
@@ -27,6 +27,9 @@ class JobToRefreshPackDataFromConfig implements ShouldQueue
      */
     public function handle(): void
     {
+
+        dd($this->pack);
+        
         $pack = $this->pack;
 
         DB::beginTransaction();

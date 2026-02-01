@@ -128,9 +128,24 @@ class SchoolProfil extends Component
 
         $school_comments = $this->school->comments;
 
-        $school_bests_pupils = $this->school->bests_pupils;
+        if(auth_user()){
 
+            if($this->school->user_id == auth_user_id()){
 
+                $school_bests_pupils = $this->school->bests_pupils;
+
+            }
+            else{
+
+                $school_bests_pupils = $this->school->bests_pupils()->where('hidden', false)->orderBy('created_at')->get();
+            }
+        }
+        else{
+
+            $school_bests_pupils = $this->school->bests_pupils()->where('hidden', false)->orderBy('created_at')->get();
+        }
+        
+        
 
         return view('livewire.master.school-profil', compact('school_stats', 'stats_years', 'school_infos', 'school_comments', 'school_bests_pupils'));
     }

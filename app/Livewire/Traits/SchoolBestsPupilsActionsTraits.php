@@ -70,7 +70,7 @@ public function deleteSchoolBestPupil($pupil_id)
 
         $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Ce record ne sera plus visible par vos visiteurs! </p>";
 
-        $options = ['event' => 'confirmPupilHidden', 'confirmButtonText' => 'Masquer', 'cancelButtonText' => 'Annulé', 'data' => ['video_id' => $pupil_id]];
+        $options = ['event' => 'confirmPupilHidden', 'confirmButtonText' => 'Masquer', 'cancelButtonText' => 'Annulé', 'data' => ['pupil_id' => $pupil_id]];
 
         $this->confirm($html, $noback, $options);
     }
@@ -90,7 +90,7 @@ public function deleteSchoolBestPupil($pupil_id)
 
                     $message = "Le record de " . $pupil->pupil_name . " a été masqué avec succès!";
 
-                    $hidden = $pupil->update(['hidden' => false]);
+                    $hidden = $pupil->update(['hidden' => true]);
 
                     if($hidden){
 
@@ -123,7 +123,7 @@ public function deleteSchoolBestPupil($pupil_id)
 
         $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Ce record sera à nouveau visible par vos visiteurs! </p>";
 
-        $options = ['event' => 'confirmPupilUnHidden', 'confirmButtonText' => 'Afficher', 'cancelButtonText' => 'Annulé', 'data' => ['video_id' => $pupil_id]];
+        $options = ['event' => 'confirmPupilUnHidden', 'confirmButtonText' => 'Afficher', 'cancelButtonText' => 'Annulé', 'data' => ['pupil_id' => $pupil_id]];
 
         $this->confirm($html, $noback, $options);
     }
@@ -228,16 +228,23 @@ public function deleteSchoolBestPupil($pupil_id)
     }
 
 
-    public function manageBestPupil($pupil_id)
+    public function manageSchoolBestPupil($pupil_id)
     {
-        $this->dispatch('ManageSchoolImageData', $pupil_id);
+        $school = $this->school;
+
+		$pupil = SchoolBestPupil::where('id', $pupil_id)->first();
+
+		if($pupil){
+
+			$school->to_update_best_pupil_route($pupil_id, $pupil->uuid);
+		}
+		else{
+
+			return $this->toast("Erreur donnée: Cette donnée n'a pas été trouvée!", 'error');
+		}
+
+		
     }
     
-    public function manageVideo($video_id)
-    {
-        $this->dispatch('ManageSchoolVideoLiveEvent', $this->school->id, $video_id);
-    }
-
-
 
 }
