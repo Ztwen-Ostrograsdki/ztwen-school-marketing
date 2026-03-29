@@ -5,6 +5,8 @@ use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
 use App\Events\InitProcessToRefreshPackDataFromConfigEvent;
 use App\Helpers\Robots\SpatieManager;
+use App\Helpers\Services\PacksManagerService;
+use App\Jobs\JobToRefreshPackDataFromConfig;
 use App\Models\Pack;
 use App\Notifications\RealTimeNotification;
 use Illuminate\Support\Facades\Notification;
@@ -21,8 +23,17 @@ trait PackActionsTraits{
 
 		$pack = Pack::find($pack_id);
 
+        // $privileges = PacksManagerService::getPrivileges($pack->name);
 
-		$this->toast("Le rechargement des données du pack depuis les fichiers de configuration a été lancé", 'success');
+        // $details = PacksManagerService::getDetails($pack->name);
+
+        // dd($pack, $privileges, $details);
+
+        // $details['privileges'] = $privileges;
+
+        // $pack->update($details);
+
+        // JobToRefreshPackDataFromConfig::dispatch(auth_user(), $pack);
 
 		InitProcessToRefreshPackDataFromConfigEvent::dispatch(auth_user(), $pack);
     }

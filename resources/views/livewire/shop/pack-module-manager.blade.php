@@ -145,6 +145,13 @@
                                                         <div class="flex gap-1.5 border rounded-lg shadow-sm shadow-amber-500 p-2 items-center">
                                                             <span>
                                                                 <span class="fas fa-cart"></span>
+                                                                <span>Nbre de meilleurs : </span>
+                                                            </span>
+                                                            <span class="text-amber-500">{{$max_bests}}</span>
+                                                        </div>
+                                                        <div class="flex gap-1.5 border rounded-lg shadow-sm shadow-amber-500 p-2 items-center">
+                                                            <span>
+                                                                <span class="fas fa-cart"></span>
                                                                 <span>Nbre de stats : </span>
                                                             </span>
                                                             <span class="text-amber-500">{{$max_stats}}</span>
@@ -165,7 +172,7 @@
                                                     <div class="flex flex-col gap-1.5">
                                                         @foreach ($privileges as $pr)
                                                             <span class="cursor-pointer flex items-center gap-x-2 hover:text-amber-500">
-                                                                <span class="fas fa-cube animate-spin "></span>
+                                                                <span class="fas fa-cube"></span>
                                                                 <span>{{ $pr }}</span>
                                                             </span> 
                                                         @endforeach

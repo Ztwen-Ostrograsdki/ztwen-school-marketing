@@ -28,6 +28,9 @@ class PackModuleManager extends Component
 
     #[Validate("numeric|required")]
     public $max_images;
+    
+    #[Validate("numeric|required")]
+    public $max_bests;
 
     #[Validate("numeric|required")]
     public $max_assistants;
@@ -111,6 +114,8 @@ class PackModuleManager extends Component
         $this->max_infos = $pack->max_infos;
 
         $this->max_stats = $pack->max_stats;
+
+        $this->max_bests = $pack->max_bests;
 
         $this->max_assistants = $pack->max_assistants;
 

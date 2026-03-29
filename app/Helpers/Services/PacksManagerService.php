@@ -31,7 +31,7 @@ class PacksManagerService{
 				"Possibilité d'enroler des assistants pour la gestion adéquate de votre école",
 				"Publications des infos|Communiqués|Offres",
 				"Publicité de votre école sur la plateforme",
-				"Notification en temps réels par email",
+				"Notifications en temps réel par email",
 				"Votre école apparaît en première page sur la plateforme",
 			],
 			'Premium' => [

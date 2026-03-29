@@ -71,17 +71,122 @@
                                 <span>En cours...</span>
                             </span>
                         </button>
+                        @if($pack->is_active)
+                        <button wire:click='hidePack({{$pack->id}})' class="block text-white cursor-pointer bg-orange-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-700 focus:ring-orange-800" type="button">
+                            <span wire:loading.remove wire:target='hidePack({{$pack->id}})'>
+                                <span class="fas fa-eye-slash mr-1"></span>
+                                Masquer
+                            </span>
+                            <span wire:loading wire:target='hidePack({{$pack->id}})'>
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        @else
+                        <button wire:click='unHidePack({{$pack->id}})' class="block text-white cursor-pointer bg-green-500 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-green-800" type="button">
+                            <span wire:loading.remove wire:target='unHidePack({{$pack->id}})'>
+                                <span class="fas fa-eye mr-1"></span>
+                                Réafficher
+                            </span>
+                            <span wire:loading wire:target='unHidePack({{$pack->id}})'>
+                                <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                <span>En cours...</span>
+                            </span>
+                        </button>
+                        @endif
                     </div>
                 </div>
             </div>
-
+        <div class="flex justify-between w-full font-semibold letter-spacing-1">
+            @if(!$pack->is_active)
+                <span class="text-red-900 bg-red-500 rounded-md text-sm py-2 px-3">
+                    <span class="fas fa-warning text-gray-900"></span>
+                    Ce pack n'est pas présentement actif!
+                </span>
+            @else
+                <span class="text-green-900 bg-green-500 rounded-md text-sm py-2 px-3">
+                    <span class="fas fa-check text-gray-900"></span>
+                    Ce pack est présentement actif!
+                </span>
+            @endif
+            <span></span>
+            <span></span>
+        </div>
         </div>
         <hr class="border-sky-600 mb-2">
     </div>
 
-  <!-- Tableau des paiements -->
   <div class=" rounded-lg shadow  z-bg-secondary-light p-3">
     @if ($pack)
+
+        <div class="mt-4 p-3 mx-auto text-xs md:text-lg overflow-x-auto">
+            <h6 class="text-center py-2 letter-spacing-1 font-semibold text-yellow-600 uppercase border border-yellow-500 bg-black/60 my-2">
+                Quelques détails actuels du pack 
+                
+            </h6>
+
+            <div class=" grid flex-wrap gap-1.5 justify-between font-semibold letter-spacing-1 text-xs md:text-sm grid-cols-4">
+                <div class="flex flex-col gap-1.5 border border-gray-400 text-gray-400 rounded-lg p-2 bg">
+                    <div class="flex flex-col">
+                        <span>Prix unitaire</span>
+                        <hr>
+                        <span class="text-right my-1.5">{{ $pack->price }} FCFA</span>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1.5 border border-gray-400 text-gray-400 rounded-lg p-2 ">
+                    <div class="flex flex-col">
+                        <span>Reduction</span>
+                        <hr>
+                        <span class="text-right my-1.5">{{ $pack->discount }} %</span>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1.5 border border-gray-400 text-gray-400 rounded-lg p-2 ">
+                    <div class="flex flex-col">
+                        <span>Nbre de vidéos publiables</span>
+                        <hr>
+                        <span class="text-right my-1.5">{{ __zero($pack->max_videos) }}</span>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1.5 border border-gray-400 text-gray-400 rounded-lg p-2 ">
+                    <div class="flex flex-col">
+                        <span>Nbre d'images publiables</span>
+                        <hr>
+                        <span class="text-right my-1.5">{{ __zero($pack->max_images) }}</span>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1.5 border border-gray-400 text-gray-400 rounded-lg p-2 ">
+                    <div class="flex flex-col">
+                        <span>Nbre de meilleurs élèves publiables</span>
+                        <hr>
+                        <span class="text-right my-1.5">{{ __zero($pack->max_bests) }}</span>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1.5 border border-gray-400 text-gray-400 rounded-lg p-2 ">
+                    <div class="flex flex-col">
+                        <span>Nbre de statistiques publiables</span>
+                        <hr>
+                        <span class="text-right my-1.5">{{ __zero($pack->max_stats) }}</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5 border border-gray-400 text-gray-400 rounded-lg p-2 ">
+                    <div class="flex flex-col">
+                        <span>Nbre d'infos publiables</span>
+                        <hr>
+                        <span class="text-right my-1.5">{{ __zero($pack->max_infos) }}</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-1.5 border border-gray-400 text-gray-400 rounded-lg p-2 ">
+                    <div class="flex flex-col">
+                        <span>Nbre d'assistants possibles</span>
+                        <hr>
+                        <span class="text-right my-1.5">{{ __zero($pack->max_assistants) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="mt-4 p-3 mx-auto text-xs md:text-lg overflow-x-auto">
             <h6 class="text-center py-2 letter-spacing-1 font-semibold text-yellow-600 uppercase border border-yellow-500 bg-black/60 my-2">
                 Liste des écoles abonnées et leurs privilèges
@@ -133,7 +238,7 @@
                                     </div>
                                     <div class="ml-4">
                                         <span class="flex gap-x-2 items-center">
-                                            <a title="Voir les détails de l'abonnement {{$subscription->ref_key}}" class="" href="{{ $subscription->to_details_route() }}">
+                                            <a title="Voir les détails de l'abonnement {{$subscription?->ref_key}}" class="" href="{{ $subscription?->to_details_route() }}">
                                                 {{$user->getFullName()}} 
                                             </a>
                                         </span>
@@ -157,62 +262,72 @@
                                 </div>
                             </td>
                             <td class="px-2 py-2 whitespace-nowrap text-right text-sm font-medium">
-                                @if($school->current_subscription())
+                                @if($school->current_subscription)
                                 <div class="text-sm font-thin letter-spacing-1 text-gray-400 flex flex-col gap-y-1">
                                     <span>
-                                        Souscrit le {{__formatDate($subscription->created_at) }}
+                                        Souscrit le {{__formatDate($subscription?->created_at) }}
                                     </span>
                                     <span>
-                                        Validé le {{ __formatDate($subscription->validate_at) }}
+                                        Validé le {{ __formatDate($subscription?->validate_at) }}
                                     </span>
-                                    <span class="{{ $subscription->remainingDaysColor }}">
-                                        Expire le {{__formatDate($subscription->will_closed_at) }}
-                                        <span>Soit dans {{ str_replace('restants', '', __formatDateDiff($subscription->will_closed_at)) }}</span>
+                                    <span class="{{ $subscription?->remainingDaysColor }}">
+                                        Expire le {{__formatDate($subscription?->will_closed_at) }}
+                                        <span>Soit dans {{ str_replace('restants', '', __formatDateDiff($subscription?->will_closed_at)) }}</span>
                                     </span>
+                                    <div>
+                                        <span class="font-thin letter-spacing-1 rounded-md p-1 animate-pulse px-3 @if($subscription->has_upgrade_request->validate_at) bg-green-300 @else bg-red-300 @endif" >
+                                            @if($subscription->has_upgrade_request->validate_at)
+                                            <span class="text-green-800">Cet abonnement a été prolongé</span>
+                                            @else
+                                            <span class="text-red-800">Demande de prolongement pas encore validé</span>
+                                            @endif
+                                            <span class="fas fa-arrow-trend-up text-xl @if($subscription->has_upgrade_request->validate_at) text-green-600 @elseif(!$subscription->has_upgrade_request->validate_at) text-red-400 @else hidden @endif"></span>
+                                        </span>
+                                    </div>
                                 </div>
                                 @else
                                     <span> Déjà expiré</span>
                                 @endif
                             </td>
                             <td class="px-2 py-2 whitespace-nowrap">
-                                @if ($subscription->validate_at && $subscription->payment)
+                                @if ($subscription?->validate_at && $subscription?->payment)
                                     <div class="flex justify-center items-center ">
                                         <span class="flex flex-wrap gap-1 font-thin justify-start">
                                             <span>
                                                 <span>Status : </span>
                                                 <span>
-                                                    <span class="text-green-500">           {{ $subscription->payment_status }}
+                                                    <span class="text-green-500">           {{ $subscription?->payment_status }}
                                                     </span>
                                                 </span>
                                             </span>
                                             <span>
                                                 <span>Prix unitaire : </span>
                                                 <span class="text-amber-500">
-                                                    {{ __moneyFormat($subscription->unique_price) }}
+                                                    {{ __moneyFormat($subscription?->unique_price) }}
                                                 </span>
                                             </span>
                                             <span>
                                                 <span>Nombre de mois : </span>
                                                 <span class="text-amber-500">
-                                                    {{ __zero($subscription->months) }}
+                                                    {{ __zero($subscription?->months) }}
                                                 </span>
                                             </span>
                                             <span>
                                                 <span>Reduction : </span>
                                                 <span class="text-amber-500">
-                                                    {{ $subscription->discount }} %
+                                                    {{ $subscription?->discount }} %
                                                 </span>
                                             </span>
                                             <span>
                                                 <span>Montant total : </span>
                                                 <span class="text-amber-500">
-                                                    {{ __moneyFormat($subscription->amount) }}
+                                                    {{ __moneyFormat($subscription?->amount) }}
                                                 </span>
                                             </span>
                                             <span>
                                                 <span>Montant payé : </span>
                                                 <span class="text-amber-500">
-                                                    {{ __moneyFormat($subscription->payment->amount) }}
+                                                    {{ __moneyFormat($subscription?->payment->amount) }}
                                                 </span>
                                             </span>
                                         </span>
@@ -223,23 +338,27 @@
                                 <div class="flex flex-col gap-y-1">
                                     <span class="flex justify-between">
                                         <span>Max Img : </span>
-                                        <span> {{ $subscription->max_images }} </span>
+                                        <span> {{ $subscription?->max_images }} </span>
                                     </span>
                                     <span class="flex justify-between">
                                         <span>Max Videos : </span>
-                                        <span> {{ $subscription->max_videos }} </span>
+                                        <span> {{ $subscription?->max_videos }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
+                                        <span>Max meilleurs : </span>
+                                        <span> {{ $subscription?->max_bests }} </span>
                                     </span>
                                     <span class="flex justify-between">
                                         <span>Max Stats : </span>
-                                        <span> {{ $subscription->max_stats }} </span>
+                                        <span> {{ $subscription?->max_stats }} </span>
                                     </span>
                                     <span class="flex justify-between">
                                         <span>Max Infos : </span>
-                                        <span> {{ $subscription->max_infos }} </span>
+                                        <span> {{ $subscription?->max_infos }} </span>
                                     </span>
                                     <span class="flex justify-between">
                                         <span>Max Assist. : </span>
-                                        <span> {{ $subscription->max_assistants }} </span>
+                                        <span> {{ $subscription?->max_assistants }} </span>
                                     </span>
                                 </div>
                             </td>
@@ -247,44 +366,52 @@
                                 <div class="flex flex-col gap-y-1 text-red-400">
                                     <span class="flex justify-between">
                                         <span>Img : </span>
-                                        <span> {{ $subscription->remainingImages }} </span>
+                                        <span> {{ $subscription?->remainingImages }} </span>
                                     </span>
                                     <span class="flex justify-between">
-                                        <span>Video : </span>
-                                        <span> {{ $subscription->remainingVideos }} </span>
+                                        <span>Videos : </span>
+                                        <span> {{ $subscription?->remainingVideos }} </span>
+                                    </span>
+                                    <span class="flex justify-between">
+                                        <span>Meilleurs : </span>
+                                        <span> {{ $subscription?->remainingBests }} </span>
                                     </span>
                                     <span class="flex justify-between">
                                         <span>Stats : </span>
-                                        <span> {{ $subscription->remainingStats }} </span>
+                                        <span> {{ $subscription?->remainingStats }} </span>
                                     </span>
                                     <span class="flex justify-between">
                                         <span>Infos : </span>
-                                        <span> {{ $subscription->remainingInfos }} </span>
+                                        <span> {{ $subscription?->remainingInfos }} </span>
                                     </span>
                                     <span class="flex justify-between">
                                         <span>Assist. : </span>
-                                        <span> {{ $subscription->remainingAssistants }} </span>
+                                        <span> {{ $subscription?->remainingAssistants }} </span>
                                     </span>
                                 </div>
                             </td>
                             <td class="px-2 py-2 whitespace-nowrap text-center">
                                 <div class="flex flex-col gap-y-1.5">
-                                    <button wire:click='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})' class="block text-white cursor-pointer bg-orange-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-700 focus:ring-orange-800" type="button">
-                                        <span wire:loading.remove wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})'>
+                                    <a href="{{$subscription->to_details_route()}}"  class="block text-white cursor-pointer bg-blue-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
+                                       <span class="fas fa-eye"></span>
+                                       <span>Voir les détails</span>
+                                    </a>
+                                    <button wire:click='nofifySubscriberThatExpiredDateIsSoClose({{$subscription?->id}})' class="block text-white cursor-pointer bg-orange-400 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-orange-700 focus:ring-orange-800" type="button">
+                                        <span wire:loading.remove wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription?->id}})'>
                                             <span class="fas fa-calendar mr-1"></span>
                                             Notifier date d'expiration
                                         </span>
-                                        <span wire:loading wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription->id}})'>
+                                        <span wire:loading wire:target='nofifySubscriberThatExpiredDateIsSoClose({{$subscription?->id}})'>
                                             <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                             <span>En cours...</span>
                                         </span>
                                     </button>
-                                    <button wire:click='markAsExpired({{$subscription->id}})' class="block text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
-                                        <span wire:loading.remove wire:target='markAsExpired({{$subscription->id}})'>
+                                    <button wire:click='markAsExpired({{$subscription?->id}})' class="block text-white cursor-pointer bg-red-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-red-800 focus:ring-red-800" type="button">
+                                        <span wire:loading.remove wire:target='markAsExpired({{$subscription?->id}})'>
                                             <span class="fas fa-hourglass-end mr-1"></span>
                                             Plannifier expiration
                                         </span>
-                                        <span wire:loading wire:target='markAsExpired({{$subscription->id}})'>
+                                        <span wire:loading wire:target='markAsExpired({{$subscription?->id}})'>
                                             <span class="fas fa-rotate animate-spin mr-1.5"></span>
                                             <span>En cours...</span>
                                         </span>

@@ -24,6 +24,7 @@ class Pack extends Model
         'max_assistants',
         'max_stats',
         'max_videos',
+        'max_bests',
         'max_infos',
         'on_page',
         'seen_by',
@@ -124,7 +125,7 @@ class Pack extends Model
 
         foreach($subscriptions as $subscription):
 
-            if($subscription->validate_at && $subscription->payment){
+            if($subscription->validate_at && $subscription->payment && $subscription->remainingsDays > 0){
 
                 $schools[] = $subscription->school;
 

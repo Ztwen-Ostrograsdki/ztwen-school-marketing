@@ -28,21 +28,18 @@ class JobToRefreshPackDataFromConfig implements ShouldQueue
     public function handle(): void
     {
 
-        dd($this->pack);
-        
         $pack = $this->pack;
 
         DB::beginTransaction();
 
         try {
 
+
             $privileges = PacksManagerService::getPrivileges($pack->name);
 
             $details = PacksManagerService::getDetails($pack->name);
 
-            $pack->privileges = $privileges;
-
-            $pack->save();
+            $details['privileges'] = $privileges;
 
             $pack->update($details);
 

@@ -9,11 +9,18 @@
                 </span>
             </a>
             @endif
-            <h6 class="text-center py-2 letter-spacing-1 font-semibold text-green-400  border border-yellow-500 bg-black/60 my-2 letter-spacing-2 flex flex-col gap-y-1">
+            <h6 class="text-center py-2 letter-spacing-1 font-semibold text-green-400  border border-yellow-500 my-2 letter-spacing-2 flex flex-col gap-y-1 @if($subscription->remainingsDays > 0)  bg-black/60 @else bg-red-900 @endif">
+                
                 <span class="uppercase flex justify-between items-center px-4">
+                    @if($subscription->remainingsDays > 0)
                     <span class="fas fa-arrow-trend-up animate-pulse text-xl @if($subscription->has_upgrade_request && $subscription->has_upgrade_request->validate_at) text-green-600 @elseif($subscription->has_upgrade_request && !$subscription->has_upgrade_request->validate_at) text-red-400 @else hidden @endif"></span>
+                    @else
+                    <span class="text-red-400">Abonnement expiré!</span>
+                    @endif
                     <span>Abonnement : #{{ $subscription->ref_key }}</span>
-                    <span></span>
+                    <span class="text-gray-400">
+                        Pack <span class=""> ({{ $subscription->pack->name }})</span>
+                    </span>
                 </span>
                 <span>
                     <span class="text-sm font-thin letter-spacing-1 text-gray-400">
@@ -33,7 +40,6 @@
                         @else
                         <span>
                             Expiré depuis le {{__formatDate($subscription->will_closed_at) }}
-                            <span>Il y a déjà {{ str_replace('restants', '', __formatDateDiff($subscription->will_closed_at)) }}</span>
                         </span>
                         @endif
                     </span>
@@ -223,7 +229,7 @@
                             <h5 class="p-3 my-2 text-center border-y-2 border-y-amber-500 letter-spacing-2 font-semibold bg-black/60">Quelques détails liés à l'abonnement 
                                 <span class="text-amber-500"> #{{ $subscription->ref_key }}</span> 
                             </h5>
-                            <div class="grid flex-wrap gap-1.5 justify-between font-semibold letter-spacing-1 text-xs md:text-sm grid-cols-5">
+                            <div class="grid flex-wrap gap-1.5 justify-between font-semibold letter-spacing-1 text-xs md:text-sm grid-cols-6">
                                 <div class="flex flex-col gap-1.5 border rounded-lg shadow-sm shadow-amber-500 p-2 items-center ">
                                     <span>
                                         <span class="fas fa-images"></span>
@@ -281,26 +287,26 @@
                                 <div class="flex flex-col gap-1.5 border rounded-lg shadow-sm shadow-amber-500 p-2 items-center">
                                     <span>
                                         <span class="fas fa-users"></span>
-                                        <span>Nbre d'assistants </span>
+                                        <span>Nbre de meilleurs </span>
                                     </span>
                                     <span class="flex flex-col gap-2 font-thin justify-center">
                                         <span>
                                             <span>Total : </span>
                                             <span>
-                                                <span class="text-amber-500"> {{__zero($subscription->max_assistants)}}
+                                                <span class="text-amber-500"> {{__zero($subscription->max_bests)}}
                                                 </span>
                                             </span>
                                         </span>
                                         <span>
                                             <span>Utilisés : </span>
                                             <span class="text-amber-500">
-                                                {{ __zero(count($subscription->assistants)) }}
+                                                {{ __zero(count($subscription->bests)) }}
                                             </span>
                                         </span>
                                         <span>
                                             <span>Rest. : </span>
                                             <span class="text-amber-500">
-                                                {{ __zero($subscription->remainingAssistants) }}
+                                                {{ __zero($subscription->remainingBests) }}
                                             </span>
                                         </span>
                                     </span>
@@ -328,6 +334,33 @@
                                             <span>Rest. : </span>
                                             <span class="text-amber-500">
                                                 {{ __zero($subscription->remainingStats) }}
+                                            </span>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="flex flex-col gap-1.5 border rounded-lg shadow-sm shadow-amber-500 p-2 items-center">
+                                    <span>
+                                        <span class="fas fa-users"></span>
+                                        <span>Nbre d'assistants </span>
+                                    </span>
+                                    <span class="flex flex-col gap-2 font-thin justify-center">
+                                        <span>
+                                            <span>Total : </span>
+                                            <span>
+                                                <span class="text-amber-500"> {{__zero($subscription->max_assistants)}}
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <span>
+                                            <span>Utilisés : </span>
+                                            <span class="text-amber-500">
+                                                {{ __zero(count($subscription->assistants)) }}
+                                            </span>
+                                        </span>
+                                        <span>
+                                            <span>Rest. : </span>
+                                            <span class="text-amber-500">
+                                                {{ __zero($subscription->remainingAssistants) }}
                                             </span>
                                         </span>
                                     </span>

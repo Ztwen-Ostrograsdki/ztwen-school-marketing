@@ -134,17 +134,17 @@
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="">
-                                                {{ __zero($pack->max_infos) }}
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-2 whitespace-nowrap">
-                                            <div class="">
                                                 {{ __zero($pack->max_bests) }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
                                             <div class="">
                                                 {{ __zero($pack->max_stats) }}
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-2 whitespace-nowrap">
+                                            <div class="">
+                                                {{ __zero($pack->max_infos) }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap">
