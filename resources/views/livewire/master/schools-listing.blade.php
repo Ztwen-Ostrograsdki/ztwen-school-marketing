@@ -442,6 +442,16 @@
                                                         <span>En cours...</span>
                                                     </span>
                                                 </button>
+                                                <button wire:click='giveSubscriptionTo({{$school->id}})' class="block  text-white cursor-pointer bg-blue-600 focus:ring-2 focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-blue-800 focus:ring-blue-800" type="button">
+                                                    <span wire:loading.remove wire:target='giveSubscriptionTo({{$school->id}})'>
+                                                        <span class="fas fa-user-plus mr-1"></span>
+                                                        Accorder un abonnement
+                                                    </span>
+                                                    <span wire:loading wire:target='giveSubscriptionTo({{$school->id}})'>
+                                                        <span class="fas fa-rotate animate-spin mr-1.5"></span>
+                                                        <span>En cours...</span>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

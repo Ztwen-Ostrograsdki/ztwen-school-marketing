@@ -83,4 +83,10 @@ class SchoolsListing extends Component
         $this->section = $section;
     }
 
+
+    public function giveSubscriptionTo($school_id)
+    {
+        $this->dispatch("GiveSubscriptionModal", $school_id);
+    }
+
 }

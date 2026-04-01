@@ -39,15 +39,17 @@ class JobToJoinSchoolDataToCurrentSubscription implements ShouldQueue
 
             $school = $subscription->school;
 
-            $images = $school->images()->update(['subscription_id' => $subscription->id]);
+            $school->images()->update(['subscription_id' => $subscription->id]);
 
-            $videos = $school->videos()->update(['subscription_id' => $subscription->id]);
+            $school->videos()->update(['subscription_id' => $subscription->id]);
 
-            $stats = $school->stats()->update(['subscription_id' => $subscription->id]);
+            $school->stats()->update(['subscription_id' => $subscription->id]);
 
-            $infos = $school->infos()->update(['subscription_id' => $subscription->id]);
+            $school->infos()->update(['subscription_id' => $subscription->id]);
+            
+            $school->bests()->update(['subscription_id' => $subscription->id]);
 
-            $assistants = $school->assistant_requests()->update(['subscription_id' => $subscription->id]);
+            $school->assistant_requests()->update(['subscription_id' => $subscription->id]);
 
             DB::commit();
 

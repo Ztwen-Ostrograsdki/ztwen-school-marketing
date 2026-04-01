@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Events\NewPackSubscriptionCreatedEvent;
 use App\Events\PackSubscriptionWasUpdatedEvent;
 use App\Jobs\JobToJoinSchoolDataToCurrentSubscription;
+use App\Jobs\JobToSendSimpleMailMessageTo;
 use App\Jobs\JobToSendSimpleMailMessageToAdmins;
 use App\Models\Subscription;
 use App\Notifications\RealTimeNotification;
@@ -17,14 +18,38 @@ class ObserveSubscription
      */
     public function created(Subscription $subscription): void
     {
-        $name = $subscription->pack->name;
 
-        Notification::sendNow([$subscription->user], new RealTimeNotification("Le code à renseigner en référence lors du payement par dépôt afin de valider votre abonnement au pack {$name} est : {$subscription->ref_key}!"));
+        if($subscription->is_free == false) :
+        
+            $name = $subscription->pack->name;
 
-        $subscription->__sendSubcriptionDetailsToSubscriber();
+            Notification::sendNow([$subscription->user], new RealTimeNotification("Le code à renseigner en référence lors du payement par dépôt afin de valider votre abonnement au pack {$name} est : {$subscription->ref_key}!"));
 
-        JobToSendSimpleMailMessageToAdmins::dispatch("L'utilisateur {$subscription->user->getFullName()} vient de faire une nouvelle demande de souscription ou abonnement pour le pack {$name}  pour son école {$subscription->school->name}", "Nouvelle Souscription - Abonnement", null, route('admin.packs.subscriptions.list'));
+            $subscription->__sendSubcriptionDetailsToSubscriber();
 
+            JobToSendSimpleMailMessageToAdmins::dispatch("L'utilisateur {$subscription->user->getFullName()} vient de faire une nouvelle demande de souscription ou abonnement pour le pack {$name}  pour son école {$subscription->school->name}", "Nouvelle Souscription - Abonnement", null, route('admin.packs.subscriptions.list'));
+
+        
+        else :
+
+            $subscriber = $subscription->user;
+
+            $subscription->deletePlannedTask(config('app.subcriptions_task_report'));
+
+            $message = "Vous avez reçu un abonnement gratuit. DETAILS:  ref:{$subscription->ref_key}, pack: {$subscription->pack->name}.";
+
+            Notification::sendNow([$subscription->user], new RealTimeNotification($message));
+
+            $lien = $subscriber->to_subscribes_route();
+
+            $greating = $subscriber->greatingMessage($subscriber->getUserNamePrefix(true, false)) . ", ";
+
+            JobToSendSimpleMailMessageTo::dispatch($subscriber->email, $greating, $message, "SOUSCRIPTION " . $subscription->ref_key . " RECEPTION - ABONNEMENT GRATUIT", null, $lien);
+
+            $message_to_admins = "L'abonnement ref:{$subscription->ref_key} du pack {$subscription->pack->name} fait par {$subscription->user->getFullName()} a été désactivé avec succès!";
+
+        endif;
+        
         broadcast(new NewPackSubscriptionCreatedEvent($subscription));
 
     }

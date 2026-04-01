@@ -549,4 +549,10 @@ trait SchoolActionsTraits {
         
     }
 
+
+    public function fakeSubscriptionTo($school_id)
+    {
+        
+    }
+
 }

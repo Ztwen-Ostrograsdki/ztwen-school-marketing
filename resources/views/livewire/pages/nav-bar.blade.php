@@ -20,9 +20,11 @@
                     <a href="{{auth_user()->to_profil_route()}}" class=" font-medium @if(request()->route()->named('user.profil')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">
                         Profil
                     </a>
+                    @if(auth_user()->isAdminsOrMaster())
                     <a href="{{route('admin')}}" class=" font-medium @if(request()->route()->named('admin')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif  px-2 py-2 rounded-lg transition">
                         Administration
                     </a>
+                    @endif
                 @endauth
                 <a href="{{route('schools.page')}}" class=" font-medium @if(request()->route()->named('schools.page')) text-lime-500 shadow-sm shadow-lime-400 @else hover:shadow-xl hover:border hover:border-purple-700 hover:shadow-purple-700 @endif px-2 py-2 rounded-lg transition">
                     Les écoles
@@ -161,6 +163,7 @@
                     <span class="flex-1 ms-3 whitespace-nowrap">Acceuil</span>
                     </a>
                 </li>
+
                 @if(auth_user()->isAdminsOrMaster())
                 <li>
                     <a href="{{route('admin')}}" class="flex items-center p-2 rounded-lg text-white  @if(request()->route()->named('admin')) bg-indigo-700/55 hover:text-yellow-400 @else hover:bg-gray-700 @endif group">

@@ -201,6 +201,11 @@ class User extends Authenticatable
         return $this->hasOne(School::class);
     }
 
+    public function validateds_subscriptions()
+    {
+        return $this->hasMany(Subscription::class)->whereNotNull('validate_at')->latest('will_closed_at');
+    }
+
 
 
     public function current_subscription()

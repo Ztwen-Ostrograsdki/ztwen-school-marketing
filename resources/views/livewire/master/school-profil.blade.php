@@ -1,6 +1,26 @@
 <div class="w-full max-w-[85rem] py-3 px-4 mx-auto my-2" x-data="{ show: false, currentImage: '', schoolName: '', simple_name: '', title: '' }">
+
+    <div class="mt-10"></div>
+
+    @auth
+        @if(auth_user_id() == $school->user_id && !$school->current_subscription)
+        <div class="w-full p-2 py-3.5 my-2 animate-pulse bg-red-600/70 shadow-sm rounded-lg mb-4 border">
+            <div class="flex items-center justify-center flex-col">
+                <h5 class="text-lg letter-spacing-1 font-semibold text-center text-red-200 inline">
+                    Vous n'avez aucun abonnement actif, veuillez en activer un afin de rendre votre école visible sur la plateforme!
+                </h5>
+
+                <a href="{{route('packs.page')}}" class="px-4 py-2 rounded-lg text-black bg-blue-600 hover:bg-blue-800 border inline hover:text-gray-300 float-right mt-3">
+                    <span class="fa fa-plus mx-1"></span>
+                    <span>Activer un abonnement maintenant</span>
+                </a>
+            </div>
+            
+        </div>
+        @endif
+    @endauth
         
-    <div class="card mx-auto mt-10 shadow-gray-900 bg-black/20">
+    <div class="card mx-auto  shadow-gray-900 bg-black/20">
         <h5 class="card letter-spacing-1 flex bg-black/70 text-center mx-auto flex-col gap-y-2 text-gray-200 rounded-sm">
             <p class="py-2 relative inline-block text-transparent bg-clip-text text-xl font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
                 <span class="card absolute -top-1 left-0 w-full to-lime-400 via-amber-500 from-sky-900 bg-linear-to-r h-1 rounded-full"></span>

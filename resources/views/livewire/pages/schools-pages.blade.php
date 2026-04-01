@@ -177,6 +177,97 @@
                                 </div>
                             </div>
                             @endif
+
+                            <div id="school_bests_pupils" class="mx-auto w-full mb-5 shadow-lg rounded-lg">
+                                <h6 class="text-amber-400 py-3 uppercase font-semibold letter-spacing-1">
+                                    # Les meilleurs élèves de tous les temps de cette école
+                                </h6>
+                                @php
+                                    $school_bests_pupils = $school->bests_pupils()->where('hidden', false)->orderBy('created_at')->get()
+                                @endphp
+                                @if(count($school_bests_pupils) > 0)
+                                    <div class="flex flex-col gap-y-7 card my-4">
+                                        @foreach($school_bests_pupils as $pupil)
+                                            <h5 class="text-center font-semibold letter-spacing-1 py-3 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600">
+                                                # EXAMEN : {{ $pupil->exam }} {{ $pupil->year }}
+                                            </h5>
+                                            @if(true)
+                                                <div class="border border-r-gray-500 bg-black/60 p-3 letter-spacing-1 rounded-xl shadow-inner shadow-sky-400">
+                                                    <div @if($pupil->hidden) title="Ce record est masqué" @endif class="text-gray-300 @if($pupil->hidden) opacity-35 @endif text-sm lg:text-lg grid grid-cols-3">
+                                                        <div class="aspect-square bg-gray-100 relative group card col-span-3 sm:col-span-1">
+                                                            <img class="w-full h-full object-cover border shadow-sm" src="{{url('storage', $pupil->image_path)}}" alt="photo de l'apprenant {{$pupil->pupil_name}}">
+                                                            
+                                                            <div  @click="currentImage = '{{ url('storage', $pupil->image_path) }}'; schoolName = 'Photo de {{ $pupil->pupil_name }}'; simple_name = '({{ $pupil->average }} / 20)'; title = 'Mention : {{ $pupil->mention }}'; show = true" class="absolute cursor-pointer inset-0 bg-black/75 bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                                                <div class="flex space-x-4 cursor-pointer text-sky-600 text-center letter-spacing-1 font-semibold text-xs">
+                                                                    <span class="text-center">Cliquer pour agrandir cette photo</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-3 col-span-3 sm:col-span-2 md:mt-0">
+                                                            <div class="px-3 flex justify-center items-center flex-col">
+                                                                <h2 class="text-left font-bold letter-spacing-1 py-3  rounded-lg border-y-2 border-y-sky-600 text-sm lg:text-lg w-full mb-3">
+                                                                    <span class="ml-2 uppercase">
+                                                                        <span class="fas fa-user"></span>
+                                                                        Candidat {{$pupil->gender == 'Feminin' ? 'e' : '' }} : </span>
+                                                                    <span class="text-sky-500 uppercase">
+                                                                        {{$pupil->pupil_name}}
+                                                                    </span>
+
+                                                                    <small class="text-xs text-yellow-500 font-semibold lowercase letter-spacing-1">
+                                                                        @if($pupil->gender && $pupil->gender == 'Masculin') 
+                                                                        Homme
+                                                                        @elseif($pupil->gender && $pupil->gender == 'Feminin') 
+                                                                        Fille
+                                                                        @endif
+                                                                    </small>
+                                                                </h2>
+                                                                
+                                                                <h3 class="text-sm md:text-lg uppercase text-center bg-green-400 shadow-2xl text-gray-900 w-full p-3 px-6 rounded-2xl">
+                                                                    <span class="">{{ $pupil->mention }} </span>
+                                                                </h3>
+                                                                <h3 class="text-sm lg:text-lg text-center  mt-4">
+                                                                    
+                                                                    <span>Moyenne : </span>
+                                                                    <span class="fas text-transparent bg-clip-text from-blue-300 via-yellow-400 to-gray-500 bg-linear-to-bl">{{ __formatDecimal($pupil->average) }} / 20 </span>
+                                                                </h3>
+                                                                <div class="w-full text-sm lg:text-lg mt-3">
+                                                                    <h5 class="text-center font-semibold letter-spacing-1 py-1 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600 w-full my-2">Quelques records et rangs de {{ $pupil->pupil_name }}</h5>
+                                                                    <ul>
+                                                                    @foreach ($pupil->ranks as $zone => $rank)
+                                                                    <li>
+                                                                        <span class="fas fa-circle text-amber-500"></span>
+                                                                        <span> {{ $zone }} :  </span>
+                                                                        <span class="text-green-400"> 
+                                                                            {{ rankFormat($rank)['rank'] }}<sup>{{ rankFormat($rank)['sup'] }}</sup> 
+                                                                        </span>
+                                                                    </li> 
+                                                                    @endforeach
+                                                                    </ul>
+                                                                    
+                                                                </div>
+                                                                <div class="w-full text-sm lg:text-lg">
+                                                                    <h5 class="text-center font-semibold letter-spacing-1 py-1 uppercase text-amber-500 rounded-lg border-y-2 border-y-sky-600 w-full my-2">Quelques notes de {{ $pupil->pupil_name }}</h5>
+                                                                    <ul>
+                                                                    @foreach ($pupil->details as $subject => $mark)
+                                                                    <li>
+                                                                        <span class="fas fa-circle text-amber-500"></span>
+                                                                        <span> {{ $subject }} :  </span>
+                                                                        <span class="text-green-400"> {{ $mark }} </span>
+                                                                    </li> 
+                                                                    @endforeach
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <h6 class="text-center font-semibold text-gray-500 italic text-lg py-3">Aucune donnée publiée</h6>
+                                @endif
+                            </div>
                         </div>
                     </div>
                     @if($school->user_id !== auth_user_id())

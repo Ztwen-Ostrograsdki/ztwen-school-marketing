@@ -76,7 +76,7 @@ e.private("admin")
     .listen("NotificationDispatchedToAdminsSuccessfullyEvent", (user) => {
         Livewire.dispatch(
             "LiveNotificationDispatchedToAdminsSuccessfullyEvent",
-            user
+            user,
         );
     })
     .listen("NewAssistanceRequestCreatedEvent", (ev) => {
@@ -111,6 +111,9 @@ e.private("admin")
     })
     .listen("NewSchoolInfoAddedEvent", (info) => {
         Livewire.dispatch("LiveNewSchoolInfoAddedEvent", info);
+    })
+    .listen("DelayedSubscriptionsWasDisabledEvent", (info) => {
+        Livewire.dispatch("LiveDelayedSubscriptionsWasDisabledEvent", info);
     })
     .listen("NewVisitorHasBeenRegistredEvent", (info) => {
         Livewire.dispatch("LiveNewVisitorHasBeenRegistredEvent", info);

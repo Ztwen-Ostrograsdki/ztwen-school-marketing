@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->decimal('unique_price', 15, 2)->nullable()->default(null);
             $table->unsignedBigInteger('months')->nullable()->default(1);
+            $table->string('duration')->nullable()->default(null);
             $table->string('free_days')->nullable()->default(null);
             $table->string('ref_key');
             $table->text('observation')->nullable()->default(null);
@@ -44,6 +45,8 @@ return new class extends Migration
             $table->decimal('amount', 15, 2)->nullable()->default(null);
             $table->string('payment_status')->nullable()->default('En cours');
             $table->boolean('is_active')->default(false);
+            $table->boolean('is_free')->default(false);
+            $table->boolean('expired')->default(false);
             $table->timestamps();
         });
     }

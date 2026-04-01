@@ -4,6 +4,7 @@ namespace App\Livewire\Traits;
 
 use Akhaled\LivewireSweetalert\Confirm;
 use Akhaled\LivewireSweetalert\Toast;
+use App\Events\InitProcessToDesactivateAllDelayedSubscriptionsEvent;
 use App\Events\PlannedTaskToDelayedSubscriptionEvent;
 use App\Helpers\Robots\SpatieManager;
 use App\Models\Subscription;
@@ -126,6 +127,11 @@ trait PackSusbscriptionActionsTraits {
                     if(!$subscription->hasPlannedDelayedTask()){
 
                         PlannedTaskToDelayedSubscriptionEvent::dispatch(auth_user(), [$subscription_id]);
+                    }
+                    elseif($subscription->hasPlannedDelayedTask() && $subscription->will_closed_at < now() && $subscription->is_active && !$subscription->expired){
+
+                        PlannedTaskToDelayedSubscriptionEvent::dispatch(auth_user(), [$subscription_id]);
+
                     }
                     else{
 
@@ -518,7 +524,54 @@ trait PackSusbscriptionActionsTraits {
 
     public function exiredAllDelayedsSubscriptions()
     {
+        SpatieManager::ensureThatUserCan();
 
+        $delayeds = Subscription::whereNotNull('validate_at')->where('will_closed_at', '<', now())->where('expired', false)->count();
+
+        if($delayeds){
+
+            $text = __zero($delayeds) . " souscriptions expirées non désactivées ont été trouvées ";
+
+            $html = "<h6 class='font-semibold text-base text-sky-400 py-0 my-0 letter-spacing-2'>
+                    <p> $text </p>
+                </h6>";
+
+            $noback = "<p class='text-orange-600 letter-spacing-2 py-0 my-0 font-semibold'> Voulez - vous la ou les désactiver à présent ? </p>";
+
+            $options = ['event' => 'confirmedDelayedSubscriptionDesactivation', 'confirmButtonText' => 'Désactiver', 'cancelButtonText' => 'Annuler', 'data' => ['delayds' => $delayeds]];
+
+            $this->confirm($html, $noback, $options);
+        }
+        else{
+
+            return $this->toast("Aucune souscription expirée n'a été trouvée!", 'info');
+        }
+
+
+    }
+
+
+    #[On('confirmedDelayedSubscriptionDesactivation')]
+    public function onConfirmedDelayedSubscriptionDesactivation($data)
+    {
+        if($data){
+
+            $delayds = $data['delayds'];
+
+            if($delayds){
+                
+                InitProcessToDesactivateAllDelayedSubscriptionsEvent::dispatch(auth_user());
+
+                $this->toast("la procédure de la désactivation des abonnements expirés a été initiée", 'success');
+                
+            }
+            else{
+
+                return $this->toast("la validation de la désactivation des abonnements expirés a échoué", 'error');
+            }
+
+            
+        }
     }
 
     public function nofifySubscribersThatExpiredDateIsSoClose()

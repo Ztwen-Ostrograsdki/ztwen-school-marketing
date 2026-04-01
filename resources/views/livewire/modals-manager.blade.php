@@ -41,6 +41,9 @@
 
         <button data-modal-target="user-quotes-manager-modal" data-modal-toggle="user-quotes-manager-modal" class="hidden" type="button"></button>
         @livewire('modals.quote-manager-modal')
+        
+        <button data-modal-target="give-subscription-modal" data-modal-toggle="give-subscription-modal" class="hidden" type="button"></button>
+        @livewire('modals.fake-subscription-manager-modal')
 
         <button data-modal-target="logout-modal" data-modal-toggle="logout-modal" class="hidden" type="button"></button>
         @livewire('auth.logout-page')

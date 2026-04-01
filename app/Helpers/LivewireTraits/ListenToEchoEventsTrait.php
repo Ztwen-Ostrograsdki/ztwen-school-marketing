@@ -209,6 +209,12 @@ trait ListenToEchoEventsTrait{
         $this->counter = getRandom();
     }
     
+    #[On("LiveDelayedSubscriptionsWasDisabledEvent")]
+    public function reloadDisabledEvent()
+    {
+        $this->counter = getRandom();
+    }
+    
     
 
 

@@ -9,11 +9,10 @@ use App\Notifications\RealTimeNotification;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\Middleware\Skip;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
-class JobToDelayedSubscription implements ShouldQueue
+class JobToDesactivateDelayedSubscriptions implements ShouldQueue
 {
     use Queueable, Batchable;
 
@@ -31,29 +30,7 @@ class JobToDelayedSubscription implements ShouldQueue
     public function handle(): void
     {
 
-        if($this->subscription->is_active && $this->subscription->will_closed_at < now()){
-
-            self::runner();
-
-        }
-        else{
-
-            if($this->subscription->hasPlannedDelayedTask()){
-
-                if($this->admin_validator){
-
-                    $message = "L'abonnement ref:{$this->subscription->ref_key} du pack {$this->subscription->pack->name} a déjà une tâche de désactivation plannifiée!";
-
-                    Notification::sendNow([$this->admin_validator], new RealTimeNotification($message));
-                }
-
-                return ;
-            }
-            else{
-
-                self::runner();
-            }
-        }
+        self::runner();
     }
 
 
@@ -63,7 +40,7 @@ class JobToDelayedSubscription implements ShouldQueue
 
         $admin_validator = $this->admin_validator;
         
-        if($subscription->is_active || !$subscription->expired){
+        if($subscription->will_closed_at < now() && ($subscription->is_active || !$subscription->expired)){
 
             DB::beginTransaction();
 
@@ -82,9 +59,13 @@ class JobToDelayedSubscription implements ShouldQueue
 
                 DB::afterCommit(function() use ($subscription, $subscriber, $admin_validator){
 
-                    $subscription->deletePlannedTask(config('app.subcriptions_task_report'));
+                    if($subscription->hasPlannedDelayedTask('app.subcriptions_task_report') && ($subscription->is_active || !$subscription->expired) ){
 
-                    $message = "Votre abonnement ref : {$subscription->ref_key} du pack {$subscription->pack->name} a expiré. Cet abonnement a été désactivé!";
+                        $subscription->deletePlannedTask('app.subcriptions_task_report');
+                        
+                    }
+
+                    $message = "Votre abonnement ref:{$subscription->ref_key} du pack {$subscription->pack->name} a expiré. Votre abonnement est à présent inactif!";
 
                     Notification::sendNow([$subscription->user], new RealTimeNotification($message));
 
@@ -94,7 +75,7 @@ class JobToDelayedSubscription implements ShouldQueue
 
                     JobToSendSimpleMailMessageTo::dispatch($subscriber->email, $greating, $message, "SOUSCRIPTION " . $subscription->ref_key . " EXPIREE - ABONNEMENT DESACTIVE ", null, $lien);
 
-                    $message_to_admins = "L'abonnement ref : {$subscription->ref_key} du pack {$subscription->pack->name} fait par {$subscription->user->getFullName()} a été désactivé avec succès!";
+                    $message_to_admins = "L'abonnement ref:{$subscription->ref_key} du pack {$subscription->pack->name} fait par {$subscription->user->getFullName()} a été désactivé avec succès!";
 
                     if($admin_validator){
 
@@ -137,18 +118,7 @@ class JobToDelayedSubscription implements ShouldQueue
                 endif;
             }
         }
-        else{
-
-
-        }
+        
     }
-
-
-    public function middleware() : array
-    {
-        return [
-            Skip::when(!$this->subscription->exists),
-            Skip::when($this->subscription->is_active && $this->subscription->will_closed_at > now() && $this->subscription->hasPlannedDelayedTask()),
-        ];
-    }
+    
 }

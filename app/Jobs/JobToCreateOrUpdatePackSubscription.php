@@ -43,6 +43,7 @@ class JobToCreateOrUpdatePackSubscription implements ShouldQueue
                 'max_images' => $this->pack->max_images,
                 'max_stats' => $this->pack->max_stats,
                 'max_infos' => $this->pack->max_infos,
+                'max_bests' => $this->pack->max_bests,
                 'max_assistants' => $this->pack->max_assistants,
                 'on_page' => $this->pack->on_page,
                 'amount' => $this->data['total'],
@@ -66,7 +67,7 @@ class JobToCreateOrUpdatePackSubscription implements ShouldQueue
 
             $name = $this->pack->name;
 
-            Notification::sendNow([$this->subscriber], new RealTimeNotification("Le processus d'abonnement au pack {$name} a échoué! Veuillez renseigner"));
+            Notification::sendNow([$this->subscriber], new RealTimeNotification("Le processus d'abonnement au pack {$name} a échoué! Veuillez réessayer"));
             
         }
     }

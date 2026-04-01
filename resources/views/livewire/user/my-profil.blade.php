@@ -159,7 +159,7 @@
                             Parcourir
                         </span>
                     </a>
-                    @if(!($user->non_validated_upgrade_request && $user->non_validated_subscription))
+                    @if($user->current_subscription && !($user->non_validated_upgrade_request && $user->non_validated_subscription))
                     <button wire:click="upgradeSubscription({{$user->current_subscription->id}})" class="text-black cursor-pointer bg-green-500 w-auto focus:outline-none font-medium rounded-lg px-2 py-2 text-center hover:bg-green-700 focus:ring-yellow-800" type="button">
                         <span wire:loading.remove wire:target="upgradeSubscription({{$user->current_subscription->id}})" class="w-full flex items-center px-1.5">
                             <span class="fas fa-up-long mr-1"></span>

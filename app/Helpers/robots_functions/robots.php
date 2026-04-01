@@ -33,6 +33,63 @@ if(!function_exists('getMonths')){
 
 }
 
+if(!function_exists('getFulldurationBetween')){
+
+    function getFulldurationBetween2Dates($start_date, $end_date)
+    {
+        $start = Carbon::parse($start_date);
+
+        $end = Carbon::parse($end_date);
+
+        $diff = $start->diff($end);
+
+        $years = $diff->y;
+
+        $months = $diff->m;
+
+        $totalDays = $diff->d;
+
+        $weeks = intval($totalDays / 7);
+
+        $days = $totalDays % 7;
+
+        $result = [];
+
+        if($years > 0){
+
+            $result[] = $years . ' an(s)';
+        }
+
+        if($months > 0){
+            
+            $result[] = $months . ' mois(s)';
+        }
+
+        if($weeks > 0){
+            
+            $result[] = $weeks . ' semaine(s)';
+        }
+
+        if($days > 0){
+            
+            $result[] = $days . ' jour(s)';
+        }
+
+        if($result !== []){
+
+            return implode(', ', $result);
+        }
+        else{
+
+            return "0 jours";
+        }
+
+    }
+
+    
+
+}
+
 if(!function_exists('generateRandomNumber')){
 
     function generateRandomNumber($length = 10)

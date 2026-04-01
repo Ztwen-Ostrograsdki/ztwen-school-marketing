@@ -51,6 +51,7 @@ class Subscription extends Model
         'max_assistants',
         'on_page',
         'amount',
+        'duration',
         'seen_by',
         'notify_by_email',
         'notify_by_sms',
@@ -58,6 +59,8 @@ class Subscription extends Model
         'promoting',
         'payment_status',
         'is_active',
+        'is_free',
+        'expired',
         'user_id',
         'payment_id',
         'school_id',
@@ -325,11 +328,15 @@ class Subscription extends Model
 
         $max_images = $this->max_images;
 
+        $max_bests = $this->max_bests;
+
         $images_uploadeds = count($this->images);
 
         $stats_publisheds = count($this->stats);
 
         $infos_publisheds = count($this->infos);
+
+        $bests_publisheds = count($this->bests);
 
         $assistants_enrolleds = count($this->assistants);
 
@@ -337,6 +344,7 @@ class Subscription extends Model
             'max_assistants' => $max_assistants - $assistants_enrolleds,
             'max_infos' => $max_infos - $infos_publisheds,
             'max_stats' => $max_stats - $stats_publisheds,
+            'max_bests' => $max_bests - $bests_publisheds,
             'max_images' => $max_images - $images_uploadeds,
         ];
     }
@@ -349,11 +357,13 @@ class Subscription extends Model
 
     public function __subcriptionApprobationManager(?User $admin_validator = null)
     {
-        
-
         $today = now();
 
         $subscriber = $this->subscriber;
+
+        $will_closed_at = Carbon::now()->addMonths($this->months)->addDays(2);
+
+        $duration = getFulldurationBetween2Dates($today, $will_closed_at);
 
         try {
 
@@ -364,7 +374,8 @@ class Subscription extends Model
                 $subscription_data = [
                     'free_days' => 2,
                     'validate_at' => $today,
-                    'will_closed_at' => Carbon::now()->addMonths($this->months)->addDays(2),
+                    'duration' => $duration,
+                    'will_closed_at' => $will_closed_at,
                     'payment_status' => "Payé",
                     'is_active' => true,
                 ];

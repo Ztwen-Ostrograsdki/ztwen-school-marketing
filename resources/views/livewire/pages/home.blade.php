@@ -13,9 +13,8 @@
             </span>
             </h1>
             <p style="letter-spacing: 2px;" class="mx-auto mb-8 max-w-2xl text-lg font-semibold letter-spacing-2 text-lime-500">
-            Grâce à nous, votre école est connue, ...vos prestations, vos résulats, vos performances annuelles, nous faisons votre promotion!
+            Grâce à nous, votre école est connue, ...vos prestations, vos résultats, vos performances annuelles, nous faisons votre promotion!
             </p>
-
             <!-- CTA Button -->
             <div class="flex justify-center items-center mt-8" data-aos="fade-up" data-aos-delay="400">
                 @auth

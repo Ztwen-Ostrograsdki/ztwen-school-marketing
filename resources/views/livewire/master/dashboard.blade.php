@@ -1,12 +1,11 @@
-<div class="w-full max-w-[85rem] py-3 px-1 mx-auto shadow-3 shadow-sky-500 rounded-xl my-2">
-    <div class="mt-10">
-        <div>
-            <h5 class="card letter-spacing-1 flex bg-black/70 text-center mx-auto flex-col gap-y-2 text-gray-200 border rounded-sm">
-                <p class="py-2 relative inline-block text-transparent bg-clip-text text-sm sm:text-lg  uppercase font-bold letter-spacing-2 from-indigo-700 via-lime-500 to-blue-700 bg-linear-to-r"> 
+<div class="w-full py-3 mx-auto shadow-3 mt-8 shadow-sky-500 rounded-xl bg-black/70">
+    <div class="m-0 p-3">
+        <div class="m-0">
+            <h5 class="letter-spacing-1 flex bg-black/70 mx-auto flex-col text-gray-200 border-b border-amber-500 m-0 p-2">
+                <p class="py-2 text-sm sm:text-lg uppercase font-bold letter-spacing-2 "> 
                     <span class="uppercase">
-                        Page d'administration : Dashboard
+                        Administration
                     </span>
-                    <span class="card absolute -bottom-1 left-0 w-full from-indigo-700 via-lime-500 to-sky-900 bg-linear-to-r h-1 rounded-full"></span>
                 </p>
             </h5>
         </div>
@@ -17,6 +16,120 @@
                 </svg>
                 <span>Ouvrir le menu</span>
             </button>
+        </div>
+
+        <div class="grid flex-wrap gap-1.5 justify-between font-semibold letter-spacing-1 text-xs md:text-sm grid-cols-2 md:grid-cols-3 lg:grid-cols-5 ">
+            <a href="{{route('admin.users.listing')}}" class="bg-neutral-primary-soft block max-w-xs rounded-base shadow-xs scale-95 hover:scale-100 text-gray-200 transition-transform ">
+                <span>
+                    <img class="rounded-t-base" src="{{asset('images/school14.jpg')}}" alt="" />
+                </span>
+                <div class="px-0 flex flex-col gap-y-1.5 bg-black/70 border-x border-b border-orange-400">
+                    <span  class="px-2.5">
+                        <h5 class="mt-3 text-lg font-semibold letter-spacing-1">
+                            Les Utilisateurs
+                        </h5>
+                    </span>
+                    <span class="inline-flex  items-center bg-brand-softer text-sm letter-spacing-1 font-semibold px-1.5 py-0.5 text-gray-500">
+                        {{ __zero($users) }} Utilisateurs enrégistrés
+                    </span>
+                    <span class="py-2 ">
+                        
+                    </span>
+                </div>
+            </a>
+            <a href="{{route('admin.schools.listing')}}" class="bg-neutral-primary-soft block max-w-xs shadow-xs scale-95 hover:scale-100 text-gray-200 transition-transform border-purple-600">
+                <span>
+                    <img class="rounded-t-base" src="{{asset('images/school12.jpg')}}" alt="" />
+                </span>
+                <div class="px-0 flex flex-col gap-y-1.5 bg-black/70  border-x border-b border-purple-400">
+                    <span  class="px-2.5">
+                        <h5 class="mt-3 text-lg font-semibold letter-spacing-1">
+                            Les écoles
+                        </h5>
+                    </span>
+                    <span class="inline-flex  items-center bg-brand-softer text-sm letter-spacing-1 font-semibold px-1.5 py-0.5 text-gray-500">
+                        {{ __zero($schools) }} écoles enrégistrées
+                    </span>
+                    <span class="py-2 ">
+                        
+                    </span>
+                </div>
+            </a>
+            <a href="{{route('packs.page')}}" class="bg-neutral-primary-soft block max-w-xs shadow-xs scale-95 hover:scale-100 text-gray-200 transition-transform border-green-600">
+                <span>
+                    <img class="rounded-t-base" src="{{asset('images/school1.jpg')}}" alt="" />
+                </span>
+                <div class="px-0 flex flex-col gap-y-1.5 bg-black/70  border-x border-b border-green-400">
+                    <span  class="px-2.5">
+                        <h5 class="mt-3 text-lg font-semibold letter-spacing-1">
+                            Les Packs
+                        </h5>
+                    </span>
+                    <span class="inline-flex  items-center bg-brand-softer text-sm letter-spacing-1 font-semibold px-1.5 py-0.5 text-gray-500">
+                        {{ __zero($packs) }} packs disponibles
+                    </span>
+                    <span class="py-2 ">
+                        
+                    </span>
+                </div>
+            </a>
+
+            <a href="{{route('admin.packs.abonnements.list')}}" class="bg-neutral-primary-soft block max-w-xs shadow-xs scale-95 hover:scale-100 text-gray-200 transition-transform border-green-600">
+                <span>
+                    <img class="rounded-t-base" src="{{asset('images/school15.jpg')}}" alt="" />
+                </span>
+                <div class="px-0 flex flex-col gap-y-1.5 bg-black/70  border-x border-b border-sky-400">
+                    <span  class="px-2.5">
+                        <h5 class="mt-3 text-xl font-semibold letter-spacing-1">
+                            Les abonnements actifs
+                        </h5>
+                    </span>
+                    <span class="inline-flex  items-center bg-brand-softer text-sm letter-spacing-1 font-semibold px-1.5 py-0.5 text-gray-500">
+                        {{ __zero($subscriptions) }} abonnements actifs
+                    </span>
+                    <span class="py-2 ">
+                        
+                    </span>
+                </div>
+            </a>
+
+            <a href="{{route('admin.packs.subscriptions.list')}}" class="bg-neutral-primary-soft block max-w-xs shadow-xs scale-95 hover:scale-100 text-gray-200 transition-transform border-amber-600">
+                <span>
+                    <img class="rounded-t-base" src="{{asset('images/school15.jpg')}}" alt="" />
+                </span>
+                <div class="px-0 flex flex-col gap-y-1.5 bg-black/70  border-x border-b border-fuchsia-500 ">
+                    <span  class="px-2.5">
+                        <h5 class="mt-3 text-lg font-semibold letter-spacing-1">
+                            Les demandes d'abonnement
+                        </h5>
+                    </span>
+                    <span class="inline-flex  items-center bg-brand-softer text-sm letter-spacing-1 font-semibold px-1.5 py-0.5 text-gray-500">
+                        {{ __zero($subscription_demandes) }} demandes actives
+                    </span>
+                    <span class="py-2 ">
+                        
+                    </span>
+                </div>
+            </a>
+
+            <a href="#" class="bg-neutral-primary-soft block max-w-xs shadow-xs scale-95 hover:scale-100 text-gray-200 transition-transform border-amber-600">
+                <span>
+                    <img class="rounded-t-base" src="{{asset('images/school20.jpg')}}" alt="" />
+                </span>
+                <div class="px-0 flex flex-col gap-y-1.5 bg-black/70  border-x border-b border-teal-500 ">
+                    <span  class="px-2.5">
+                        <h5 class="mt-3 text-lg font-semibold letter-spacing-1">
+                            Les payements
+                        </h5>
+                    </span>
+                    <span class="inline-flex  items-center bg-brand-softer text-sm letter-spacing-1 font-semibold px-1.5 py-0.5 text-gray-500">
+                        {{ __zero($payments) }} payements effectués
+                    </span>
+                    <span class="py-2 ">
+                        
+                    </span>
+                </div>
+            </a>
         </div>
     </div>
     

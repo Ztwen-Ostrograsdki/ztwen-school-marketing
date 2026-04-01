@@ -137,6 +137,11 @@ class School extends Model
         return $this->belongsTo(User::class);
     }
     
+    public function bests()
+    {
+        return $this->hasMany(SchoolBestPupil::class);
+    }
+    
     public function bests_pupils()
     {
         return $this->hasMany(SchoolBestPupil::class);

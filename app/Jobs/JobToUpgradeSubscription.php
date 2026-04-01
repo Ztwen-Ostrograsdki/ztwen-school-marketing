@@ -57,7 +57,7 @@ class JobToUpgradeSubscription implements ShouldQueue
 
             $key = $this->subscription->ref_key;
 
-            Notification::sendNow([$this->subscriber], new RealTimeNotification("Le processus de demande de réabonnement de votre souscription {$key} a échoué! Veuillez renseigner " . $th->getMessage()));
+            Notification::sendNow([$this->subscriber], new RealTimeNotification("Le processus de demande de réabonnement de votre souscription {$key} a échoué! Veuillez réessayer " . $th->getMessage()));
             
         }
     }
